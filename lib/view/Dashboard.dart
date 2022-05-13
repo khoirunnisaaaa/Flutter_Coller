@@ -64,17 +64,42 @@ class _DashboardState extends State<Dashboard> {
                         ],
                       ),
                       SizedBox(height: 38),
-                      TextField(
-                        decoration: InputDecoration(
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 25, vertical: 10),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50.0),
+                      Stack(
+                        children: [
+                          Material(
+                            child: TextField(
+                              decoration: InputDecoration(
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 25, vertical: 10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(50.0),
+                                ),
+                                filled: true,
+                                hintStyle: TextStyle(color: Color(0xffA7A7A7)),
+                                hintText: "Add instant note in here ...",
+                                fillColor: Color(0xffF3F3F3),
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide:
+                                      new BorderSide(color: Color(0xffF3F3F3)),
+                                  borderRadius: new BorderRadius.circular(25.7),
+                                ),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      new BorderSide(color: Color(0xffF3F3F3)),
+                                  borderRadius: new BorderRadius.circular(25.7),
+                                ),
+                              ),
                             ),
-                            filled: true,
-                            hintStyle: TextStyle(color: Colors.grey[800]),
-                            hintText: "Type in your text",
-                            fillColor: Colors.white70),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: FloatingActionButton(
+                              child: Icon(Icons.add),
+                              backgroundColor: redColor,
+                              onPressed: () {},
+                            ),
+                          ),
+                        ],
                       ),
                       SizedBox(height: 30),
                       Text(

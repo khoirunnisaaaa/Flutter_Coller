@@ -89,6 +89,132 @@ class Register extends StatelessWidget {
                 ),
               ),
             ),
+         SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 42),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(235, 235, 235, 235),
+                  border: Border.all(color: Color.fromARGB(235, 235, 235, 235)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: TextFormField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        labelText: 'Konfirmasi Password',
+                        suffixIcon: Icon(
+                          Icons.visibility,
+                          color: Color.fromARGB(255, 116, 110, 110),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Password Tidak Boleh Kosong';
+                        }
+                        return null;
+                      }),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 42),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(235, 235, 235, 235),
+                  border: Border.all(color: Color.fromARGB(235, 235, 235, 235)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: TextFormField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: 'Irene Bae',
+                        labelText: 'Nama Lengkap',
+                        suffixIcon: Icon(
+                          Icons.person,
+                          color: Color.fromARGB(255, 116, 110, 110),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'Nama Tidak Boleh Kosong';
+                        }
+                        return null;
+                      }),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 42),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(235, 235, 235, 235),
+                  border: Border.all(color: Color.fromARGB(235, 235, 235, 235)),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25),
+                  child: TextFormField(
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '+1 2374 23899 21',
+                        labelText: 'No Telepon',
+                        suffixIcon: Icon(
+                          Icons.phone,
+                          color: Color.fromARGB(255, 116, 110, 110),
+                        ),
+                      ),
+                      validator: (value) {
+                        if (value!.isEmpty) {
+                          return 'No Telepon Tidak Boleh Kosong';
+                        }
+                        return null;
+                      }),
+                ),
+              ),
+            ),
+
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Container(
+                width: 400,
+                child: RaisedButton(
+                  onPressed: () {},
+                  elevation: 5,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Color.fromARGB(255, 247, 105, 99),
+                  padding: EdgeInsets.all(20),
+                  child: Text(
+                    "Register",
+                    style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       )),

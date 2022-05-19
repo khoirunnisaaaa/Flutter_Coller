@@ -62,6 +62,8 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/coller-white-logo.png
+    - assets/images/coller-white-logo-large.png
+    - assets/images/bg-welcome-screen2.png
     - assets/images/ic_alarmClock.png
     - assets/images/ic_books.png
     - assets/images/ic_cm.png
@@ -70,7 +72,9 @@ flutter:
     - assets/images/ic_mm.png
     - assets/images/ic_piggy.png
     - assets/images/ic_profile.png
+    - assets/images/ic_pen.png
     - assets/images/ic_text.png
+    - assets/images/ic_man_sitting.png
     - assets/images/profile.png
     - assets/images/card.png
 

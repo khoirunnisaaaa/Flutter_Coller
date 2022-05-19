@@ -1,5 +1,7 @@
 import 'package:coller_mobile/view/Dashboard.dart';
+import 'package:coller_mobile/view/navbar.dart';
 import 'package:coller_mobile/view/register.dart';
+import 'package:coller_mobile/view/schedule.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(fontFamily: 'Poppins'),
-      home: Register(),
+      home: schedule(),
     );
   }
 }

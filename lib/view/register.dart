@@ -89,7 +89,7 @@ class Register extends StatelessWidget {
                 ),
               ),
             ),
-         SizedBox(
+            SizedBox(
               height: 20,
             ),
             Padding(

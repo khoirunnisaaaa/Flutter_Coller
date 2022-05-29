@@ -43,6 +43,9 @@ class Login extends StatelessWidget {
                         border: InputBorder.none,
                         hintText: 'irenebae@gmail.com',
                         labelText: 'Email Address',
+                        labelStyle: TextStyle(
+                          color: Color.fromARGB(255, 116, 110, 110),
+                        ),
                         suffixIcon: Icon(
                           Icons.mail,
                           color: Color(0xFFF76963),
@@ -89,7 +92,7 @@ class Login extends StatelessWidget {
                 ),
               ),
             ),
-         
+
             SizedBox(
               height: 20,
             ),
@@ -115,6 +118,48 @@ class Login extends StatelessWidget {
                 ),
               ),
             ),
+            SizedBox(
+              height: 20,
+            ),
+            TextButton(
+              onPressed: () {
+                //action
+              },
+              child: Text(
+                'Forgot Password?',
+                style:
+                    TextStyle(decorationThickness: 0, color: Color(0xFFF76963)),
+                textAlign: TextAlign.center,
+              ),
+            ),
+            SizedBox(
+              height: 300,
+            ),
+            Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Don't have any account ?",
+                      style: TextStyle(
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(255, 116, 110, 110),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {},
+                      child: Text(
+                        "Register",
+                        style: TextStyle(
+                            color: Color(0xFFF76963),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 15),
+                      ),
+                    )
+                  ],
+                ))
           ],
         ),
       )),

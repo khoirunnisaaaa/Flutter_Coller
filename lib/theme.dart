@@ -21,3 +21,5 @@ TextStyle titleTFEditProfile = TextStyle(
   fontWeight: FontWeight.w500,
   color: Color(0xff949494),
 );
+TextStyle titleFeatureTextStyle = TextStyle(
+    color: Color(0xff9F9F9F), fontSize: 14, fontWeight: FontWeight.w400);

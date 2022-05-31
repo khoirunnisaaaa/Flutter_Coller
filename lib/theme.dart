@@ -23,3 +23,8 @@ TextStyle titleTFEditProfile = TextStyle(
 );
 TextStyle titleFeatureTextStyle = TextStyle(
     color: Color(0xff9F9F9F), fontSize: 14, fontWeight: FontWeight.w400);
+TextStyle dateMMTextStyle = TextStyle(fontSize: 12, color: Color(0xff949494));
+TextStyle titleListTileMMTextStyle =
+    TextStyle(fontSize: 15, color: darkGreyColor);
+TextStyle trailingTextStyleMMTextStyle =
+    TextStyle(fontSize: 15, color: Color(0xff949494));

@@ -1,4 +1,5 @@
 import 'package:coller_mobile/main.dart';
+import 'package:coller_mobile/view/Dashboard.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -85,7 +86,8 @@ class _IncomeState extends State<Income> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Home()),
+                            MaterialPageRoute(
+                                builder: (context) => Dashboard()),
                           );
                         },
                       ),

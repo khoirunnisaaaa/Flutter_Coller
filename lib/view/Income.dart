@@ -1,11 +1,12 @@
 import 'package:coller_mobile/main.dart';
-import 'package:coller_mobile/view/Dashboard.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../theme.dart';
 import 'OverviewProfile.dart';
+import 'indicator.dart';
 
 class Income extends StatefulWidget {
   const Income({Key? key}) : super(key: key);
@@ -15,6 +16,8 @@ class Income extends StatefulWidget {
 }
 
 class _IncomeState extends State<Income> {
+  int touchedIndex = -1;
+
   DateTime selectedDate = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
@@ -82,8 +85,7 @@ class _IncomeState extends State<Income> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => Dashboard()),
+                            MaterialPageRoute(builder: (context) => Home()),
                           );
                         },
                       ),
@@ -248,7 +250,7 @@ class _IncomeState extends State<Income> {
         panel: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 0, vertical: 30),
+              padding: EdgeInsets.only(top: 30, bottom: 170),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -272,7 +274,93 @@ class _IncomeState extends State<Income> {
                     style: titleTextStyle,
                   ),
                   SizedBox(height: 10),
-                  Image.asset("assets/images/pie_chart.png"),
+                  Container(
+                    decoration: BoxDecoration(
+                        color: Color(0xffFCE3DF).withOpacity(0.5),
+                        borderRadius: BorderRadius.circular(22)),
+                    child: Row(
+                      children: <Widget>[
+                        const SizedBox(
+                          height: 18,
+                        ),
+                        Expanded(
+                          child: AspectRatio(
+                            aspectRatio: 1,
+                            child: PieChart(
+                              PieChartData(
+                                  pieTouchData: PieTouchData(touchCallback:
+                                      (FlTouchEvent event, pieTouchResponse) {
+                                    setState(() {
+                                      if (!event.isInterestedForInteractions ||
+                                          pieTouchResponse == null ||
+                                          pieTouchResponse.touchedSection ==
+                                              null) {
+                                        touchedIndex = -1;
+                                        return;
+                                      }
+                                      touchedIndex = pieTouchResponse
+                                          .touchedSection!.touchedSectionIndex;
+                                    });
+                                  }),
+                                  borderData: FlBorderData(
+                                    show: false,
+                                  ),
+                                  sectionsSpace: 0,
+                                  centerSpaceRadius: 40,
+                                  sections: showingSections()),
+                            ),
+                          ),
+                        ),
+                        Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const <Widget>[
+                            Indicator(
+                              color: Color(0xff9F43CC),
+                              text: 'Gaji',
+                              size: 12,
+                              isSquare: false,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Indicator(
+                              color: Color(0xff4D4D4E),
+                              text: 'Orang Tua',
+                              size: 12,
+                              isSquare: false,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Indicator(
+                              color: Color(0xffFF57BC),
+                              text: 'Hadiah',
+                              size: 12,
+                              isSquare: false,
+                            ),
+                            SizedBox(
+                              height: 4,
+                            ),
+                            Indicator(
+                              color: Color(0xffFB4F4F),
+                              text: 'Investasi',
+                              size: 12,
+                              isSquare: false,
+                            ),
+                            SizedBox(
+                              height: 18,
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          width: 28,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Image.asset("assets/images/pie_chart.png"),
                   SizedBox(height: 30),
                   Text(
                     'History Income.',
@@ -295,17 +383,15 @@ class _IncomeState extends State<Income> {
                         SlidableAction(
                           // An action can be bigger than the others.
                           onPressed: doEdit,
-                          backgroundColor: Colors.blue,
+                          backgroundColor: Color.fromARGB(255, 99, 185, 255),
                           foregroundColor: Colors.white,
-                          icon: Icons.edit_note_rounded,
-                          label: 'Edit',
+                          icon: Icons.edit_rounded,
                         ),
                         SlidableAction(
                           onPressed: doDelete,
-                          backgroundColor: Colors.red,
+                          backgroundColor: Color(0xffF76963),
                           foregroundColor: Colors.white,
                           icon: Icons.delete_rounded,
-                          label: 'Delete',
                         ),
                       ],
                     ),
@@ -337,6 +423,62 @@ class _IncomeState extends State<Income> {
         ),
       ),
     );
+  }
+
+  List<PieChartSectionData> showingSections() {
+    return List.generate(4, (i) {
+      final isTouched = i == touchedIndex;
+      final fontSize = isTouched ? 25.0 : 16.0;
+      final radius = isTouched ? 60.0 : 50.0;
+      switch (i) {
+        case 0:
+          return PieChartSectionData(
+            color: const Color(0xff9F43CC),
+            value: 40,
+            title: '40%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
+          );
+        case 1:
+          return PieChartSectionData(
+            color: const Color(0xff4D4D4E),
+            value: 30,
+            title: '30%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
+          );
+        case 2:
+          return PieChartSectionData(
+            color: const Color(0xffFF57BC),
+            value: 15,
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
+          );
+        case 3:
+          return PieChartSectionData(
+            color: const Color(0xffFB4F4F),
+            value: 15,
+            title: '15%',
+            radius: radius,
+            titleStyle: TextStyle(
+                fontSize: fontSize,
+                fontWeight: FontWeight.bold,
+                color: const Color(0xffffffff)),
+          );
+        default:
+          throw Error();
+      }
+    });
   }
 }
 

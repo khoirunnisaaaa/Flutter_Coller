@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
+import 'Outcome.dart';
+
 class MMMenu extends StatefulWidget {
   const MMMenu({Key? key}) : super(key: key);
 
@@ -229,7 +231,7 @@ class _MMMenuState extends State<MMMenu> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Income()),
+                        MaterialPageRoute(builder: (context) => Outcome()),
                       );
                     },
                   ),

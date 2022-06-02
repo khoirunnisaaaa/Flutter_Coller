@@ -3,6 +3,7 @@ import 'package:coller_mobile/view/MMMenu.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
@@ -20,9 +21,18 @@ class Income extends StatefulWidget {
 class _IncomeState extends State<Income> {
   int touchedIndex = -1;
 
-  final List<String> incomeItems = ['Gaji', 'Orang Tua', 'Hadiah', 'Investasi'];
+  final List<String> incomeItems = [
+    'Salary',
+    'Parent',
+    'Gift',
+    'Invest',
+    '.etc'
+  ];
   String? selectedValue;
   final _formKey = GlobalKey<FormState>();
+
+  DateTime _selectedDate = DateTime.now();
+  final initialdateval = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -199,13 +209,20 @@ class _IncomeState extends State<Income> {
                                           },
                                         ),
                                         TextFormField(
-                                          keyboardType: TextInputType.datetime,
+                                          controller: initialdateval,
+                                          onTap: () {
+                                            _selectDate();
+                                            FocusScope.of(context)
+                                                .requestFocus(new FocusNode());
+                                          },
                                           decoration: InputDecoration(
-                                            labelText: 'Date *',
-                                          ),
+                                              focusColor: redColor,
+                                              suffixIcon: Icon(
+                                                  Icons.date_range_rounded),
+                                              hintText: 'Date*'),
                                           validator: (value) {
                                             if (value!.isEmpty) {
-                                              return 'Title must be filled';
+                                              return 'Date must be filled';
                                             }
                                             return null;
                                           },
@@ -374,7 +391,7 @@ class _IncomeState extends State<Income> {
                             ),
                             Indicator(
                               color: Color(0xffFB4F4F),
-                              text: 'Investasi',
+                              text: '.etc',
                               size: 12,
                               isSquare: false,
                             ),
@@ -508,6 +525,20 @@ class _IncomeState extends State<Income> {
           throw Error();
       }
     });
+  }
+
+  Future _selectDate() async {
+    DateTime? _selectedDate = await showDatePicker(
+        context: context,
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime(2000),
+        lastDate: new DateTime.now());
+
+    if (_selectedDate != null) {
+      setState(() {
+        initialdateval.text = _selectedDate.toString();
+      });
+    }
   }
 }
 

@@ -39,6 +39,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   fl_chart: ^0.50.6
   flutter_slidable: ^1.3.0
+  dropdown_button2: ^1.4.0
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +68,7 @@ flutter:
     - assets/images/coller-white-logo.png
     - assets/images/coller-white-logo-large.png
     - assets/images/bg-welcome-screen2.png
+    - assets/images/bg_mmmenu.png
     - assets/images/ic_alarmClock.png
     - assets/images/ic_books.png
     - assets/images/ic_cm.png

@@ -1,9 +1,10 @@
 import 'package:coller_mobile/main.dart';
-import 'package:coller_mobile/view/Dashboard.dart';
+import 'package:coller_mobile/view/MMMenu.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
 import '../theme.dart';
 import 'OverviewProfile.dart';
@@ -19,30 +20,18 @@ class Income extends StatefulWidget {
 class _IncomeState extends State<Income> {
   int touchedIndex = -1;
 
-  DateTime selectedDate = DateTime.now();
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
-    }
-  }
+  final List<String> incomeItems = ['Gaji', 'Orang Tua', 'Hadiah', 'Investasi'];
+  String? selectedValue;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SlidingUpPanel(
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
-        minHeight: size.height * 0.1,
+        minHeight: size.height * 0.2,
         boxShadow: [
           BoxShadow(
             color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
@@ -86,8 +75,7 @@ class _IncomeState extends State<Income> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (context) => Dashboard()),
+                            MaterialPageRoute(builder: (context) => MMMenu()),
                           );
                         },
                       ),
@@ -160,15 +148,54 @@ class _IncomeState extends State<Income> {
                                             return null;
                                           },
                                         ),
-                                        TextFormField(
+                                        DropdownButtonFormField2(
                                           decoration: InputDecoration(
-                                            labelText: 'Category *',
+                                            //Add isDense true and zero Padding.
+                                            //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            //Add more decoration as you want here
+                                            //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
                                           ),
+                                          isExpanded: true,
+                                          hint: const Text(
+                                            'Category*',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black45,
+                                          ),
+                                          iconSize: 30,
+                                          buttonHeight: 60,
+                                          buttonPadding: const EdgeInsets.only(
+                                              left: 0, right: 10),
+                                          dropdownDecoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          items: incomeItems
+                                              .map((item) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                                  ))
+                                              .toList(),
                                           validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return 'Title must be filled';
+                                            if (value == null) {
+                                              return 'Please select income category.';
                                             }
-                                            return null;
+                                          },
+                                          onChanged: (value) {
+                                            //Do something when changing the item if you want.
+                                          },
+                                          onSaved: (value) {
+                                            selectedValue = value.toString();
                                           },
                                         ),
                                         TextFormField(

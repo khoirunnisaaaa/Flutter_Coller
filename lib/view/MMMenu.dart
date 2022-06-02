@@ -1,11 +1,19 @@
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/view/Income.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 
-import 'Outcome.dart';
-
-class MMMenu extends StatelessWidget {
+class MMMenu extends StatefulWidget {
   const MMMenu({Key? key}) : super(key: key);
+
+  @override
+  State<MMMenu> createState() => _MMMenuState();
+}
+
+class _MMMenuState extends State<MMMenu> {
+  DateTime _selectedDate = DateTime.now();
+  final initialdateval = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -53,14 +61,19 @@ class MMMenu extends StatelessWidget {
                           EdgeInsets.symmetric(horizontal: 50, vertical: 25),
                       child: Column(
                         children: [
-                          Text(
-                            'June 2022',
-                            style: TextStyle(
-                                color: darkGreyColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600),
+                          TextFormField(
+                            textAlign: TextAlign.center,
+                            controller: initialdateval,
+                            onTap: () {
+                              _selectDate();
+                              FocusScope.of(context)
+                                  .requestFocus(new FocusNode());
+                            },
+                            decoration: InputDecoration(
+                                border: InputBorder.none,
+                                hintText:
+                                    '${DateFormat().add_yMMMM().format(DateTime.now())}'),
                           ),
-                          SizedBox(height: 20),
                           Divider(
                             color: Color(0xffEBEBEB),
                           ),
@@ -216,7 +229,7 @@ class MMMenu extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Outcome()),
+                        MaterialPageRoute(builder: (context) => Income()),
                       );
                     },
                   ),
@@ -228,5 +241,19 @@ class MMMenu extends StatelessWidget {
         ),
       )),
     );
+  }
+
+  Future _selectDate() async {
+    DateTime? _selectedDate = await showDatePicker(
+        context: context,
+        initialDate: new DateTime.now(),
+        firstDate: new DateTime(2000),
+        lastDate: new DateTime.now());
+
+    if (_selectedDate != null) {
+      setState(() {
+        initialdateval.text = _selectedDate.toString();
+      });
+    }
   }
 }

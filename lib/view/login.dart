@@ -1,7 +1,32 @@
+import 'package:coller_mobile/view/navbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  loginSubmit() async {
+    try {
+      _firebaseAuth
+          .signInWithEmailAndPassword(
+              email: _emailController.text, password: _passwordController.text)
+          .then((value) => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => navbar())));
+    } catch (e) {
+      print(e);
+      SnackBar(content: Text(e.toString()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,6 +64,7 @@ class Login extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextFormField(
+                      controller: _emailController,
                       decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: 'irenebae@gmail.com',
@@ -74,6 +100,7 @@ class Login extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25),
                   child: TextFormField(
+                      controller: _passwordController,
                       obscureText: true,
                       decoration: InputDecoration(
                         border: InputBorder.none,
@@ -101,7 +128,9 @@ class Login extends StatelessWidget {
               child: Container(
                 width: 400,
                 child: RaisedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    loginSubmit();
+                  },
                   elevation: 5,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20),

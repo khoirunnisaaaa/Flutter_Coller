@@ -1,9 +1,17 @@
 import 'dart:ui';
 
 import 'package:coller_mobile/theme.dart';
+import 'package:coller_mobile/utils/CollageManagement/notes.dart';
+import 'package:coller_mobile/utils/CollageManagement/task.dart';
+import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/view/CMMenu.dart';
+import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
+import 'package:coller_mobile/view/CollageManagement/notes/notesItem.dart';
+import 'package:coller_mobile/view/CollageManagement/task.dart';
 import 'package:coller_mobile/view/EditProfile.dart';
 import 'package:coller_mobile/view/MMMenu.dart';
+import 'package:coller_mobile/view/CollageManagement/todolist.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:badges/badges.dart';
@@ -30,6 +38,16 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    if (auth.currentUser != null) {
+      print(auth.currentUser!.uid);
+      uTodolist.userUid = auth.currentUser!.uid.toString();
+      uNotes.userUid = auth.currentUser!.uid.toString();
+      uTask.userUid = auth.currentUser!.uid.toString();
+    }
+
+    String emailku = auth.currentUser!.email.toString();
+
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       body: SafeArea(
@@ -50,7 +68,7 @@ class _DashboardState extends State<Dashboard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Hello, Khoirunnisa👋",
+                                "Hello, " + emailku,
                                 style: mainTitleTextStyle,
                               ),
                               Text(
@@ -83,6 +101,13 @@ class _DashboardState extends State<Dashboard> {
                         children: [
                           Material(
                             child: TextField(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Notes()),
+                                );
+                              },
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
                                     horizontal: 25, vertical: 10),
@@ -352,11 +377,11 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => Task()),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Task()),
+                                );
                               },
                             ),
                           ),
@@ -447,11 +472,11 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => Tododlist()),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => Todolist()),
+                                );
                               },
                             ),
                           ),

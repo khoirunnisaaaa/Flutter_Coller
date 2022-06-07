@@ -1,3 +1,4 @@
+import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -87,11 +88,10 @@ class _CMMenuState extends State<CMMenu> {
                           ),
                         ),
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => Notes()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Notes()),
+                          );
                         },
                       ),
                     ),

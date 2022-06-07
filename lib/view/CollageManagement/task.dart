@@ -17,7 +17,7 @@ class Task extends StatefulWidget {
 }
 
 class _TaskState extends State<Task> {
-  DateTime _selectedDate = DateTime.now();
+  // DateTime _selectedDate = DateTime.now();
 
   final initialdateval = TextEditingController();
   final deskTask = TextEditingController();

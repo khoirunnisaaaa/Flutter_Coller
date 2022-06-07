@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
+import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -14,7 +16,13 @@ class schedule extends StatefulWidget {
 }
 
 class _scheduleState extends State<schedule> {
-  String? selectedValue;
+  String? _selectedDay;
+  TimeOfDay time = TimeOfDay.now();
+  final _timeStartController = TextEditingController();
+  final _timeEndController = TextEditingController();
+  final _topicController = TextEditingController();
+
+  String? documentId;
   final List<String> dayItems = [
     'Senin',
     'Selasa',
@@ -25,11 +33,15 @@ class _scheduleState extends State<schedule> {
     'Minggu'
   ];
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      body: SlidingUpPanel(
+        body: Form(
+      key: _formKey,
+      child: SlidingUpPanel(
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
         minHeight: size.height * 0.3,
@@ -128,7 +140,7 @@ class _scheduleState extends State<schedule> {
                                   color: redColor),
                               child: Container(
                                 child: Padding(
-                                  padding: EdgeInsets.all(20.0),
+                                  padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
                                   child: Column(
                                     children: [
                                       DropdownButtonFormField2(
@@ -178,13 +190,14 @@ class _scheduleState extends State<schedule> {
                                           //Do something when changing the item if you want.
                                         },
                                         onSaved: (value) {
-                                          selectedValue = value.toString();
+                                          _selectedDay = value.toString();
                                         },
                                       ),
                                       SizedBox(
                                         width: 200,
                                       ),
                                       TextField(
+                                        controller: _topicController,
                                         keyboardType: TextInputType.text,
                                         decoration:
                                             InputDecoration(hintText: "Topic*"),
@@ -192,18 +205,34 @@ class _scheduleState extends State<schedule> {
                                       SizedBox(
                                         width: 200,
                                       ),
-                                      TextField(
-                                        keyboardType: TextInputType.text,
+                                      TextFormField(
+                                        controller: _timeStartController,
                                         decoration: InputDecoration(
-                                            hintText: "Time Start*"),
+                                            focusColor: redColor,
+                                            suffixIcon:
+                                                Icon(Icons.access_time_sharp),
+                                            hintText: 'Time Start*'),
+                                        onTap: () {
+                                          selectTimeStart();
+                                          FocusScope.of(context)
+                                              .requestFocus(new FocusNode());
+                                        },
                                       ),
                                       SizedBox(
                                         width: 200,
                                       ),
-                                      TextField(
-                                        keyboardType: TextInputType.text,
+                                      TextFormField(
+                                        controller: _timeEndController,
                                         decoration: InputDecoration(
-                                            hintText: "Time End*"),
+                                            focusColor: redColor,
+                                            suffixIcon:
+                                                Icon(Icons.access_time_sharp),
+                                            hintText: 'Time End*'),
+                                        onTap: () {
+                                          selectTimeEnd();
+                                          FocusScope.of(context)
+                                              .requestFocus(new FocusNode());
+                                        },
                                       ),
                                       SizedBox(
                                         width: 200,
@@ -249,12 +278,29 @@ class _scheduleState extends State<schedule> {
                               ),
                             ),
                           ),
-                          onTap: () {
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //       builder: (context) => EditProfile()),
-                            // );
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                            }
+
+                            if (documentId == null) {
+                              await uSchedule.addItem(
+                                  day: _selectedDay as String,
+                                  topic: _topicController.text,
+                                  timeStart: _timeStartController.text,
+                                  timeEnd: _timeEndController.text);
+
+                              _topicController.clear();
+                              _timeStartController.clear();
+                              _timeEndController.clear();
+                            } else {
+                              await uSchedule.updateItem(
+                                  docId: documentId as String,
+                                  day: _selectedDay as String,
+                                  topic: _topicController.text,
+                                  timeStart: _timeStartController.text,
+                                  timeEnd: _timeEndController.text);
+                            }
                           },
                         ))
                       ])
@@ -268,7 +314,7 @@ class _scheduleState extends State<schedule> {
         panel: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(top: 30, bottom: 170),
+              padding: EdgeInsets.only(top: 30, bottom: 170, left: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -282,58 +328,125 @@ class _scheduleState extends State<schedule> {
                   SizedBox(
                     height: 15,
                   ),
-                  Slidable(
-                    // Specify a key if the Slidable is dismissible.
-                    key: const ValueKey(0),
+                  Table(
+                    columnWidths: const <int, TableColumnWidth>{
+                      0: FixedColumnWidth(120),
+                      1: FlexColumnWidth()
+                    },
+                    children: <TableRow>[
+                      TableRow(children: <Widget>[
+                        Text(
+                          'Time',
+                          style: TextStyle(
+                            color: redColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                        Text(
+                          'Topic',
+                          style: TextStyle(
+                            color: redColor,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ]),
+                    ],
+                  ),
+                  StreamBuilder(
+                    stream: uSchedule.readItems(),
+                    builder:
+                        (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                      if (streamSnapshot.hasError) {
+                        return Text("Something went wrong");
+                      } else if (streamSnapshot.hasData ||
+                          streamSnapshot.data != null) {
+                        return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: streamSnapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              var scheduleInfo =
+                                  streamSnapshot.data!.docs[index].data()
+                                      as Map<String, dynamic>;
+                              final DocumentSnapshot documentSnapshot =
+                                  streamSnapshot.data!.docs[index];
+                              String docId =
+                                  streamSnapshot.data!.docs[index].id;
+                              String day = scheduleInfo['day'];
+                              String topic = scheduleInfo['topic'];
+                              String timeStart = scheduleInfo['timestart'];
+                              String timeEnd = scheduleInfo['timeend'];
 
-                    // The end action pane is the one at the right or the bottom side.
-                    endActionPane: const ActionPane(
-                      motion: ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          // An action can be bigger than the others.
-                          onPressed: doEdit,
-                          backgroundColor: Color.fromARGB(255, 99, 185, 255),
-                          foregroundColor: Colors.white,
-                          icon: Icons.edit_rounded,
-                        ),
-                        SlidableAction(
-                          onPressed: doDelete,
-                          backgroundColor: Color(0xffF76963),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete_rounded,
-                        ),
-                      ],
-                    ),
+                              return Slidable(
+                                // Specify a key if the Slidable is dismissible.
+                                key: const ValueKey(0),
 
-                    // The child of the Slidable is what the user sees when the
-                    // component is not dragged.
-                    child: Column(
-                      children: [
-                        SizedBox(height: 15),
-                        ListTile(
-                          leading: Checkbox(
-                            checkColor: Colors.white,
-                            value: true,
-                            onChanged: null,
-                          ),
-                          title: Text(
-                            'Assignment',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          subtitle: Text(
-                            'Membuat tutorial memasak.',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: Text(
-                            "10/06/2022",
-                            style: TextStyle(color: Color(0xff464646)),
-                          ),
-                        ),
-                      ],
-                    ),
+                                // The end action pane is the one at the right or the bottom side.
+                                endActionPane: ActionPane(
+                                  motion: ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      // An action can be bigger than the others.
+                                      onPressed: (context) {
+                                        documentId = docId;
+                                        _topicController.text = topic;
+                                        _timeStartController.text = timeStart;
+                                        _timeEndController.text = timeEnd;
+                                      },
+                                      backgroundColor:
+                                          Color.fromARGB(255, 99, 185, 255),
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.edit_rounded,
+                                    ),
+                                    SlidableAction(
+                                      onPressed: ((context) async {
+                                        await uSchedule.deleteItem(
+                                            docId: docId);
+                                      }),
+                                      backgroundColor: Color(0xffF76963),
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.delete_rounded,
+                                    ),
+                                  ],
+                                ),
+                                child: Table(
+                                  columnWidths: const <int, TableColumnWidth>{
+                                    0: FixedColumnWidth(120),
+                                    1: FlexColumnWidth()
+                                  },
+                                  children: <TableRow>[
+                                    TableRow(children: <Widget>[
+                                      Text(
+                                        '${timeStart} - ${timeEnd}',
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                      Text(
+                                        topic,
+                                        style: TextStyle(
+                                          color: Colors.grey[600],
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ])
+                                  ],
+                                ),
+                                // The child of the Slidable is what the user sees when the
+                                // component is not dragged.
+                              );
+                            });
+                      }
+
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -341,7 +454,37 @@ class _scheduleState extends State<schedule> {
           ),
         ),
       ),
-    );
+    ));
+  }
+
+  Future selectTimeStart() async {
+    TimeOfDay? _selectedTime =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+
+    if (_selectedTime != null) {
+      setState(() {
+        time = _selectedTime;
+        final hours = time.hour.toString().padLeft(2, '0');
+        final minutes = time.minute.toString().padLeft(2, '0');
+        _timeStartController.text = "${hours}:${minutes}";
+        // _timeEndController.text = "${hours}:${minutes}";
+      });
+    }
+  }
+
+  Future selectTimeEnd() async {
+    TimeOfDay? _selectedTime =
+        await showTimePicker(context: context, initialTime: TimeOfDay.now());
+
+    if (_selectedTime != null) {
+      setState(() {
+        time = _selectedTime;
+        final hours = time.hour.toString().padLeft(2, '0');
+        final minutes = time.minute.toString().padLeft(2, '0');
+        // _timeStartController.text = "${hours}:${minutes}";
+        _timeEndController.text = "${hours}:${minutes}";
+      });
+    }
   }
 }
 

@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
+import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
 import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/view/CMMenu.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesItem.dart';
+import 'package:coller_mobile/view/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/CollageManagement/task.dart';
 import 'package:coller_mobile/view/EditProfile.dart';
 import 'package:coller_mobile/view/MMMenu.dart';
@@ -44,6 +46,7 @@ class _DashboardState extends State<Dashboard> {
       uTodolist.userUid = auth.currentUser!.uid.toString();
       uNotes.userUid = auth.currentUser!.uid.toString();
       uTask.userUid = auth.currentUser!.uid.toString();
+      uSchedule.userUid = auth.currentUser!.uid.toString();
     }
 
     String emailku = auth.currentUser!.email.toString();
@@ -424,11 +427,11 @@ class _DashboardState extends State<Dashboard> {
                                 ),
                               ),
                               onTap: () {
-                                // Navigator.push(
-                                //   context,
-                                //   MaterialPageRoute(
-                                //       builder: (context) => Schedule()),
-                                // );
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => schedule()),
+                                );
                               },
                             ),
                           ),

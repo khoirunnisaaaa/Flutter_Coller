@@ -2,7 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
-import 'package:coller_mobile/view/CollageManagement/notes/notesItem.dart';
+import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
+import 'package:coller_mobile/view/CollageManagement/notes/notesEditItem.dart';
 import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:flutter/material.dart';
@@ -257,9 +258,15 @@ class _NotesState extends State<Notes> {
                                     SlidableAction(
                                       // An action can be bigger than the others.
                                       onPressed: (context) {
-                                        // _todos.text = todosInfo['todos'];
-                                        // documentId = docId;
-                                        // todosStatus = status;
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  notesEditItem(
+                                                      documentId: docId,
+                                                      docTitle: title,
+                                                      docBody: body)),
+                                        );
                                       },
                                       backgroundColor:
                                           Color.fromARGB(255, 99, 185, 255),

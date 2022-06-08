@@ -1,4 +1,4 @@
-import 'package:coller_mobile/view/CollageManagement/notes/notesItem.dart';
+import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
 import 'package:coller_mobile/view/Dashboard.dart';
 import 'package:coller_mobile/view/Income.dart';
 import 'package:coller_mobile/view/navbar.dart';

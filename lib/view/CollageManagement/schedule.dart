@@ -23,6 +23,7 @@ class _scheduleState extends State<schedule> {
   final _topicController = TextEditingController();
 
   String? documentId;
+  String dayNow = "Senin";
   final List<String> dayItems = [
     'Senin',
     'Selasa',
@@ -44,7 +45,7 @@ class _scheduleState extends State<schedule> {
       child: SlidingUpPanel(
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
-        minHeight: size.height * 0.3,
+        minHeight: size.height * 0.35,
         boxShadow: [
           BoxShadow(
             color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
@@ -187,7 +188,7 @@ class _scheduleState extends State<schedule> {
                                           }
                                         },
                                         onChanged: (value) {
-                                          //Do something when changing the item if you want.
+                                          uSchedule.hari = value.toString();
                                         },
                                         onSaved: (value) {
                                           _selectedDay = value.toString();
@@ -314,7 +315,7 @@ class _scheduleState extends State<schedule> {
         panel: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(top: 30, bottom: 170, left: 30),
+              padding: EdgeInsets.only(top: 0, bottom: 170),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -328,126 +329,165 @@ class _scheduleState extends State<schedule> {
                   SizedBox(
                     height: 15,
                   ),
-                  Table(
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FixedColumnWidth(120),
-                      1: FlexColumnWidth()
-                    },
-                    children: <TableRow>[
-                      TableRow(children: <Widget>[
-                        Text(
-                          'Time',
-                          style: TextStyle(
-                            color: redColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
+                  Column(children: <Widget>[
+                    Center(
+                        child: InkWell(
+                      child: Container(
+                        height: 40,
+                        width: 200,
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Center(
+                          child: Text(
+                            dayNow,
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
                           ),
                         ),
-                        Text(
-                          'Topic',
-                          style: TextStyle(
-                            color: redColor,
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ]),
-                    ],
+                      ),
+                      onTap: () {
+                        showAlertDialog();
+                      },
+                    ))
+                  ]),
+                  SizedBox(
+                    height: 15,
                   ),
-                  StreamBuilder(
-                    stream: uSchedule.readItems(),
-                    builder:
-                        (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
-                      if (streamSnapshot.hasError) {
-                        return Text("Something went wrong");
-                      } else if (streamSnapshot.hasData ||
-                          streamSnapshot.data != null) {
-                        return ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: streamSnapshot.data!.docs.length,
-                            itemBuilder: (context, index) {
-                              var scheduleInfo =
-                                  streamSnapshot.data!.docs[index].data()
-                                      as Map<String, dynamic>;
-                              final DocumentSnapshot documentSnapshot =
-                                  streamSnapshot.data!.docs[index];
-                              String docId =
-                                  streamSnapshot.data!.docs[index].id;
-                              String day = scheduleInfo['day'];
-                              String topic = scheduleInfo['topic'];
-                              String timeStart = scheduleInfo['timestart'];
-                              String timeEnd = scheduleInfo['timeend'];
-
-                              return Slidable(
-                                // Specify a key if the Slidable is dismissible.
-                                key: const ValueKey(0),
-
-                                // The end action pane is the one at the right or the bottom side.
-                                endActionPane: ActionPane(
-                                  motion: ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      // An action can be bigger than the others.
-                                      onPressed: (context) {
-                                        documentId = docId;
-                                        _topicController.text = topic;
-                                        _timeStartController.text = timeStart;
-                                        _timeEndController.text = timeEnd;
-                                      },
-                                      backgroundColor:
-                                          Color.fromARGB(255, 99, 185, 255),
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.edit_rounded,
-                                    ),
-                                    SlidableAction(
-                                      onPressed: ((context) async {
-                                        await uSchedule.deleteItem(
-                                            docId: docId);
-                                      }),
-                                      backgroundColor: Color(0xffF76963),
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete_rounded,
-                                    ),
-                                  ],
+                  Padding(
+                      padding: EdgeInsets.only(left: 30),
+                      child: Column(
+                        children: <Widget>[
+                          Table(
+                            columnWidths: const <int, TableColumnWidth>{
+                              0: FixedColumnWidth(120),
+                              1: FlexColumnWidth()
+                            },
+                            children: <TableRow>[
+                              TableRow(children: <Widget>[
+                                Text(
+                                  'Time',
+                                  style: TextStyle(
+                                    color: redColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                                child: Table(
-                                  columnWidths: const <int, TableColumnWidth>{
-                                    0: FixedColumnWidth(120),
-                                    1: FlexColumnWidth()
-                                  },
-                                  children: <TableRow>[
-                                    TableRow(children: <Widget>[
-                                      Text(
-                                        '${timeStart} - ${timeEnd}',
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                      Text(
-                                        topic,
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    ])
-                                  ],
+                                Text(
+                                  'Topic',
+                                  style: TextStyle(
+                                    color: redColor,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 16,
+                                  ),
                                 ),
-                                // The child of the Slidable is what the user sees when the
-                                // component is not dragged.
+                              ]),
+                            ],
+                          ),
+                          StreamBuilder(
+                            stream: uSchedule.readItems(dayNow),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                              if (streamSnapshot.hasError) {
+                                return Text("Something went wrong");
+                              } else if (streamSnapshot.hasData ||
+                                  streamSnapshot.data != null) {
+                                return ListView.builder(
+                                    scrollDirection: Axis.vertical,
+                                    shrinkWrap: true,
+                                    itemCount: streamSnapshot.data!.docs.length,
+                                    itemBuilder: (context, index) {
+                                      var scheduleInfo = streamSnapshot
+                                          .data!.docs[index]
+                                          .data() as Map<String, dynamic>;
+                                      final DocumentSnapshot documentSnapshot =
+                                          streamSnapshot.data!.docs[index];
+                                      String docId =
+                                          streamSnapshot.data!.docs[index].id;
+                                      String day = scheduleInfo['day'];
+                                      String topic = scheduleInfo['topic'];
+                                      String timeStart =
+                                          scheduleInfo['timestart'];
+                                      String timeEnd = scheduleInfo['timeend'];
+
+                                      return Slidable(
+                                        // Specify a key if the Slidable is dismissible.
+                                        key: const ValueKey(0),
+
+                                        // The end action pane is the one at the right or the bottom side.
+                                        endActionPane: ActionPane(
+                                          motion: ScrollMotion(),
+                                          children: [
+                                            SlidableAction(
+                                              // An action can be bigger than the others.
+                                              onPressed: (context) {
+                                                documentId = docId;
+                                                _topicController.text = topic;
+                                                _timeStartController.text =
+                                                    timeStart;
+                                                _timeEndController.text =
+                                                    timeEnd;
+                                              },
+                                              backgroundColor: Color.fromARGB(
+                                                  255, 99, 185, 255),
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.edit_rounded,
+                                            ),
+                                            SlidableAction(
+                                              onPressed: ((context) async {
+                                                await uSchedule.deleteItem(
+                                                    docId: docId, day: day);
+                                              }),
+                                              backgroundColor:
+                                                  Color(0xffF76963),
+                                              foregroundColor: Colors.white,
+                                              icon: Icons.delete_rounded,
+                                            ),
+                                          ],
+                                        ),
+                                        child: Table(
+                                          columnWidths: const <int,
+                                              TableColumnWidth>{
+                                            0: FixedColumnWidth(120),
+                                            1: FlexColumnWidth()
+                                          },
+                                          children: <TableRow>[
+                                            TableRow(children: <Widget>[
+                                              Text(
+                                                '${timeStart} - ${timeEnd}',
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              Text(
+                                                topic,
+                                                style: TextStyle(
+                                                  color: Colors.grey[600],
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ])
+                                          ],
+                                        ),
+                                        // The child of the Slidable is what the user sees when the
+                                        // component is not dragged.
+                                      );
+                                    });
+                              }
+
+                              return const Center(
+                                child: CircularProgressIndicator(),
                               );
-                            });
-                      }
-
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    },
-                  ),
+                            },
+                          ),
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -485,6 +525,34 @@ class _scheduleState extends State<schedule> {
         _timeEndController.text = "${hours}:${minutes}";
       });
     }
+  }
+
+  showAlertDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Select Day'),
+            content: Container(
+              width: double.minPositive,
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: dayItems.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                    title: Text(dayItems[index]),
+                    onTap: () {
+                      setState(() {
+                        dayNow = dayItems[index];
+                      });
+                      Navigator.pop(context, dayItems[index]);
+                    },
+                  );
+                },
+              ),
+            ),
+          );
+        });
   }
 }
 

@@ -7,7 +7,7 @@ import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/view/CMMenu.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
-import 'package:coller_mobile/view/CollageManagement/notes/notesItem.dart';
+import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
 import 'package:coller_mobile/view/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/CollageManagement/task.dart';
 import 'package:coller_mobile/view/EditProfile.dart';

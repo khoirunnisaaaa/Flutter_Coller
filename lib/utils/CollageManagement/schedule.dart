@@ -8,7 +8,7 @@ final CollectionReference _scheduleCollection =
 
 class uSchedule {
   static String? userUid;
-
+  static String? hari;
   static Future<void> addItem({
     required String day,
     required String topic,
@@ -16,7 +16,7 @@ class uSchedule {
     required String timeEnd,
   }) async {
     DocumentReference documentReference =
-        _scheduleCollection.doc(userUid).collection('items').doc();
+        _scheduleCollection.doc(userUid).collection(hari as String).doc();
 
     Map<String, dynamic> data = <String, dynamic>{
       "day": day,
@@ -54,18 +54,17 @@ class uSchedule {
         .catchError((e) => log(e));
   }
 
-  static Stream<QuerySnapshot> readItems() {
+  static Stream<QuerySnapshot> readItems(String hari) {
     CollectionReference todosItemCollection =
-        _scheduleCollection.doc(userUid).collection("items");
+        _scheduleCollection.doc(userUid).collection(hari);
 
     return todosItemCollection.snapshots();
   }
 
-  static Future<void> deleteItem({
-    required String docId,
-  }) async {
+  static Future<void> deleteItem(
+      {required String docId, required String day}) async {
     DocumentReference documentReference =
-        _scheduleCollection.doc(userUid).collection('items').doc(docId);
+        _scheduleCollection.doc(userUid).collection(day).doc(docId);
     await documentReference
         .delete()
         .whenComplete(() => print('Schedule deleted'))

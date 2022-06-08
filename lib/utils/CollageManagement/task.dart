@@ -7,6 +7,19 @@ final CollectionReference _taskCollection = _firestore.collection("task");
 
 class uTask {
   static String? userUid;
+  static int totalTask = 0;
+  static List<String> dataItems = [];
+
+  static void getLength() async {
+    var data = await _taskCollection
+        .doc(userUid)
+        .collection("items")
+        .where("status", isEqualTo: "true")
+        .get();
+
+    totalTask = data.size;
+    print("Total Task : " + totalTask.toString());
+  }
 
   // static List<int> listIncome = [];
 

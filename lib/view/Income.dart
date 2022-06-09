@@ -1,5 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/main.dart';
+import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/view/MMMenu.dart';
+import 'package:coller_mobile/view/Outcome.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -21,18 +24,38 @@ class Income extends StatefulWidget {
 class _IncomeState extends State<Income> {
   int touchedIndex = -1;
 
-  final List<String> incomeItems = [
-    'Salary',
-    'Parent',
-    'Gift',
-    'Invest',
-    '.etc'
-  ];
-  String? selectedValue;
+  double sum = 0.0;
+
+  final List<String> incomeItems = ['Salary', 'Parent', 'Gift', '.etc'];
+  String? selectedCategory;
   final _formKey = GlobalKey<FormState>();
 
   DateTime _selectedDate = DateTime.now();
-  final initialdateval = TextEditingController();
+  // final initialdateval = TextEditingController();
+
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _date = TextEditingController();
+  final TextEditingController _income = TextEditingController();
+  String? documentId;
+
+  // operasi chart
+  double? totalSalary;
+  double? totalGift;
+  double? totalParent;
+  double? totalEtc;
+
+  @override
+  void initState() {
+    // uIncome.totalIncome = 0;
+    // uIncome.totalGift = 0;
+    // uIncome.totalSalary = 0;
+    uIncome.getNama();
+    totalSalary = uIncome.totalSalary;
+    totalGift = uIncome.totalGift;
+    totalParent = uIncome.totalParent;
+    totalEtc = uIncome.totalEtc;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -146,6 +169,7 @@ class _IncomeState extends State<Income> {
                                     child: Column(
                                       children: [
                                         TextFormField(
+                                          controller: _title,
                                           keyboardType: TextInputType.text,
                                           style: TextStyle(color: Colors.white),
                                           decoration: InputDecoration(
@@ -203,13 +227,15 @@ class _IncomeState extends State<Income> {
                                           },
                                           onChanged: (value) {
                                             //Do something when changing the item if you want.
+                                            selectedCategory = value.toString();
                                           },
                                           onSaved: (value) {
-                                            selectedValue = value.toString();
+                                            selectedCategory = value.toString();
                                           },
                                         ),
                                         TextFormField(
-                                          controller: initialdateval,
+                                          // controller: _date
+                                          controller: _date,
                                           onTap: () {
                                             _selectDate();
                                             FocusScope.of(context)
@@ -228,6 +254,7 @@ class _IncomeState extends State<Income> {
                                           },
                                         ),
                                         TextFormField(
+                                          controller: _income,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             labelText: 'Income(Rp.) *',
@@ -281,9 +308,49 @@ class _IncomeState extends State<Income> {
                               ),
                             ),
                           ),
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {}
+                          onTap: () async {
+                            // uIncome.getNama();
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                            }
+                            String category = selectedCategory as String;
+                            print(documentId);
+                            if (documentId != null) {
+                              await uIncome.updateItem(
+                                  title: _title.text,
+                                  category: category,
+                                  date: _date.text,
+                                  income: int.parse(_income.text),
+                                  docId: documentId as String);
+                              _title.clear();
+                              _date.clear();
+                              _income.clear();
+                            } else {
+                              await uIncome.addItem(
+                                title: _title.text,
+                                category: category,
+                                date: _date.text,
+                                income: int.parse(_income.text),
+                              );
+                              _title.clear();
+                              _date.clear();
+                              _income.clear();
+                            }
+
+                            await uIncome.getNama();
+                            setState(() {
+                              totalSalary = uIncome.totalSalary;
+                              totalGift = uIncome.totalGift;
+                              totalParent = uIncome.totalParent;
+                              totalEtc = uIncome.totalEtc;
+                            });
                           },
+                          // onTap: () {
+                          //   if (_formKey.currentState!.validate()) {
+                          //     _formKey.currentState!.save();
+                          //     print(selectedCategory);
+                          //   }
+                          // },
                         ),
                       ),
                     ],
@@ -310,7 +377,7 @@ class _IncomeState extends State<Income> {
                   SizedBox(height: 15),
                   Center(
                     child: Text(
-                      'Chart & History',
+                      'History',
                       style: titleFeatureTextStyle,
                     ),
                   ),
@@ -364,7 +431,7 @@ class _IncomeState extends State<Income> {
                           children: const <Widget>[
                             Indicator(
                               color: Color(0xff9F43CC),
-                              text: 'Gaji',
+                              text: 'Salary',
                               size: 12,
                               isSquare: false,
                             ),
@@ -373,7 +440,7 @@ class _IncomeState extends State<Income> {
                             ),
                             Indicator(
                               color: Color(0xff4D4D4E),
-                              text: 'Orang Tua',
+                              text: 'Gift',
                               size: 12,
                               isSquare: false,
                             ),
@@ -382,7 +449,7 @@ class _IncomeState extends State<Income> {
                             ),
                             Indicator(
                               color: Color(0xffFF57BC),
-                              text: 'Hadiah',
+                              text: 'Parent',
                               size: 12,
                               isSquare: false,
                             ),
@@ -412,55 +479,133 @@ class _IncomeState extends State<Income> {
                     'History Income.',
                     style: titleTextStyle,
                   ),
-                  SizedBox(height: 20),
-                  Text(
-                    '12/06/2022',
-                    style: dateMMTextStyle,
-                  ),
+                  // SizedBox(height: 20),
+                  // Text(
+                  //   "16/05/2022",
+                  //   style: dateMMTextStyle,
+                  // ),
                   // SLIDE-ABLE
-                  Slidable(
-                    // Specify a key if the Slidable is dismissible.
-                    key: const ValueKey(0),
+                  StreamBuilder(
+                    stream: uIncome.readItems(),
+                    builder:
+                        (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                      if (streamSnapshot.hasError) {
+                        return Text("Something went wrong");
+                      } else if (streamSnapshot.hasData ||
+                          streamSnapshot.data != null) {
+                        return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: streamSnapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              var incomesInfo = streamSnapshot.data!.docs[index]
+                                  .data() as Map<String, dynamic>;
+                              final DocumentSnapshot documentSnapshot =
+                                  streamSnapshot.data!.docs[index];
+                              String docId =
+                                  streamSnapshot.data!.docs[index].id;
+                              String title = incomesInfo['title'];
+                              String category = incomesInfo['category'];
+                              int income = incomesInfo['income'];
+                              String date = incomesInfo['date'];
 
-                    // The end action pane is the one at the right or the bottom side.
-                    endActionPane: const ActionPane(
-                      motion: ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          // An action can be bigger than the others.
-                          onPressed: doEdit,
-                          backgroundColor: Color.fromARGB(255, 99, 185, 255),
-                          foregroundColor: Colors.white,
-                          icon: Icons.edit_rounded,
-                        ),
-                        SlidableAction(
-                          onPressed: doDelete,
-                          backgroundColor: Color(0xffF76963),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete_rounded,
-                        ),
-                      ],
-                    ),
+                              return Slidable(
+                                // Specify a key if the Slidable is dismissible.
+                                key: const ValueKey(0),
 
-                    // The child of the Slidable is what the user sees when the
-                    // component is not dragged.
-                    child: Column(
-                      children: [
-                        SizedBox(height: 15),
-                        ListTile(
-                          leading: CircleAvatar(),
-                          title: Text(
-                            'Gaji bulan juni',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: Text(
-                            "1.200.000",
-                            style: TextStyle(color: Color(0xff464646)),
-                          ),
-                        ),
-                      ],
-                    ),
+                                // The end action pane is the one at the right or the bottom side.
+                                endActionPane: ActionPane(
+                                  motion: ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      // An action can be bigger than the others.
+                                      onPressed: (context) {
+                                        documentId = docId;
+                                        _title.text = incomesInfo['title'];
+                                        _date.text = incomesInfo['date'];
+                                        selectedCategory =
+                                            incomesInfo['category'];
+                                        _income.text =
+                                            incomesInfo['income'].toString();
+                                      },
+                                      backgroundColor:
+                                          Color.fromARGB(255, 99, 185, 255),
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.edit_rounded,
+                                    ),
+                                    SlidableAction(
+                                      onPressed: ((context) async {
+                                        await uIncome.deleteItem(docId: docId);
+                                        await uIncome.getNama();
+                                        setState(() {
+                                          totalSalary = uIncome.totalSalary;
+                                          totalGift = uIncome.totalGift;
+                                          totalParent = uIncome.totalParent;
+                                          totalEtc = uIncome.totalEtc;
+                                        });
+                                      }),
+                                      backgroundColor: Color(0xffF76963),
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.delete_rounded,
+                                    ),
+                                  ],
+                                ),
+
+                                // The child of the Slidable is what the user sees when the
+                                // component is not dragged.
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 15),
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: redColor,
+                                        child: category == 'Salary'
+                                            ? Icon(
+                                                Icons
+                                                    .account_balance_wallet_rounded,
+                                                color: Colors.white,
+                                                size: 20,
+                                              )
+                                            : category == 'Parent'
+                                                ? Icon(
+                                                    Icons.group_rounded,
+                                                    color: Colors.white,
+                                                    size: 20,
+                                                  )
+                                                : category == 'Gift'
+                                                    ? Icon(
+                                                        Icons.redeem_rounded,
+                                                        color: Colors.white,
+                                                        size: 20,
+                                                      )
+                                                    : Icon(
+                                                        Icons
+                                                            .more_horiz_rounded,
+                                                        color: Colors.white,
+                                                        size: 20,
+                                                      ),
+                                      ),
+                                      title: Text(
+                                        title,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      subtitle: Text(date),
+                                      trailing: Text(
+                                        "Rp. ${income}",
+                                        style:
+                                            TextStyle(color: Color(0xff464646)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -478,10 +623,13 @@ class _IncomeState extends State<Income> {
       final radius = isTouched ? 60.0 : 50.0;
       switch (i) {
         case 0:
+          // print(
+          //     'salary: ${uIncome.totalSalary} / ${uIncome.totalIncome} * 100 = ${totalSalary}');
           return PieChartSectionData(
             color: const Color(0xff9F43CC),
-            value: 40,
-            title: '40%',
+            value: totalSalary,
+            title: '${(uIncome.persenSalary).toString()}%',
+            // title: '${(totalSalary / uIncome.totalIncome * 100).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -489,10 +637,13 @@ class _IncomeState extends State<Income> {
                 color: const Color(0xffffffff)),
           );
         case 1:
+          // print(
+          //     'gift: ${uIncome.totalGift} / ${uIncome.totalIncome} * 100 = ${totalGift}');
           return PieChartSectionData(
             color: const Color(0xff4D4D4E),
-            value: 30,
-            title: '30%',
+            value: totalGift,
+            title: '${(uIncome.persenGift).toString()}%',
+            // title: '${(totalGift / uIncome.totalIncome * 100).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -502,8 +653,8 @@ class _IncomeState extends State<Income> {
         case 2:
           return PieChartSectionData(
             color: const Color(0xffFF57BC),
-            value: 15,
-            title: '15%',
+            value: totalParent,
+            title: '${(uIncome.persenParent).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -513,8 +664,8 @@ class _IncomeState extends State<Income> {
         case 3:
           return PieChartSectionData(
             color: const Color(0xffFB4F4F),
-            value: 15,
-            title: '15%',
+            value: totalEtc,
+            title: '${(uIncome.persenEtc).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -534,9 +685,11 @@ class _IncomeState extends State<Income> {
         firstDate: new DateTime(2000),
         lastDate: new DateTime.now());
 
+    final DateFormat formatter = DateFormat('yMd');
+    final String finalDate = formatter.format(_selectedDate as DateTime);
     if (_selectedDate != null) {
       setState(() {
-        initialdateval.text = _selectedDate.toString();
+        _date.text = finalDate.toString();
       });
     }
   }

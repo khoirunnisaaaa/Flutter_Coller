@@ -5,6 +5,8 @@ import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
 import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
+import 'package:coller_mobile/utils/income.dart';
+import 'package:coller_mobile/utils/outcome.dart';
 import 'package:coller_mobile/view/CMMenu.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
@@ -47,6 +49,8 @@ class _DashboardState extends State<Dashboard> {
       uNotes.userUid = auth.currentUser!.uid.toString();
       uTask.userUid = auth.currentUser!.uid.toString();
       uSchedule.userUid = auth.currentUser!.uid.toString();
+      uIncome.userUid = auth.currentUser!.uid.toString();
+      uOutcome.userUid = auth.currentUser!.uid.toString();
     }
 
     String emailku = auth.currentUser!.email.toString();

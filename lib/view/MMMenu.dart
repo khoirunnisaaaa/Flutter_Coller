@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
+import 'package:coller_mobile/utils/income.dart';
+import 'package:coller_mobile/utils/outcome.dart';
 import 'package:coller_mobile/view/Income.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -16,6 +19,19 @@ class MMMenu extends StatefulWidget {
 class _MMMenuState extends State<MMMenu> {
   DateTime _selectedDate = DateTime.now();
   final initialdateval = TextEditingController();
+  String balance = ((uIncome.totalIncome) - (uOutcome.totalOutcome)).toString();
+  String totalIncome = (uIncome.totalIncome).toString();
+  String totalOutcome = (uOutcome.totalOutcome).toString();
+  int sum = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    uIncome.totalIncome = 0;
+    uIncome.getNama();
+    // uOutcome.totalOutcome = 0;
+    uOutcome.getNama();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,25 +79,30 @@ class _MMMenuState extends State<MMMenu> {
                           EdgeInsets.symmetric(horizontal: 50, vertical: 25),
                       child: Column(
                         children: [
-                          TextFormField(
-                            textAlign: TextAlign.center,
-                            controller: initialdateval,
-                            onTap: () {
-                              _selectDate();
-                              FocusScope.of(context)
-                                  .requestFocus(new FocusNode());
-                            },
-                            decoration: InputDecoration(
-                                border: InputBorder.none,
-                                hintText:
-                                    '${DateFormat().add_yMMMM().format(DateTime.now())}'),
+                          Text(
+                            'Balance',
+                            style: TextStyle(
+                                fontSize: 16, color: Color(0xff9F9F9F)),
                           ),
-                          Divider(
-                            color: Color(0xffEBEBEB),
-                          ),
+                          // TextFormField(
+                          //   textAlign: TextAlign.center,
+                          //   controller: initialdateval,
+                          //   onTap: () {
+                          //     _selectDate();
+                          //     FocusScope.of(context)
+                          //         .requestFocus(new FocusNode());
+                          //   },
+                          //   decoration: InputDecoration(
+                          //       border: InputBorder.none,
+                          //       hintText:
+                          //           '${DateFormat().add_yMMMM().format(DateTime.now())}'),
+                          // ),
+                          // Divider(
+                          //   color: Color(0xffEBEBEB),
+                          // ),
                           SizedBox(height: 15),
                           Text(
-                            'Rp. 3.245.500',
+                            'Rp. ${balance}',
                             style: TextStyle(
                                 color: darkGreyColor,
                                 fontSize: 27,
@@ -91,20 +112,24 @@ class _MMMenuState extends State<MMMenu> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Income',
-                                    style: TextStyle(
-                                        color: Color(0xff9F9F9F), fontSize: 13),
-                                  ),
-                                  Text(
-                                    'Rp. 5.000.000',
-                                    style: TextStyle(
-                                        color: darkGreyColor, fontSize: 16),
-                                  )
-                                ],
+                              Container(
+                                width: MediaQuery.of(context).size.width * 0.35,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Income',
+                                      style: TextStyle(
+                                          color: Color(0xff9F9F9F),
+                                          fontSize: 13),
+                                    ),
+                                    Text(
+                                      'Rp. ${totalIncome}',
+                                      style: TextStyle(
+                                          color: darkGreyColor, fontSize: 16),
+                                    )
+                                  ],
+                                ),
                               ),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -115,7 +140,7 @@ class _MMMenuState extends State<MMMenu> {
                                         color: Color(0xff9F9F9F), fontSize: 13),
                                   ),
                                   Text(
-                                    'Rp. 1.754.500',
+                                    'Rp. ${totalOutcome}',
                                     style: TextStyle(
                                         color: darkGreyColor, fontSize: 16),
                                   )

@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/main.dart';
+import 'package:coller_mobile/utils/income.dart';
+import 'package:coller_mobile/utils/outcome.dart';
 import 'package:coller_mobile/view/MMMenu.dart';
+import 'package:coller_mobile/view/Outcome.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -21,20 +25,40 @@ class Outcome extends StatefulWidget {
 class _OutcomeState extends State<Outcome> {
   int touchedIndex = -1;
 
+  double sum = 0.0;
+
   final List<String> outcomeItems = [
     'Food',
-    'Entertainment',
-    'Beauty',
     'Education',
-    'Social',
-    'Travel',
+    'Entertainment',
     '.etc'
   ];
-  String? selectedValue;
+  String? selectedCategory;
   final _formKey = GlobalKey<FormState>();
 
   DateTime _selectedDate = DateTime.now();
-  final initialdateval = TextEditingController();
+  // final initialdateval = TextEditingController();
+
+  final TextEditingController _title = TextEditingController();
+  final TextEditingController _date = TextEditingController();
+  final TextEditingController _outcome = TextEditingController();
+  String? documentId;
+
+  // operasi chart
+  double? totalFood;
+  double? totalEducation;
+  double? totalEntertainment;
+  double? totalEtc;
+
+  @override
+  void initState() {
+    uOutcome.getNama();
+    totalFood = uOutcome.totalFood;
+    totalEducation = uOutcome.totalEducation;
+    totalEntertainment = uOutcome.totalEntertainment;
+    totalEtc = uOutcome.totalEtc;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -148,6 +172,7 @@ class _OutcomeState extends State<Outcome> {
                                     child: Column(
                                       children: [
                                         TextFormField(
+                                          controller: _title,
                                           keyboardType: TextInputType.text,
                                           style: TextStyle(color: Colors.white),
                                           decoration: InputDecoration(
@@ -205,19 +230,22 @@ class _OutcomeState extends State<Outcome> {
                                           },
                                           onChanged: (value) {
                                             //Do something when changing the item if you want.
+                                            selectedCategory = value.toString();
                                           },
                                           onSaved: (value) {
-                                            selectedValue = value.toString();
+                                            selectedCategory = value.toString();
                                           },
                                         ),
                                         TextFormField(
-                                          controller: initialdateval,
+                                          // controller: _date
+                                          controller: _date,
                                           onTap: () {
                                             _selectDate();
                                             FocusScope.of(context)
                                                 .requestFocus(new FocusNode());
                                           },
                                           decoration: InputDecoration(
+                                              focusColor: redColor,
                                               suffixIcon: Icon(
                                                   Icons.date_range_rounded),
                                               hintText: 'Date*'),
@@ -229,6 +257,7 @@ class _OutcomeState extends State<Outcome> {
                                           },
                                         ),
                                         TextFormField(
+                                          controller: _outcome,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
                                             labelText: 'Outcome(Rp.) *',
@@ -282,9 +311,48 @@ class _OutcomeState extends State<Outcome> {
                               ),
                             ),
                           ),
-                          onTap: () {
-                            if (_formKey.currentState!.validate()) {}
+                          onTap: () async {
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                            }
+                            String category = selectedCategory as String;
+                            print("documentId: ${documentId}");
+                            if (documentId != null) {
+                              await uOutcome.updateItem(
+                                  title: _title.text,
+                                  category: category,
+                                  date: _date.text,
+                                  outcome: int.parse(_outcome.text),
+                                  docId: documentId as String);
+                              _title.clear();
+                              _date.clear();
+                              _outcome.clear();
+                            } else {
+                              await uOutcome.addItem(
+                                title: _title.text,
+                                category: category,
+                                date: _date.text,
+                                outcome: int.parse(_outcome.text),
+                              );
+                              _title.clear();
+                              _date.clear();
+                              _outcome.clear();
+                            }
+
+                            await uOutcome.getNama();
+                            setState(() {
+                              totalFood = uOutcome.totalFood;
+                              totalEducation = uOutcome.totalEducation;
+                              totalEntertainment = uOutcome.totalEntertainment;
+                              totalEtc = uOutcome.totalEtc;
+                            });
                           },
+                          // onTap: () {
+                          //   if (_formKey.currentState!.validate()) {
+                          //     _formKey.currentState!.save();
+                          //     print(selectedCategory);
+                          //   }
+                          // },
                         ),
                       ),
                     ],
@@ -415,53 +483,159 @@ class _OutcomeState extends State<Outcome> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    '12/06/2022',
+                    "16/05/2022",
                     style: dateMMTextStyle,
                   ),
                   // SLIDE-ABLE
-                  Slidable(
-                    // Specify a key if the Slidable is dismissible.
-                    key: const ValueKey(0),
+                  StreamBuilder(
+                    stream: uOutcome.readItems(),
+                    builder:
+                        (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
+                      if (streamSnapshot.hasError) {
+                        return Text("Something went wrong");
+                      } else if (streamSnapshot.hasData ||
+                          streamSnapshot.data != null) {
+                        return ListView.builder(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: streamSnapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              var outcomesInfo =
+                                  streamSnapshot.data!.docs[index].data()
+                                      as Map<String, dynamic>;
+                              final DocumentSnapshot documentSnapshot =
+                                  streamSnapshot.data!.docs[index];
+                              String docId =
+                                  streamSnapshot.data!.docs[index].id;
+                              String title = outcomesInfo['title'];
+                              String category = outcomesInfo['category'];
+                              int outcome = outcomesInfo['outcome'];
+                              String date = outcomesInfo['date'];
 
-                    // The end action pane is the one at the right or the bottom side.
-                    endActionPane: const ActionPane(
-                      motion: ScrollMotion(),
-                      children: [
-                        SlidableAction(
-                          // An action can be bigger than the others.
-                          onPressed: doEdit,
-                          backgroundColor: Color.fromARGB(255, 99, 185, 255),
-                          foregroundColor: Colors.white,
-                          icon: Icons.edit_rounded,
-                        ),
-                        SlidableAction(
-                          onPressed: doDelete,
-                          backgroundColor: Color(0xffF76963),
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete_rounded,
-                        ),
-                      ],
-                    ),
+                              return Slidable(
+                                // Specify a key if the Slidable is dismissible.
+                                key: const ValueKey(0),
 
-                    // The child of the Slidable is what the user sees when the
-                    // component is not dragged.
-                    child: Column(
-                      children: [
-                        SizedBox(height: 15),
-                        ListTile(
-                          leading: CircleAvatar(),
-                          title: Text(
-                            'Hamburger + Coffee for breakfast',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          trailing: Text(
-                            "130.000",
-                            style: TextStyle(color: Color(0xff464646)),
-                          ),
-                        ),
-                      ],
-                    ),
+                                // The end action pane is the one at the right or the bottom side.
+                                endActionPane: ActionPane(
+                                  motion: ScrollMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      // An action can be bigger than the others.
+                                      onPressed: (context) {
+                                        documentId = docId;
+                                        _title.text = outcomesInfo['title'];
+                                        _date.text = outcomesInfo['date'];
+                                        selectedCategory =
+                                            outcomesInfo['category'];
+                                        _outcome.text =
+                                            outcomesInfo['outcome'].toString();
+                                      },
+                                      backgroundColor:
+                                          Color.fromARGB(255, 99, 185, 255),
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.edit_rounded,
+                                    ),
+                                    SlidableAction(
+                                      onPressed: ((context) async {
+                                        await uOutcome.deleteItem(docId: docId);
+                                        await uOutcome.getNama();
+                                        setState(() {
+                                          totalFood = uOutcome.totalFood;
+                                          totalEducation =
+                                              uOutcome.totalEducation;
+                                          totalEntertainment =
+                                              uOutcome.totalEntertainment;
+                                          totalEtc = uOutcome.totalEtc;
+                                        });
+                                      }),
+                                      backgroundColor: Color(0xffF76963),
+                                      foregroundColor: Colors.white,
+                                      icon: Icons.delete_rounded,
+                                    ),
+                                  ],
+                                ),
+
+                                // The child of the Slidable is what the user sees when the
+                                // component is not dragged.
+                                child: Column(
+                                  children: [
+                                    SizedBox(height: 15),
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        backgroundColor: redColor,
+                                        child: category == 'Food'
+                                            ? Icon(
+                                                Icons.restaurant_rounded,
+                                                color: Colors.white,
+                                                size: 20,
+                                              )
+                                            : category == 'Entertainment'
+                                                ? Icon(
+                                                    Icons
+                                                        .sports_esports_rounded,
+                                                    color: Colors.white,
+                                                    size: 20,
+                                                  )
+                                                : category == 'Beauty'
+                                                    ? Icon(
+                                                        Icons.woman_rounded,
+                                                        color: Colors.white,
+                                                        size: 20,
+                                                      )
+                                                    : category == 'Education'
+                                                        ? Icon(
+                                                            Icons
+                                                                .cast_for_education_rounded,
+                                                            color: Colors.white,
+                                                            size: 20,
+                                                          )
+                                                        : category == 'Social'
+                                                            ? Icon(
+                                                                Icons
+                                                                    .groups_rounded,
+                                                                color: Colors
+                                                                    .white,
+                                                                size: 20,
+                                                              )
+                                                            : category ==
+                                                                    'Travel'
+                                                                ? Icon(
+                                                                    Icons
+                                                                        .flight_rounded,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size: 20,
+                                                                  )
+                                                                : Icon(
+                                                                    Icons
+                                                                        .more_horiz_rounded,
+                                                                    color: Colors
+                                                                        .white,
+                                                                    size: 20,
+                                                                  ),
+                                      ),
+                                      title: Text(
+                                        title,
+                                        maxLines: 2,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      subtitle: Text(date),
+                                      trailing: Text(
+                                        "Rp. ${outcome}",
+                                        style:
+                                            TextStyle(color: Color(0xff464646)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            });
+                      }
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    },
                   ),
                 ],
               ),
@@ -481,8 +655,8 @@ class _OutcomeState extends State<Outcome> {
         case 0:
           return PieChartSectionData(
             color: const Color(0xff9F43CC),
-            value: 40,
-            title: '40%',
+            value: totalFood,
+            title: '${(uOutcome.persenFood).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -492,8 +666,8 @@ class _OutcomeState extends State<Outcome> {
         case 1:
           return PieChartSectionData(
             color: const Color(0xff4D4D4E),
-            value: 30,
-            title: '30%',
+            value: totalEducation,
+            title: '${(uOutcome.persenEducation).toString()}',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -503,8 +677,8 @@ class _OutcomeState extends State<Outcome> {
         case 2:
           return PieChartSectionData(
             color: const Color(0xffFF57BC),
-            value: 15,
-            title: '15%',
+            value: totalEntertainment,
+            title: '${(uOutcome.persenEntertainment).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -514,8 +688,8 @@ class _OutcomeState extends State<Outcome> {
         case 3:
           return PieChartSectionData(
             color: const Color(0xffFB4F4F),
-            value: 15,
-            title: '15%',
+            value: totalEtc,
+            title: '${(uOutcome.persenEtc).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -535,9 +709,11 @@ class _OutcomeState extends State<Outcome> {
         firstDate: new DateTime(2000),
         lastDate: new DateTime.now());
 
+    final DateFormat formatter = DateFormat('yMd');
+    final String finalDate = formatter.format(_selectedDate as DateTime);
     if (_selectedDate != null) {
       setState(() {
-        initialdateval.text = _selectedDate.toString();
+        _date.text = finalDate.toString();
       });
     }
   }

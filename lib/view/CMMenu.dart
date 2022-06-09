@@ -1,4 +1,8 @@
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
+import 'package:coller_mobile/view/CollageManagement/schedule.dart';
+import 'package:coller_mobile/view/CollageManagement/task.dart';
+import 'package:coller_mobile/view/CollageManagement/todolist.dart';
+import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -44,11 +48,11 @@ class _CMMenuState extends State<CMMenu> {
                         width: 45,
                       ),
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => OverviewProfile()),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OverviewProfile()),
+                        );
                       },
                     )
                   ],
@@ -74,7 +78,8 @@ class _CMMenuState extends State<CMMenu> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset("images/ic_pen.png", height: 63),
+                              Image.asset("assets/images/ic_pen.png",
+                                  height: 63),
                               SizedBox(height: 15),
                               Text("Notes", style: titleTextStyle),
                               Text(
@@ -106,7 +111,8 @@ class _CMMenuState extends State<CMMenu> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset("images/ic_books.png", height: 53),
+                              Image.asset("assets/images/ic_books.png",
+                                  height: 53),
                               SizedBox(height: 15),
                               Text("Task", style: titleTextStyle),
                               Text(
@@ -120,11 +126,10 @@ class _CMMenuState extends State<CMMenu> {
                           ),
                         ),
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => Task()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Task()),
+                          );
                         },
                       ),
                     )
@@ -143,7 +148,7 @@ class _CMMenuState extends State<CMMenu> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset("images/ic_alarmClock.png",
+                              Image.asset("assets/images/ic_alarmClock.png",
                                   height: 65),
                               SizedBox(height: 15),
                               Text("Schedule", style: titleTextStyle),
@@ -158,11 +163,10 @@ class _CMMenuState extends State<CMMenu> {
                           ),
                         ),
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => Schedule()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => schedule()),
+                          );
                         },
                       ),
                     ),
@@ -177,7 +181,8 @@ class _CMMenuState extends State<CMMenu> {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image.asset("images/ic_text.png", height: 54),
+                              Image.asset("assets/images/ic_text.png",
+                                  height: 54),
                               SizedBox(height: 15),
                               Text("To do List", style: titleTextStyle),
                               Text(
@@ -191,11 +196,10 @@ class _CMMenuState extends State<CMMenu> {
                           ),
                         ),
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => Todolist()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => Todolist()),
+                          );
                         },
                       ),
                     )

@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:coller_mobile/view/EditProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -107,11 +108,11 @@ class _OverviewProfileState extends State<OverviewProfile> {
                                   ),
                                 ),
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => EditProfile()),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => EditProfile()),
+                                  );
                                 },
                               )
                             ],

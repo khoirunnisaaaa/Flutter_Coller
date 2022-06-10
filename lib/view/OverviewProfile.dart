@@ -73,11 +73,11 @@ class _OverviewProfileState extends State<OverviewProfile> {
                               ),
                               SizedBox(height: 10),
                               Text(
-                                "Irene Bae",
+                                "Khoirunnisa",
                                 style: titleTextStyle,
                               ),
                               Text(
-                                "irenebae@gmail.com",
+                                "nisanisa@mail.com",
                                 style: TextStyle(
                                     color: Color(0xff6F6F6F), fontSize: 13),
                               ),

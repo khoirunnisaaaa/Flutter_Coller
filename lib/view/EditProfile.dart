@@ -91,7 +91,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    hintText: 'Irene Bae',
+                    hintText: 'Khoirunnisa',
                     hintStyle: TextStyle(fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -121,7 +121,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    hintText: 'irenebae@gmail.com',
+                    hintText: 'nisanisa@mail.com',
                     hintStyle: TextStyle(fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -151,7 +151,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    hintText: '+1 2374 2389 21',
+                    hintText: '088288172819',
                     hintStyle: TextStyle(fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),

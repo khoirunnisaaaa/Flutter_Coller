@@ -251,7 +251,7 @@ class _DashboardState extends State<Dashboard> {
                                       children: [
                                         Image.asset(
                                           "assets/images/ic_piggy.png",
-                                          width: 61,
+                                          width: 51,
                                           height: 42,
                                         ),
                                         Column(

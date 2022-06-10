@@ -142,7 +142,6 @@ class Register extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
-                        obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Irene Bae',
@@ -177,7 +176,6 @@ class Register extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
-                        obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: '+1 2374 23899 21',

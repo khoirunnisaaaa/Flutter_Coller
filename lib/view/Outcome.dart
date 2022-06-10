@@ -667,7 +667,7 @@ class _OutcomeState extends State<Outcome> {
           return PieChartSectionData(
             color: const Color(0xff4D4D4E),
             value: totalEducation,
-            title: '${(uOutcome.persenEducation).toString()}',
+            title: '${(uOutcome.persenEducation).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,

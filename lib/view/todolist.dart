@@ -20,7 +20,7 @@ class _TodolistState extends State<Todolist> {
       body: SlidingUpPanel(
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
-        minHeight: size.height * 0.3,
+        minHeight: size.height * 0.2,
         boxShadow: [
           BoxShadow(
             color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),

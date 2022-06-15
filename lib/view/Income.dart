@@ -11,7 +11,7 @@ import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 import '../theme.dart';
-import 'OverviewProfile.dart';
+import 'Profile/OverviewProfile.dart';
 import 'indicator.dart';
 
 class Income extends StatefulWidget {

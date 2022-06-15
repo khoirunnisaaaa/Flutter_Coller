@@ -17,14 +17,23 @@ class _LoginState extends State<Login> {
 
   loginSubmit() async {
     try {
-      _firebaseAuth
+      await _firebaseAuth
           .signInWithEmailAndPassword(
-              email: _emailController.text, password: _passwordController.text)
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim())
           .then((value) => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => navbar())));
-    } catch (e) {
-      print(e);
-      SnackBar(content: Text(e.toString()));
+    } on FirebaseAuthException catch (e) {
+      print(e.message);
+      // if (e.code == 'user-not-found') {
+      //   SnackBar(content: Text(e.toString()));
+      //   print(e);
+      // } else if (e.code == 'wrong-password') {
+      //   SnackBar(content: Text(e.toString()));
+      //   print(e);
+      // }
+      // print(e);
+      // SnackBar(content: Text(e.toString()));
     }
   }
 

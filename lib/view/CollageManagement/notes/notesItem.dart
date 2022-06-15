@@ -2,12 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
-import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../../Profile/OverviewProfile.dart';
 
 class notesItem extends StatefulWidget {
   const notesItem({Key? key}) : super(key: key);

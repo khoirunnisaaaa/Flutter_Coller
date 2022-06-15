@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/utils/profile.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _notesCollection = _firestore.collection("notes");
 
 class uNotes {
-  static String? userUid;
+  static String? userUid = uProfile.userUid;
 
   static Future<void> addItem({
     required String title,

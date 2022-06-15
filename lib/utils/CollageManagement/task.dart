@@ -1,13 +1,14 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/utils/profile.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _taskCollection = _firestore.collection("task");
 
 class uTask {
-  static String? userUid;
-  static int totalTask = 0;
+  static String? userUid = uProfile.userUid;
+  static int? totalTask;
   static List<String> dataItems = [];
 
   static void getLength() async {

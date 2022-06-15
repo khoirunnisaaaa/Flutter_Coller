@@ -1,13 +1,14 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/utils/profile.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _scheduleCollection =
     _firestore.collection("schedule");
 
 class uSchedule {
-  static String? userUid;
+  static String? userUid = uProfile.userUid;
   static String? hari;
   static Future<void> addItem({
     required String day,

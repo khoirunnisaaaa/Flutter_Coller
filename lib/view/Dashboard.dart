@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
@@ -7,18 +8,20 @@ import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/utils/outcome.dart';
+import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/CMMenu.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
 import 'package:coller_mobile/view/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/CollageManagement/task.dart';
-import 'package:coller_mobile/view/EditProfile.dart';
 import 'package:coller_mobile/view/MMMenu.dart';
 import 'package:coller_mobile/view/CollageManagement/todolist.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:badges/badges.dart';
+
+import 'Profile/EditProfile.dart';
 
 class Dashboard extends StatefulWidget {
   @override
@@ -43,17 +46,29 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     FirebaseAuth auth = FirebaseAuth.instance;
-    if (auth.currentUser != null) {
-      print(auth.currentUser!.uid);
-      uTodolist.userUid = auth.currentUser!.uid.toString();
-      uNotes.userUid = auth.currentUser!.uid.toString();
-      uTask.userUid = auth.currentUser!.uid.toString();
-      uSchedule.userUid = auth.currentUser!.uid.toString();
-      uIncome.userUid = auth.currentUser!.uid.toString();
-      uOutcome.userUid = auth.currentUser!.uid.toString();
-    }
+    FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    String emailku = auth.currentUser!.email.toString();
+    if (auth.currentUser != null) {
+      // print(auth.currentUser!.uid);
+      _firestore
+          .collection("users")
+          .doc(auth.currentUser!.uid.toString())
+          .get()
+          .then((value) {
+        uProfile.email = (value.data()!["email"]).toString();
+        uProfile.nama_lengkap = (value.data()!["nama_lengkap"]).toString();
+        uProfile.no_hp = (value.data()!["phone"]).toString();
+        uProfile.prof_img = (value.data()!["prof_img"]).toString();
+        // print(nama_lengkap);
+      });
+      uProfile.userUid = auth.currentUser!.uid.toString();
+      // uTodolist.userUid = auth.currentUser!.uid.toString();
+      // uNotes.userUid = auth.currentUser!.uid.toString();
+      // uTask.userUid = auth.currentUser!.uid.toString();
+      // uSchedule.userUid = auth.currentUser!.uid.toString();
+      // uIncome.userUid = auth.currentUser!.uid.toString();
+      // uOutcome.userUid = auth.currentUser!.uid.toString();
+    }
 
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -75,7 +90,7 @@ class _DashboardState extends State<Dashboard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Hello, " + emailku,
+                                "Hello, " + uProfile.nama_lengkap.toString(),
                                 style: mainTitleTextStyle,
                               ),
                               Text(
@@ -358,7 +373,7 @@ class _DashboardState extends State<Dashboard> {
                                     width: 25,
                                     height: 25,
                                     child: Text(
-                                      '3',
+                                      uTask.totalTask.toString(),
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -452,7 +467,7 @@ class _DashboardState extends State<Dashboard> {
                                     width: 25,
                                     height: 25,
                                     child: Text(
-                                      '6',
+                                      uTodolist.todosLength.toString(),
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,

@@ -1,12 +1,14 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/utils/profile.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _todoCollection = _firestore.collection("todolist");
 
 class uTodolist {
-  static String? userUid;
+  static String? userUid = uProfile.userUid;
+  static int? todosLength;
 
   static Future<void> addItem({
     required String todos,

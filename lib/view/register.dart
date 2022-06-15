@@ -1,8 +1,56 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/view/login.dart';
+import 'package:coller_mobile/view/navbar.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class Register extends StatelessWidget {
+class Register extends StatefulWidget {
+  @override
+  State<Register> createState() => _RegisterState();
+}
+
+class _RegisterState extends State<Register> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confPasswordController = TextEditingController();
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _nohpController = TextEditingController();
+
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  registerSubmit() async {
+    try {
+      await _firebaseAuth
+          .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passwordController.text.trim())
+          .then((value) async {
+        print(value.user!.uid.toString());
+        DocumentReference docRef =
+            _firestore.collection("users").doc(value.user!.uid.toString());
+
+        Map<String, dynamic> data = <String, dynamic>{
+          "nama_lengkap": _namaController.text,
+          "email": _emailController.text,
+          "phone": _nohpController.text,
+          "prof_img":
+              "https://firebasestorage.googleapis.com/v0/b/coller-me.appspot.com/o/prof_img%2Fcute-an-astronaut-sits-in-internet-vector-22760432.jpg?alt=media&token=02d1f34d-766b-4f3b-817c-8c1437d96c6c"
+        };
+        await docRef
+            .set(data)
+            .whenComplete(() => print(
+                "Data telah ditambahkan, UID : " + value.user!.uid.toString()))
+            .catchError((e) => print(e));
+      }).then((value) => Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => navbar())));
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      SnackBar(content: Text(e.message.toString()));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +90,7 @@ class Register extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
+                        controller: _emailController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'irenebae@gmail.com',
@@ -75,6 +124,7 @@ class Register extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
+                        controller: _passwordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -108,6 +158,7 @@ class Register extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
+                        controller: _confPasswordController,
                         obscureText: true,
                         decoration: InputDecoration(
                           border: InputBorder.none,
@@ -142,6 +193,7 @@ class Register extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
+                        controller: _namaController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Irene Bae',
@@ -176,6 +228,7 @@ class Register extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
+                        controller: _nohpController,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: '+1 2374 23899 21',
@@ -204,7 +257,9 @@ class Register extends StatelessWidget {
                 child: Container(
                   width: 400,
                   child: RaisedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      registerSubmit();
+                    },
                     elevation: 5,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),

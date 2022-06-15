@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
-import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../Profile/OverviewProfile.dart';
 
 class schedule extends StatefulWidget {
   const schedule({Key? key}) : super(key: key);

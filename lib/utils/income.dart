@@ -1,12 +1,13 @@
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/utils/profile.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final CollectionReference _incomeCollection = _firestore.collection("income");
 
 class uIncome {
-  static String? userUid;
+  static String? userUid = uProfile.userUid;
 
   static int totalIncome = 0;
   static double totalSalary = 0;

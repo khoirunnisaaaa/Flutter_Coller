@@ -2,11 +2,11 @@ import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:coller_mobile/view/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/CollageManagement/task.dart';
 import 'package:coller_mobile/view/CollageManagement/todolist.dart';
-import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../theme.dart';
+import 'Profile/OverviewProfile.dart';
 
 class CMMenu extends StatefulWidget {
   @override

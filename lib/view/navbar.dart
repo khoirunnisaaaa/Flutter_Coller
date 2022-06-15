@@ -3,13 +3,13 @@ import 'dart:ui';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/view/CMMenu.dart';
 import 'package:coller_mobile/view/Dashboard.dart';
-import 'package:coller_mobile/view/EditProfile.dart';
 import 'package:coller_mobile/view/MMMenu.dart';
-import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:badges/badges.dart';
+
+import 'Profile/OverviewProfile.dart';
 
 class navbar extends StatefulWidget {
   const navbar({Key? key}) : super(key: key);

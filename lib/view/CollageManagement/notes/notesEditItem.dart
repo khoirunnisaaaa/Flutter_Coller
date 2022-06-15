@@ -3,7 +3,6 @@ import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
-import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';

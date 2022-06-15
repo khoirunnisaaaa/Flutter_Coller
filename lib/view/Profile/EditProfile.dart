@@ -1,8 +1,9 @@
 import 'dart:ui';
 
+import 'package:coller_mobile/utils/profile.dart';
 import 'package:flutter/material.dart';
 
-import '../theme.dart';
+import '../../theme.dart';
 
 class EditProfile extends StatefulWidget {
   @override
@@ -10,6 +11,21 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  TextEditingController _namaController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _profImgController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _namaController.text = uProfile.nama_lengkap.toString();
+    _emailController.text = uProfile.email.toString();
+    _phoneController.text = uProfile.no_hp.toString();
+    _profImgController.text = uProfile.prof_img.toString();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +69,7 @@ class _EditProfileState extends State<EditProfile> {
                 Center(
                   child: Stack(
                     children: [
-                      Image.asset("assets/images/profile.png"),
+                      Image.network(uProfile.prof_img.toString()),
                       Positioned(
                         right: 0,
                         bottom: 0,
@@ -80,6 +96,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 SizedBox(height: 5),
                 TextField(
+                  controller: _namaController,
                   // controller: searchCtrl,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -91,7 +108,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    hintText: 'Khoirunnisa',
+                    hintText: uProfile.nama_lengkap.toString(),
                     hintStyle: TextStyle(fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -110,6 +127,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 SizedBox(height: 5),
                 TextField(
+                  controller: _emailController,
                   // controller: searchCtrl,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -121,7 +139,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    hintText: 'nisanisa@mail.com',
+                    // hintText: uProfile.email.toString(),
                     hintStyle: TextStyle(fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -140,6 +158,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 SizedBox(height: 5),
                 TextField(
+                  controller: _phoneController,
                   // controller: searchCtrl,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
@@ -151,7 +170,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     contentPadding:
                         EdgeInsets.symmetric(horizontal: 25, vertical: 10),
-                    hintText: '088288172819',
+                    hintText: uProfile.no_hp.toString(),
                     hintStyle: TextStyle(fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
@@ -190,11 +209,23 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => Register()),
-                    // );
+                    uProfile.updateProfile(
+                        email: _emailController.text,
+                        nama_lengkap: _namaController.text,
+                        no_hp: _phoneController.text,
+                        prof_img: _profImgController.text);
+
+                    uProfile.email = _emailController.text;
+                    uProfile.nama_lengkap = _namaController.text;
+                    uProfile.no_hp = _phoneController.text;
+                    uProfile.prof_img = _profImgController.text;
+                    // print(_namaController.text +
+                    //     " | " +
+                    //     _emailController.text +
+                    //     " | " +
+                    //     _phoneController.text +
+                    //     " | " +
+                    //     _profImgController.text);
                   },
                 ),
               ],

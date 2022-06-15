@@ -4,11 +4,12 @@ import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesEditItem.dart';
-import 'package:coller_mobile/view/OverviewProfile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+
+import '../../Profile/OverviewProfile.dart';
 
 class Notes extends StatefulWidget {
   const Notes({Key? key}) : super(key: key);

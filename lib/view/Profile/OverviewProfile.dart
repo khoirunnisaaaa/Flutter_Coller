@@ -1,10 +1,12 @@
 import 'dart:ui';
 
-import 'package:coller_mobile/view/EditProfile.dart';
+import 'package:coller_mobile/utils/profile.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../theme.dart';
+import '../../theme.dart';
+import 'EditProfile.dart';
 
 class OverviewProfile extends StatefulWidget {
   @override
@@ -66,18 +68,18 @@ class _OverviewProfileState extends State<OverviewProfile> {
                           padding: EdgeInsets.only(top: 30, bottom: 45),
                           child: Column(
                             children: [
-                              Image.asset(
-                                "assets/images/profile.png",
+                              Image.network(
+                                uProfile.prof_img.toString(),
                                 height: 70,
                                 width: 70,
                               ),
                               SizedBox(height: 10),
                               Text(
-                                "Khoirunnisa",
+                                uProfile.nama_lengkap.toString(),
                                 style: titleTextStyle,
                               ),
                               Text(
-                                "nisanisa@mail.com",
+                                uProfile.email.toString(),
                                 style: TextStyle(
                                     color: Color(0xff6F6F6F), fontSize: 13),
                               ),
@@ -290,7 +292,8 @@ class _OverviewProfileState extends State<OverviewProfile> {
                       ),
                     ],
                   ),
-                  onTap: () {
+                  onTap: () async {
+                    await FirebaseAuth.instance.signOut();
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(

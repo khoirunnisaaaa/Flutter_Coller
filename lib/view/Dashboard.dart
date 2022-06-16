@@ -436,7 +436,7 @@ class _DashboardState extends State<Dashboard> {
                                     width: 25,
                                     height: 25,
                                     child: Text(
-                                      '5',
+                                      uSchedule.totalSchedule.toString(),
                                       style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,

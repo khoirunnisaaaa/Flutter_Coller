@@ -22,7 +22,7 @@ class _LoginState extends State<Login> {
               email: _emailController.text.trim(),
               password: _passwordController.text.trim())
           .then((value) => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => navbar())));
+              MaterialPageRoute(builder: (context) => navbar(index: 0))));
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'invalid-email') {

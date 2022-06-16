@@ -47,7 +47,7 @@ class _RegisterState extends State<Register> {
                 "Data telah ditambahkan, UID : " + value.user!.uid.toString()))
             .catchError((e) => print(e));
       }).then((value) => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => navbar())));
+              MaterialPageRoute(builder: (context) => navbar(index: 0))));
     } on FirebaseAuthException catch (e) {
       print(e);
       SnackBar(content: Text(e.message.toString()));

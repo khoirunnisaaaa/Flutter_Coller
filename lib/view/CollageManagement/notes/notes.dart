@@ -68,7 +68,8 @@ class _NotesState extends State<Notes> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => navbar()),
+                            MaterialPageRoute(
+                                builder: (context) => navbar(index: 1)),
                           );
                         },
                       ),

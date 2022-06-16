@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/Profile/ChangeEmail.dart';
+import 'package:coller_mobile/view/navbar.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -107,11 +108,11 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => EditProfile()),
-                        // );
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => navbar(index: 3)),
+                        );
                       },
                     ),
                     Text("Edit Profile.", style: mainTitleTextStyle),

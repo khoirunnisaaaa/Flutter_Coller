@@ -10,6 +10,21 @@ final CollectionReference _scheduleCollection =
 class uSchedule {
   static String? userUid = uProfile.userUid;
   static String? hari;
+  static int? totalSchedule;
+
+  static void getLength() async {
+    FirebaseFirestore.instance
+        .collection("schedule")
+        .doc(userUid)
+        .collection("items")
+        .where("day", isEqualTo: "Senin")
+        .get()
+        .then((value) {
+      totalSchedule = value.docs.length;
+      print("Senin Length : " + value.docs.length.toString());
+    });
+  }
+
   static Future<void> addItem({
     required String day,
     required String topic,

@@ -12,14 +12,15 @@ import 'package:badges/badges.dart';
 import 'Profile/OverviewProfile.dart';
 
 class navbar extends StatefulWidget {
-  const navbar({Key? key}) : super(key: key);
+  final int? index;
+  const navbar({required this.index});
 
   @override
   State<navbar> createState() => _navbarState();
 }
 
 class _navbarState extends State<navbar> {
-  var _currentIndex = 0;
+  int _currentIndex = 0;
 
   static List<Widget> _widgetOptions = <Widget>[
     Dashboard(),
@@ -32,6 +33,13 @@ class _navbarState extends State<navbar> {
     setState(() {
       _currentIndex = index;
     });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    _currentIndex = widget.index as int;
+    super.initState();
   }
 
   @override

@@ -10,6 +10,19 @@ class uTodolist {
   static String? userUid = uProfile.userUid;
   static int? todosLength;
 
+  static void getLength() async {
+    FirebaseFirestore.instance
+        .collection("todolist")
+        .doc(userUid)
+        .collection("items")
+        .where("status", isEqualTo: "false")
+        .get()
+        .then((value) {
+      uTodolist.todosLength = value.docs.length;
+      print("Todos Length : " + value.docs.length.toString());
+    });
+  }
+
   static Future<void> addItem({
     required String todos,
     required String status,

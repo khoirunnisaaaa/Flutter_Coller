@@ -89,7 +89,8 @@ class _scheduleState extends State<schedule> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => navbar()),
+                            MaterialPageRoute(
+                                builder: (context) => navbar(index: 1)),
                           );
                         },
                       ),
@@ -143,103 +144,119 @@ class _scheduleState extends State<schedule> {
                               child: Container(
                                 child: Padding(
                                   padding: EdgeInsets.fromLTRB(20, 5, 20, 20),
-                                  child: Column(
-                                    children: [
-                                      DropdownButtonFormField2(
-                                        decoration: InputDecoration(
-                                          //Add isDense true and zero Padding.
-                                          //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
-                                          isDense: true,
-                                          contentPadding: EdgeInsets.zero,
-                                          //Add more decoration as you want here
-                                          //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
-                                        ),
-                                        isExpanded: true,
-                                        hint: const Text(
-                                          'Day*',
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                        icon: const Icon(
-                                          Icons.arrow_drop_down,
-                                          color: Colors.black45,
-                                        ),
-                                        iconSize: 30,
-                                        buttonHeight: 60,
-                                        buttonPadding: const EdgeInsets.only(
-                                            left: 0, right: 10),
-                                        dropdownDecoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(15),
-                                        ),
-                                        items: dayItems
-                                            .map((item) =>
-                                                DropdownMenuItem<String>(
-                                                  value: item,
-                                                  child: Text(
-                                                    item,
-                                                    style: const TextStyle(
-                                                      fontSize: 14,
+                                  child: SingleChildScrollView(
+                                    child: Column(
+                                      children: [
+                                        DropdownButtonFormField2(
+                                          decoration: InputDecoration(
+                                            //Add isDense true and zero Padding.
+                                            //Add Horizontal padding using buttonPadding and Vertical padding by increasing buttonHeight instead of add Padding here so that The whole TextField Button become clickable, and also the dropdown menu open under The whole TextField Button.
+                                            isDense: true,
+                                            contentPadding: EdgeInsets.zero,
+                                            //Add more decoration as you want here
+                                            //Add label If you want but add hint outside the decoration to be aligned in the button perfectly.
+                                          ),
+                                          isExpanded: true,
+                                          hint: const Text(
+                                            'Day*',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          icon: const Icon(
+                                            Icons.arrow_drop_down,
+                                            color: Colors.black45,
+                                          ),
+                                          iconSize: 30,
+                                          buttonHeight: 60,
+                                          buttonPadding: const EdgeInsets.only(
+                                              left: 0, right: 10),
+                                          dropdownDecoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(15),
+                                          ),
+                                          items: dayItems
+                                              .map((item) =>
+                                                  DropdownMenuItem<String>(
+                                                    value: item,
+                                                    child: Text(
+                                                      item,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                      ),
                                                     ),
-                                                  ),
-                                                ))
-                                            .toList(),
-                                        validator: (value) {
-                                          if (value == null) {
-                                            return 'Please select income category.';
-                                          }
-                                        },
-                                        onChanged: (value) {
-                                          uSchedule.hari = value.toString();
-                                        },
-                                        onSaved: (value) {
-                                          _selectedDay = value.toString();
-                                        },
-                                      ),
-                                      SizedBox(
-                                        width: 200,
-                                      ),
-                                      TextField(
-                                        controller: _topicController,
-                                        keyboardType: TextInputType.text,
-                                        decoration:
-                                            InputDecoration(hintText: "Topic*"),
-                                      ),
-                                      SizedBox(
-                                        width: 200,
-                                      ),
-                                      TextFormField(
-                                        controller: _timeStartController,
-                                        decoration: InputDecoration(
-                                            focusColor: redColor,
-                                            suffixIcon:
-                                                Icon(Icons.access_time_sharp),
-                                            hintText: 'Time Start*'),
-                                        onTap: () {
-                                          selectTimeStart();
-                                          FocusScope.of(context)
-                                              .requestFocus(new FocusNode());
-                                        },
-                                      ),
-                                      SizedBox(
-                                        width: 200,
-                                      ),
-                                      TextFormField(
-                                        controller: _timeEndController,
-                                        decoration: InputDecoration(
-                                            focusColor: redColor,
-                                            suffixIcon:
-                                                Icon(Icons.access_time_sharp),
-                                            hintText: 'Time End*'),
-                                        onTap: () {
-                                          selectTimeEnd();
-                                          FocusScope.of(context)
-                                              .requestFocus(new FocusNode());
-                                        },
-                                      ),
-                                      SizedBox(
-                                        width: 200,
-                                      ),
-                                    ],
+                                                  ))
+                                              .toList(),
+                                          validator: (value) {
+                                            if (value == null) {
+                                              return 'Please select income category.';
+                                            }
+                                          },
+                                          onChanged: (value) {
+                                            uSchedule.hari = value.toString();
+                                          },
+                                          onSaved: (value) {
+                                            _selectedDay = value.toString();
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 200,
+                                        ),
+                                        TextFormField(
+                                            controller: _topicController,
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                                hintText: "Topic*"),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please fill this field.';
+                                              }
+                                            }),
+                                        SizedBox(
+                                          width: 200,
+                                        ),
+                                        TextFormField(
+                                          controller: _timeStartController,
+                                          decoration: InputDecoration(
+                                              focusColor: redColor,
+                                              suffixIcon:
+                                                  Icon(Icons.access_time_sharp),
+                                              hintText: 'Time Start*'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Please fill this field.';
+                                            }
+                                          },
+                                          onTap: () {
+                                            selectTimeStart();
+                                            FocusScope.of(context)
+                                                .requestFocus(new FocusNode());
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 200,
+                                        ),
+                                        TextFormField(
+                                          controller: _timeEndController,
+                                          decoration: InputDecoration(
+                                              focusColor: redColor,
+                                              suffixIcon:
+                                                  Icon(Icons.access_time_sharp),
+                                              hintText: 'Time End*'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Please fill this field.';
+                                            }
+                                          },
+                                          onTap: () {
+                                            selectTimeEnd();
+                                            FocusScope.of(context)
+                                                .requestFocus(new FocusNode());
+                                          },
+                                        ),
+                                        SizedBox(
+                                          width: 200,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 width: 400.0,
@@ -283,25 +300,26 @@ class _scheduleState extends State<schedule> {
                           onTap: () async {
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
-                            }
 
-                            if (documentId == null) {
-                              await uSchedule.addItem(
-                                  day: _selectedDay as String,
-                                  topic: _topicController.text,
-                                  timeStart: _timeStartController.text,
-                                  timeEnd: _timeEndController.text);
+                              if (documentId == null) {
+                                await uSchedule.addItem(
+                                    day: _selectedDay as String,
+                                    topic: _topicController.text,
+                                    timeStart: _timeStartController.text,
+                                    timeEnd: _timeEndController.text);
 
-                              _topicController.clear();
-                              _timeStartController.clear();
-                              _timeEndController.clear();
-                            } else {
-                              await uSchedule.updateItem(
-                                  docId: documentId as String,
-                                  day: _selectedDay as String,
-                                  topic: _topicController.text,
-                                  timeStart: _timeStartController.text,
-                                  timeEnd: _timeEndController.text);
+                                _topicController.clear();
+                                _timeStartController.clear();
+                                _timeEndController.clear();
+                              } else {
+                                await uSchedule.updateItem(
+                                    docId: documentId as String,
+                                    day: _selectedDay as String,
+                                    topic: _topicController.text,
+                                    timeStart: _timeStartController.text,
+                                    timeEnd: _timeEndController.text);
+                              }
+                              uSchedule.getLength();
                             }
                           },
                         ))
@@ -441,6 +459,7 @@ class _scheduleState extends State<schedule> {
                                               onPressed: ((context) async {
                                                 await uSchedule.deleteItem(
                                                     docId: docId);
+                                                uSchedule.getLength();
                                               }),
                                               backgroundColor:
                                                   Color(0xffF76963),

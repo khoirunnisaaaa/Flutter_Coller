@@ -3,6 +3,7 @@ import 'package:coller_mobile/main.dart';
 import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/view/MoneyManagement/MMMenu.dart';
 import 'package:coller_mobile/view/MoneyManagement/Outcome.dart';
+import 'package:coller_mobile/view/navbar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -108,7 +109,8 @@ class _IncomeState extends State<Income> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => MMMenu()),
+                            MaterialPageRoute(
+                                builder: (context) => navbar(index: 2)),
                           );
                         },
                       ),

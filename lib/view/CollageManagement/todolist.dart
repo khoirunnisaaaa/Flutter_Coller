@@ -20,6 +20,8 @@ class _TodolistState extends State<Todolist> {
   String? documentId;
   String? todosStatus;
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -70,7 +72,8 @@ class _TodolistState extends State<Todolist> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => navbar()),
+                            MaterialPageRoute(
+                                builder: (context) => navbar(index: 1)),
                           );
                         },
                       ),
@@ -119,27 +122,38 @@ class _TodolistState extends State<Todolist> {
                         children: <Widget>[
                           Container(height: 10.0),
                           //first element in the column is the white background (the Image.asset in your case)
-                          DecoratedBox(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  color: redColor),
-                              child: Container(
-                                child: Padding(
-                                  padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                                  child: Column(
-                                    children: [
-                                      TextField(
-                                        controller: _todos,
-                                        keyboardType: TextInputType.text,
-                                        decoration: InputDecoration(
-                                            hintText: "Type in here"),
+                          Form(
+                            key: _formKey,
+                            child: DecoratedBox(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30.0),
+                                    color: redColor),
+                                child: Container(
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          TextFormField(
+                                              controller: _todos,
+                                              keyboardType: TextInputType.text,
+                                              decoration: InputDecoration(
+                                                  border: InputBorder.none,
+                                                  hintText: "Type in here"),
+                                              validator: (value) {
+                                                if (value!.isEmpty) {
+                                                  return 'Please fill this field.';
+                                                }
+                                              }),
+                                        ],
                                       ),
-                                    ],
+                                    ),
                                   ),
-                                ),
-                                width: 350.0,
-                                height: 50.0,
-                              )),
+                                  width: 350.0,
+                                  height: 50.0,
+                                )),
+                          )
+
                           //second item in the column is a transparent space of 20
                         ],
                       ),
@@ -184,16 +198,19 @@ class _TodolistState extends State<Todolist> {
                                   ),
                                 ),
                                 onTap: () async {
-                                  if (documentId == null) {
-                                    await uTodolist.addItem(
-                                        todos: _todos.text, status: "false");
-                                    _todos.clear();
-                                  } else {
-                                    await uTodolist.updateItem(
-                                        todos: _todos.text,
-                                        status: todosStatus as String,
-                                        docId: documentId as String);
-                                    _todos.clear();
+                                  if (_formKey.currentState!.validate()) {
+                                    if (documentId == null) {
+                                      await uTodolist.addItem(
+                                          todos: _todos.text, status: "false");
+                                      _todos.clear();
+                                    } else {
+                                      await uTodolist.updateItem(
+                                          todos: _todos.text,
+                                          status: todosStatus as String,
+                                          docId: documentId as String);
+                                      _todos.clear();
+                                    }
+                                    uTodolist.getLength();
                                   }
                                 },
                               )
@@ -272,6 +289,7 @@ class _TodolistState extends State<Todolist> {
                                       onPressed: ((context) async {
                                         await uTodolist.deleteItem(
                                             docId: docId);
+                                        uTodolist.getLength();
                                       }),
                                       backgroundColor: Color(0xffF76963),
                                       foregroundColor: Colors.white,
@@ -295,6 +313,7 @@ class _TodolistState extends State<Todolist> {
                                               todos: todos,
                                               status: value.toString(),
                                               docId: docId);
+                                          uTodolist.getLength();
                                         },
                                       ),
                                       title: Text(

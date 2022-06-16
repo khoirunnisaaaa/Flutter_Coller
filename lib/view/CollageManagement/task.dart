@@ -89,7 +89,8 @@ class _TaskState extends State<Task> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => navbar()),
+                              MaterialPageRoute(
+                                  builder: (context) => navbar(index: 1)),
                             );
                           },
                         ),
@@ -198,12 +199,16 @@ class _TaskState extends State<Task> {
                                         SizedBox(
                                           width: 200,
                                         ),
-                                        TextField(
-                                          controller: deskTask,
-                                          keyboardType: TextInputType.text,
-                                          decoration:
-                                              InputDecoration(hintText: "Task"),
-                                        ),
+                                        TextFormField(
+                                            controller: deskTask,
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                                hintText: "Task"),
+                                            validator: (value) {
+                                              if (value!.isEmpty) {
+                                                return 'Please fill this field.';
+                                              }
+                                            }),
                                         SizedBox(
                                           width: 200,
                                         ),
@@ -214,6 +219,11 @@ class _TaskState extends State<Task> {
                                               suffixIcon: Icon(
                                                   Icons.date_range_rounded),
                                               hintText: 'Date*'),
+                                          validator: (value) {
+                                            if (value!.isEmpty) {
+                                              return 'Please fill this field.';
+                                            }
+                                          },
                                           onTap: () {
                                             _selectDate();
                                             FocusScope.of(context)
@@ -264,21 +274,27 @@ class _TaskState extends State<Task> {
                             onTap: () async {
                               if (_formKey.currentState!.validate()) {
                                 _formKey.currentState!.save();
-                              }
 
-                              if (documentId == null) {
-                                await uTask.addItem(
-                                    catTask: _selectedCat as String,
-                                    task: deskTask.text,
-                                    date: initialdateval.text,
-                                    status: "false");
-                              } else {
-                                await uTask.updateItem(
-                                    docId: documentId as String,
-                                    catTask: _selectedCat as String,
-                                    task: deskTask.text,
-                                    date: initialdateval.text,
-                                    status: taskStatus as String);
+                                if (documentId == null) {
+                                  await uTask
+                                      .addItem(
+                                          catTask: _selectedCat as String,
+                                          task: deskTask.text,
+                                          date: initialdateval.text,
+                                          status: "false")
+                                      .then((value) => uTask.getLength());
+                                } else {
+                                  await uTask
+                                      .updateItem(
+                                          docId: documentId as String,
+                                          catTask: _selectedCat as String,
+                                          task: deskTask.text,
+                                          date: initialdateval.text,
+                                          status: taskStatus as String)
+                                      .then((value) => uTask.getLength());
+                                }
+                                deskTask.clear();
+                                initialdateval.clear();
                               }
                             },
                           ))
@@ -356,7 +372,10 @@ class _TaskState extends State<Task> {
                                       ),
                                       SlidableAction(
                                         onPressed: ((context) async {
-                                          await uTask.deleteItem(docId: docId);
+                                          await uTask
+                                              .deleteItem(docId: docId)
+                                              .then(
+                                                  (value) => uTask.getLength());
                                         }),
                                         backgroundColor: Color(0xffF76963),
                                         foregroundColor: Colors.white,
@@ -376,12 +395,15 @@ class _TaskState extends State<Task> {
                                           activeColor: redColor,
                                           value: bstatus,
                                           onChanged: (bool? value) async {
-                                            await uTask.updateItem(
-                                                docId: docId,
-                                                catTask: taskCat,
-                                                task: task,
-                                                date: date,
-                                                status: value.toString());
+                                            await uTask
+                                                .updateItem(
+                                                    docId: docId,
+                                                    catTask: taskCat,
+                                                    task: task,
+                                                    date: date,
+                                                    status: value.toString())
+                                                .then((value) =>
+                                                    uTask.getLength());
                                           },
                                         ),
                                         title: Text(

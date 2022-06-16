@@ -12,14 +12,16 @@ class uTask {
   static List<String> dataItems = [];
 
   static void getLength() async {
-    var data = await _taskCollection
+    FirebaseFirestore.instance
+        .collection("task")
         .doc(userUid)
         .collection("items")
-        .where("status", isEqualTo: "true")
-        .get();
-
-    totalTask = data.size;
-    print("Total Task : " + totalTask.toString());
+        .where("status", isEqualTo: "false")
+        .get()
+        .then((value) {
+      totalTask = value.docs.length;
+      print("Task Length : " + value.docs.length.toString());
+    });
   }
 
   // static List<int> listIncome = [];

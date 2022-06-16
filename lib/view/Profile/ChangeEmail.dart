@@ -70,11 +70,11 @@ class _ChangeEmailState extends State<ChangeEmail> {
                           ),
                         ),
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) => EditProfile()),
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => EditProfile()),
+                          );
                         },
                       ),
                       Text("Change Email.", style: mainTitleTextStyle),

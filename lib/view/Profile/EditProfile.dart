@@ -24,10 +24,15 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _profImgController = TextEditingController();
 
+  bool isLoading = false;
   File? _pickedImage;
 
   Future pickImage(ImageSource source) async {
     final image = await ImagePicker().pickImage(source: source);
+
+    setState(() {
+      isLoading = true;
+    });
 
     if (image != null) {
       String locationImg = 'prof_img/${image.name}';
@@ -48,6 +53,7 @@ class _EditProfileState extends State<EditProfile> {
           prof_img: downloadUrl);
 
       setState(() {
+        isLoading = false;
         _pickedImage = file;
       });
     }
@@ -124,34 +130,36 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(height: 45),
                 Center(
                     child: InkWell(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        radius: 90.0,
-                        backgroundColor: const Color(0xFF778899),
-                        backgroundImage: _pickedImage != null
-                            ? FileImage(_pickedImage as File)
-                            : NetworkImage(uProfile.prof_img.toString())
-                                as ImageProvider, // for Network image,
-                      ),
-                      Positioned(
-                        right: 15,
-                        bottom: 0,
-                        child: Container(
-                          width: 35,
-                          height: 35,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Icon(
-                            Icons.camera_alt_rounded,
-                            color: redColor,
-                            size: 18,
-                          ),
+                  child: isLoading
+                      ? CircularProgressIndicator(color: redColor)
+                      : Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 90.0,
+                              backgroundColor: const Color(0xFF778899),
+                              backgroundImage: _pickedImage != null
+                                  ? FileImage(_pickedImage as File)
+                                  : NetworkImage(uProfile.prof_img.toString())
+                                      as ImageProvider, // for Network image,
+                            ),
+                            Positioned(
+                              right: 15,
+                              bottom: 0,
+                              child: Container(
+                                width: 35,
+                                height: 35,
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(50)),
+                                child: Icon(
+                                  Icons.camera_alt_rounded,
+                                  color: redColor,
+                                  size: 18,
+                                ),
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
                   onTap: () {
                     _imageOption();
                   },

@@ -23,8 +23,13 @@ class _ChangeEmailState extends State<ChangeEmail> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  bool isLoading = false;
+
   changePass(String newEmail) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       await _firebaseAuth.currentUser?.updateEmail(newEmail).then((value) {
         uProfile.updateProfile(
             email: _newEmailController.text,
@@ -32,6 +37,10 @@ class _ChangeEmailState extends State<ChangeEmail> {
             nama_lengkap: uProfile.nama_lengkap.toString(),
             no_hp: uProfile.no_hp.toString(),
             prof_img: uProfile.prof_img.toString());
+        uProfile.getUserDoc();
+        setState(() {
+          isLoading = false;
+        });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: const Text('Email berhasil diperbarui!'),
         ));
@@ -219,13 +228,15 @@ class _ChangeEmailState extends State<ChangeEmail> {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          "Simpan",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                        ),
+                        child: isLoading
+                            ? CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                                "Simpan",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
                       ),
                     ),
                     onTap: () {

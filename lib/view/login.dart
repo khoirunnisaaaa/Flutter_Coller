@@ -1,3 +1,9 @@
+import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
+import 'package:coller_mobile/utils/CollageManagement/task.dart';
+import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
+import 'package:coller_mobile/utils/income.dart';
+import 'package:coller_mobile/utils/outcome.dart';
+import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:coller_mobile/view/register.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,14 +21,35 @@ class _LoginState extends State<Login> {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
+  bool isLogin = false;
+
+  final _formKey = GlobalKey<FormState>();
+
   loginSubmit() async {
     try {
+      setState(() {
+        isLogin = true;
+      });
       await _firebaseAuth
           .signInWithEmailAndPassword(
               email: _emailController.text.trim(),
               password: _passwordController.text.trim())
-          .then((value) => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => navbar(index: 0))));
+          .then((value) {
+        uProfile.userUid = value.user!.uid;
+        uProfile.getUserDoc();
+        uTask.getLength();
+        uSchedule.getLength();
+        uTodolist.getLength();
+        uIncome.getNama();
+        uOutcome.getNama();
+      }).then((value) {
+        setState(() {
+          isLogin = false;
+        });
+        // Navigator.of(context).pop();
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => navbar(index: 0)));
+      });
     } on FirebaseAuthException catch (e) {
       print(e.code);
       if (e.code == 'invalid-email') {
@@ -38,6 +65,9 @@ class _LoginState extends State<Login> {
           content: const Text('Password anda salah!'),
         ));
       }
+      setState(() {
+        isLogin = false;
+      });
     }
   }
 
@@ -46,6 +76,8 @@ class _LoginState extends State<Login> {
     return Scaffold(
       body: SafeArea(
           child: SingleChildScrollView(
+              child: Form(
+        key: _formKey,
         child: Center(
           child: Column(
             children: [
@@ -146,7 +178,9 @@ class _LoginState extends State<Login> {
                   width: 400,
                   child: RaisedButton(
                     onPressed: () {
-                      loginSubmit();
+                      if (_formKey.currentState!.validate()) {
+                        loginSubmit();
+                      }
                     },
                     elevation: 5,
                     shape: RoundedRectangleBorder(
@@ -154,13 +188,15 @@ class _LoginState extends State<Login> {
                     ),
                     color: Color.fromARGB(255, 247, 105, 99),
                     padding: EdgeInsets.all(20),
-                    child: Text(
-                      "Log-In",
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    child: isLogin
+                        ? CircularProgressIndicator(color: Colors.white)
+                        : Text(
+                            "Log-In",
+                            style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold),
+                          ),
                   ),
                 ),
               ),
@@ -212,7 +248,7 @@ class _LoginState extends State<Login> {
             ],
           ),
         ),
-      )),
+      ))),
     );
   }
 }

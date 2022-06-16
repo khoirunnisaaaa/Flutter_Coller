@@ -22,8 +22,13 @@ class _RegisterState extends State<Register> {
 
   final _formKey = GlobalKey<FormState>();
 
+  bool isLoading = false;
+
   registerSubmit() async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       await _firebaseAuth
           .createUserWithEmailAndPassword(
               email: _emailController.text.trim(),
@@ -46,11 +51,20 @@ class _RegisterState extends State<Register> {
             .whenComplete(() => print(
                 "Data telah ditambahkan, UID : " + value.user!.uid.toString()))
             .catchError((e) => print(e));
-      }).then((value) => Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => navbar(index: 0))));
+      }).then((value) {
+        setState(() {
+          isLoading = false;
+        });
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => navbar(index: 0)));
+      });
     } on FirebaseAuthException catch (e) {
-      print(e);
-      SnackBar(content: Text(e.message.toString()));
+      print(e.code);
+      if (e.code == 'email-already-in-use') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Email telah terdaftar!'),
+        ));
+      }
     }
   }
 
@@ -281,13 +295,15 @@ class _RegisterState extends State<Register> {
                       ),
                       color: Color.fromARGB(255, 247, 105, 99),
                       padding: EdgeInsets.all(20),
-                      child: Text(
-                        "Register",
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold),
-                      ),
+                      child: isLoading
+                          ? CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              "Register",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                     ),
                   ),
                 ),

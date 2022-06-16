@@ -23,8 +23,13 @@ class _ChangePasswordState extends State<ChangePassword> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  bool isLoading = false;
+
   changePass(String newPass) async {
     try {
+      setState(() {
+        isLoading = true;
+      });
       await _firebaseAuth.currentUser?.updatePassword(newPass).then((value) {
         uProfile.updateProfile(
             email: uProfile.email.toString(),
@@ -32,6 +37,12 @@ class _ChangePasswordState extends State<ChangePassword> {
             nama_lengkap: uProfile.nama_lengkap.toString(),
             no_hp: uProfile.no_hp.toString(),
             prof_img: uProfile.prof_img.toString());
+        uProfile.getUserDoc();
+
+        setState(() {
+          isLoading = false;
+        });
+
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: const Text('Password berhasil diperbarui!'),
         ));
@@ -219,13 +230,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                         ],
                       ),
                       child: Center(
-                        child: Text(
-                          "Simpan",
-                          style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500),
-                        ),
+                        child: isLoading
+                            ? CircularProgressIndicator(color: Colors.white)
+                            : Text(
+                                "Simpan",
+                                style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500),
+                              ),
                       ),
                     ),
                     onTap: () {

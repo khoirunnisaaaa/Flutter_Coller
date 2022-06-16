@@ -295,12 +295,8 @@ class _OverviewProfileState extends State<OverviewProfile> {
                       ),
                     ],
                   ),
-                  onTap: () async {
-                    await FirebaseAuth.instance.signOut();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Login()),
-                    );
+                  onTap: () {
+                    showAlertLogout();
                   },
                 ),
                 SizedBox(height: 15),
@@ -340,5 +336,35 @@ class _OverviewProfileState extends State<OverviewProfile> {
         ),
       ),
     );
+  }
+
+  showAlertLogout() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Do you want to Logout?'),
+            // content: Text('We hate to see you leave...'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  print("you choose no");
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  await FirebaseAuth.instance.signOut();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Login()),
+                  );
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          );
+        });
   }
 }

@@ -31,20 +31,6 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
-  var _currentIndex = 0;
-
-  static List<Widget> _widgetOptions = <Widget>[
-    CMMenu(),
-    MMMenu(),
-    EditProfile(),
-  ];
-
-  void _onItemTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     String nama = uProfile.nama_lengkap.toString();

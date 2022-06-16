@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/utils/outcome.dart';
-import 'package:coller_mobile/view/Income.dart';
+import 'package:coller_mobile/view/MoneyManagement/Income.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';

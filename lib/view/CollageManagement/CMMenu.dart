@@ -5,8 +5,8 @@ import 'package:coller_mobile/view/CollageManagement/todolist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../theme.dart';
-import 'Profile/OverviewProfile.dart';
+import '../../theme.dart';
+import '../Profile/OverviewProfile.dart';
 
 class CMMenu extends StatefulWidget {
   @override

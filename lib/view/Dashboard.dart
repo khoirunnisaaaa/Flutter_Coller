@@ -9,13 +9,15 @@ import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/utils/outcome.dart';
 import 'package:coller_mobile/utils/profile.dart';
-import 'package:coller_mobile/view/CMMenu.dart';
+import 'package:coller_mobile/view/CollageManagement/CMMenu.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
 import 'package:coller_mobile/view/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/CollageManagement/task.dart';
-import 'package:coller_mobile/view/MMMenu.dart';
+import 'package:coller_mobile/view/MoneyManagement/Income.dart';
+import 'package:coller_mobile/view/MoneyManagement/MMMenu.dart';
 import 'package:coller_mobile/view/CollageManagement/todolist.dart';
+import 'package:coller_mobile/view/MoneyManagement/Outcome.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,20 +105,26 @@ class _DashboardState extends State<Dashboard> {
                               )
                             ],
                           ),
-                          InkWell(
-                            child: Image.asset(
-                              "assets/images/profile.png",
-                              height: 45,
-                              width: 45,
-                            ),
-                            onTap: () {
-                              // Navigator.push(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //       builder: (context) => OverviewProfile()),
-                              // );
-                            },
-                          )
+                          CircleAvatar(
+                            radius: 30.0,
+                            backgroundColor: const Color(0xFF778899),
+                            backgroundImage: NetworkImage(uProfile.prof_img
+                                .toString()), // for Network image
+                          ),
+                          // InkWell(
+                          //   child: Image.asset(
+                          //     "assets/images/profile.png",
+                          //     height: 45,
+                          //     width: 45,
+                          //   ),
+                          //   onTap: () {
+                          //     // Navigator.push(
+                          //     //   context,
+                          //     //   MaterialPageRoute(
+                          //     //       builder: (context) => OverviewProfile()),
+                          //     // );
+                          //   },
+                          // )
                         ],
                       ),
                       SizedBox(height: 38),
@@ -128,9 +136,10 @@ class _DashboardState extends State<Dashboard> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (context) => Notes()),
+                                      builder: (context) => notesAddItem()),
                                 );
                               },
+                              readOnly: true,
                               decoration: InputDecoration(
                                 contentPadding: EdgeInsets.symmetric(
                                     horizontal: 25, vertical: 10),
@@ -159,7 +168,13 @@ class _DashboardState extends State<Dashboard> {
                             child: FloatingActionButton(
                               child: Icon(Icons.add),
                               backgroundColor: redColor,
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => notesAddItem()),
+                                );
+                              },
                             ),
                           ),
                         ],
@@ -226,7 +241,7 @@ class _DashboardState extends State<Dashboard> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "Irene Bae / +1 2738 23** ***",
+                                    "${nama} / +1 2738 23** ***",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
@@ -291,11 +306,11 @@ class _DashboardState extends State<Dashboard> {
                                   ),
                                 ),
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => Income()),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Income()),
+                                  );
                                 },
                               ),
                             ),
@@ -342,11 +357,11 @@ class _DashboardState extends State<Dashboard> {
                                   ),
                                 ),
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => Outcome()),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Outcome()),
+                                  );
                                 },
                               ),
                             ),

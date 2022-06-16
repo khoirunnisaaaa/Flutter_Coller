@@ -70,10 +70,11 @@ class _OverviewProfileState extends State<OverviewProfile> {
                           padding: EdgeInsets.only(top: 30, bottom: 45),
                           child: Column(
                             children: [
-                              Image.network(
-                                uProfile.prof_img.toString(),
-                                height: 70,
-                                width: 70,
+                              CircleAvatar(
+                                radius: 55.0,
+                                backgroundColor: const Color(0xFF778899),
+                                backgroundImage: NetworkImage(uProfile.prof_img
+                                    .toString()), // for Network image
                               ),
                               SizedBox(height: 10),
                               Text(

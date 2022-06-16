@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
-import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesEditItem.dart';
 import 'package:coller_mobile/view/navbar.dart';
@@ -128,6 +127,7 @@ class _NotesState extends State<Notes> {
                                   child: Column(
                                     children: [
                                       TextField(
+                                        readOnly: true,
                                         keyboardType: TextInputType.text,
                                         decoration: InputDecoration(
                                             hintText: "Type in here"),
@@ -136,7 +136,7 @@ class _NotesState extends State<Notes> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    notesItem()),
+                                                    notesAddItem()),
                                           );
                                         },
                                       ),

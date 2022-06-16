@@ -2,30 +2,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
+import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
-class notesItem extends StatefulWidget {
-  const notesItem({Key? key}) : super(key: key);
+class notesAddItem extends StatefulWidget {
+  const notesAddItem({Key? key}) : super(key: key);
 
   @override
-  State<notesItem> createState() => _notesItemState();
+  State<notesAddItem> createState() => _notesAddItemState();
 }
 
-class _notesItemState extends State<notesItem> {
+class _notesAddItemState extends State<notesAddItem> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final now = new DateTime.now();
     String formatter = DateFormat('yMd').format(now);
     return Scaffold(
-      body: Container(
-        padding: EdgeInsets.only(top: 20),
+      body: SafeArea(
+          child: SingleChildScrollView(
+              child: Container(
+        padding: EdgeInsets.only(top: 10),
         decoration: BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/bg-welcome-screen2.png"),
@@ -56,7 +61,7 @@ class _notesItemState extends State<notesItem> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => navbar()),
+                        MaterialPageRoute(builder: (context) => Notes()),
                       );
                     },
                   ),
@@ -76,91 +81,117 @@ class _notesItemState extends State<notesItem> {
               SizedBox(
                 height: 10,
               ),
-              DecoratedBox(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: redColor),
-                  child: Container(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: Column(
-                        children: [
-                          TextField(
-                            controller: _titleController,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(hintText: "Title"),
+              Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      DecoratedBox(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: redColor),
+                          child: Container(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                              child: TextFormField(
+                                  controller: _titleController,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Title"),
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'please fill this field!';
+                                    }
+                                    return null;
+                                  }),
+                            ),
+                            width: 350.0,
+                            height: 60.0,
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      DecoratedBox(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                              color: redColor),
+                          child: Container(
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                child: TextFormField(
+                                    maxLines: null,
+                                    minLines: 15,
+                                    // expands: true,
+                                    controller: _bodyController,
+                                    keyboardType: TextInputType.multiline,
+                                    decoration: InputDecoration(
+                                        hintText: "body",
+                                        border: InputBorder.none),
+                                    validator: (value) {
+                                      if (value!.isEmpty) {
+                                        return 'Please fill this field';
+                                      }
+                                      return null;
+                                    }),
+                              ),
+                            ),
+                            width: 350.0,
+                            height: 400.0,
+                          )),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                          child: InkWell(
+                        child: Container(
+                          height: 40,
+                          width: 140,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 0,
+                                blurRadius: 10,
+                                offset:
+                                    Offset(0, 10), // changes position of shadow
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    width: 350.0,
-                    height: 60.0,
-                  )),
-              SizedBox(
-                height: 20,
-              ),
-              DecoratedBox(
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(15.0),
-                      color: redColor),
-                  child: Container(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
-                      child: Column(
-                        children: [
-                          TextField(
-                            controller: _bodyController,
-                            keyboardType: TextInputType.text,
-                            decoration: InputDecoration(hintText: "body"),
+                          child: Center(
+                            child: Text(
+                              "Save",
+                              style: TextStyle(
+                                  fontSize: 16,
+                                  color: redColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                    width: 350.0,
-                    height: 400.0,
-                  )),
-              SizedBox(
-                height: 20,
-              ),
-              Center(
-                  child: InkWell(
-                child: Container(
-                  height: 40,
-                  width: 140,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        spreadRadius: 0,
-                        blurRadius: 10,
-                        offset: Offset(0, 10), // changes position of shadow
-                      ),
+                        ),
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await uNotes.addItem(
+                                title: _titleController.text,
+                                body: _bodyController.text,
+                                date: formatter);
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => Notes()),
+                            );
+
+                            // Navigator.push(
+                            //   context,
+                            //   MaterialPageRoute(
+                            //       builder: (context) => EditProfile()),
+                            // );
+                          }
+                        },
+                      ))
                     ],
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Save",
-                      style: TextStyle(
-                          fontSize: 16,
-                          color: redColor,
-                          fontWeight: FontWeight.w500),
-                    ),
-                  ),
-                ),
-                onTap: () async {
-                  await uNotes.addItem(
-                      title: _titleController.text,
-                      body: _bodyController.text,
-                      date: formatter);
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //       builder: (context) => EditProfile()),
-                  // );
-                },
-              )),
+                  )),
               // Stack(
               //   children: <Widget>[
               //     Column(
@@ -248,7 +279,7 @@ class _notesItemState extends State<notesItem> {
             ],
           ),
         ),
-      ),
+      ))),
     );
   }
 }

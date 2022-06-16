@@ -1,8 +1,14 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/Profile/ChangeEmail.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../theme.dart';
 
@@ -16,6 +22,54 @@ class _EditProfileState extends State<EditProfile> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _profImgController = TextEditingController();
+
+  File? _pickedImage;
+
+  Future pickImage(ImageSource source) async {
+    final image = await ImagePicker().pickImage(source: source);
+
+    if (image != null) {
+      String locationImg = 'prof_img/${image.name}';
+      final file = File(image.path);
+
+      Reference ref = FirebaseStorage.instance.ref().child(locationImg);
+      UploadTask uploadTask = ref.putFile(file);
+      TaskSnapshot snapshot = await uploadTask.whenComplete(() {});
+
+      final downloadUrl = await snapshot.ref.getDownloadURL();
+      print("Download Link : " + downloadUrl);
+
+      uProfile.updateProfile(
+          email: uProfile.email.toString(),
+          password: uProfile.password.toString(),
+          nama_lengkap: uProfile.nama_lengkap.toString(),
+          no_hp: uProfile.no_hp.toString(),
+          prof_img: downloadUrl);
+
+      setState(() {
+        _pickedImage = file;
+      });
+    }
+  }
+
+  _imageOption() async {
+    showCupertinoDialog(
+      context: context,
+      builder: (context) =>
+          AlertDialog(content: Text("Choose image source"), actions: [
+        FlatButton(
+          child: Text("Camera"),
+          onPressed: () =>
+              Navigator.pop(context, pickImage(ImageSource.camera)),
+        ),
+        FlatButton(
+          child: Text("Gallery"),
+          onPressed: () =>
+              Navigator.pop(context, pickImage(ImageSource.gallery)),
+        ),
+      ]),
+    );
+  }
 
   @override
   void initState() {
@@ -68,11 +122,19 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 SizedBox(height: 45),
                 Center(
+                    child: InkWell(
                   child: Stack(
                     children: [
-                      Image.network(uProfile.prof_img.toString()),
+                      CircleAvatar(
+                        radius: 90.0,
+                        backgroundColor: const Color(0xFF778899),
+                        backgroundImage: _pickedImage != null
+                            ? FileImage(_pickedImage as File)
+                            : NetworkImage(uProfile.prof_img.toString())
+                                as ImageProvider, // for Network image,
+                      ),
                       Positioned(
-                        right: 0,
+                        right: 15,
                         bottom: 0,
                         child: Container(
                           width: 35,
@@ -89,7 +151,10 @@ class _EditProfileState extends State<EditProfile> {
                       )
                     ],
                   ),
-                ),
+                  onTap: () {
+                    _imageOption();
+                  },
+                )),
                 SizedBox(height: 35),
                 Text(
                   "Full Name",
@@ -219,16 +284,17 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   onTap: () {
                     uProfile.updateProfile(
-                        email: _emailController.text,
+                        email: uProfile.email.toString(),
                         nama_lengkap: _namaController.text,
                         password: uProfile.password.toString(),
                         no_hp: _phoneController.text,
                         prof_img: _profImgController.text);
 
-                    uProfile.email = _emailController.text;
-                    uProfile.nama_lengkap = _namaController.text;
-                    uProfile.no_hp = _phoneController.text;
-                    uProfile.prof_img = _profImgController.text;
+                    uProfile.getUserDoc();
+                    // uProfile.email = _emailController.text;
+                    // uProfile.nama_lengkap = _namaController.text;
+                    // uProfile.no_hp = _phoneController.text;
+                    // uProfile.prof_img = _profImgController.text;
                     // print(_namaController.text +
                     //     " | " +
                     //     _emailController.text +

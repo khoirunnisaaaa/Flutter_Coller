@@ -26,7 +26,7 @@ class uProfile {
       uProfile.no_hp = (value.data()!["phone"]).toString();
       uProfile.prof_img = (value.data()!["prof_img"]).toString();
     });
-    print("Ini Password : " + password.toString());
+    print("User : " + nama_lengkap.toString());
   }
 
   static Future<void> updateProfile({
@@ -48,7 +48,7 @@ class uProfile {
 
     await docRef
         .update(data)
-        .whenComplete(() => log("Profile Updated!"))
+        .whenComplete(() => getUserDoc())
         .catchError((e) => log(e.toString()));
   }
 

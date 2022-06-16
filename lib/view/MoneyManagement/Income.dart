@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/main.dart';
 import 'package:coller_mobile/utils/income.dart';
-import 'package:coller_mobile/utils/outcome.dart';
-import 'package:coller_mobile/view/MMMenu.dart';
-import 'package:coller_mobile/view/Outcome.dart';
+import 'package:coller_mobile/view/MoneyManagement/MMMenu.dart';
+import 'package:coller_mobile/view/MoneyManagement/Outcome.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -11,28 +10,23 @@ import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-import '../theme.dart';
-import 'Profile/OverviewProfile.dart';
-import 'indicator.dart';
+import '../../theme.dart';
+import '../Profile/OverviewProfile.dart';
+import '../indicator.dart';
 
-class Outcome extends StatefulWidget {
-  const Outcome({Key? key}) : super(key: key);
+class Income extends StatefulWidget {
+  const Income({Key? key}) : super(key: key);
 
   @override
-  State<Outcome> createState() => _OutcomeState();
+  State<Income> createState() => _IncomeState();
 }
 
-class _OutcomeState extends State<Outcome> {
+class _IncomeState extends State<Income> {
   int touchedIndex = -1;
 
   double sum = 0.0;
 
-  final List<String> outcomeItems = [
-    'Food',
-    'Education',
-    'Entertainment',
-    '.etc'
-  ];
+  final List<String> incomeItems = ['Salary', 'Parent', 'Gift', '.etc'];
   String? selectedCategory;
   final _formKey = GlobalKey<FormState>();
 
@@ -41,22 +35,25 @@ class _OutcomeState extends State<Outcome> {
 
   final TextEditingController _title = TextEditingController();
   final TextEditingController _date = TextEditingController();
-  final TextEditingController _outcome = TextEditingController();
+  final TextEditingController _income = TextEditingController();
   String? documentId;
 
   // operasi chart
-  double? totalFood;
-  double? totalEducation;
-  double? totalEntertainment;
+  double? totalSalary;
+  double? totalGift;
+  double? totalParent;
   double? totalEtc;
 
   @override
   void initState() {
-    uOutcome.getNama();
-    totalFood = uOutcome.totalFood;
-    totalEducation = uOutcome.totalEducation;
-    totalEntertainment = uOutcome.totalEntertainment;
-    totalEtc = uOutcome.totalEtc;
+    // uIncome.totalIncome = 0;
+    // uIncome.totalGift = 0;
+    // uIncome.totalSalary = 0;
+    uIncome.getNama();
+    totalSalary = uIncome.totalSalary;
+    totalGift = uIncome.totalGift;
+    totalParent = uIncome.totalParent;
+    totalEtc = uIncome.totalEtc;
     super.initState();
   }
 
@@ -116,7 +113,7 @@ class _OutcomeState extends State<Outcome> {
                         },
                       ),
                       Text(
-                        'Outcome',
+                        'Income',
                         style: TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -141,7 +138,7 @@ class _OutcomeState extends State<Outcome> {
                   ),
                   SizedBox(height: 30),
                   Text(
-                    'New Outcome.',
+                    'New Income.',
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 14,
@@ -211,7 +208,7 @@ class _OutcomeState extends State<Outcome> {
                                             borderRadius:
                                                 BorderRadius.circular(15),
                                           ),
-                                          items: outcomeItems
+                                          items: incomeItems
                                               .map((item) =>
                                                   DropdownMenuItem<String>(
                                                     value: item,
@@ -225,7 +222,7 @@ class _OutcomeState extends State<Outcome> {
                                               .toList(),
                                           validator: (value) {
                                             if (value == null) {
-                                              return 'Please select outcome category.';
+                                              return 'Please select income category.';
                                             }
                                           },
                                           onChanged: (value) {
@@ -257,14 +254,14 @@ class _OutcomeState extends State<Outcome> {
                                           },
                                         ),
                                         TextFormField(
-                                          controller: _outcome,
+                                          controller: _income,
                                           keyboardType: TextInputType.number,
                                           decoration: InputDecoration(
-                                            labelText: 'Outcome(Rp.) *',
+                                            labelText: 'Income(Rp.) *',
                                           ),
                                           validator: (value) {
                                             if (value!.isEmpty) {
-                                              return 'Outcome must be filled';
+                                              return 'Income must be filled';
                                             }
                                             return null;
                                           },
@@ -312,39 +309,40 @@ class _OutcomeState extends State<Outcome> {
                             ),
                           ),
                           onTap: () async {
+                            // uIncome.getNama();
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
                             }
                             String category = selectedCategory as String;
-                            print("documentId: ${documentId}");
+                            print(documentId);
                             if (documentId != null) {
-                              await uOutcome.updateItem(
+                              await uIncome.updateItem(
                                   title: _title.text,
                                   category: category,
                                   date: _date.text,
-                                  outcome: int.parse(_outcome.text),
+                                  income: int.parse(_income.text),
                                   docId: documentId as String);
                               _title.clear();
                               _date.clear();
-                              _outcome.clear();
+                              _income.clear();
                             } else {
-                              await uOutcome.addItem(
+                              await uIncome.addItem(
                                 title: _title.text,
                                 category: category,
                                 date: _date.text,
-                                outcome: int.parse(_outcome.text),
+                                income: int.parse(_income.text),
                               );
                               _title.clear();
                               _date.clear();
-                              _outcome.clear();
+                              _income.clear();
                             }
 
-                            await uOutcome.getNama();
+                            await uIncome.getNama();
                             setState(() {
-                              totalFood = uOutcome.totalFood;
-                              totalEducation = uOutcome.totalEducation;
-                              totalEntertainment = uOutcome.totalEntertainment;
-                              totalEtc = uOutcome.totalEtc;
+                              totalSalary = uIncome.totalSalary;
+                              totalGift = uIncome.totalGift;
+                              totalParent = uIncome.totalParent;
+                              totalEtc = uIncome.totalEtc;
                             });
                           },
                           // onTap: () {
@@ -379,13 +377,13 @@ class _OutcomeState extends State<Outcome> {
                   SizedBox(height: 15),
                   Center(
                     child: Text(
-                      'Chart & History',
+                      'History',
                       style: titleFeatureTextStyle,
                     ),
                   ),
                   SizedBox(height: 30),
                   Text(
-                    'Chart % Outcome.',
+                    'Chart % Income.',
                     style: titleTextStyle,
                   ),
                   SizedBox(height: 10),
@@ -433,7 +431,7 @@ class _OutcomeState extends State<Outcome> {
                           children: const <Widget>[
                             Indicator(
                               color: Color(0xff9F43CC),
-                              text: 'Food',
+                              text: 'Salary',
                               size: 12,
                               isSquare: false,
                             ),
@@ -442,7 +440,7 @@ class _OutcomeState extends State<Outcome> {
                             ),
                             Indicator(
                               color: Color(0xff4D4D4E),
-                              text: 'Entertainment',
+                              text: 'Gift',
                               size: 12,
                               isSquare: false,
                             ),
@@ -451,7 +449,7 @@ class _OutcomeState extends State<Outcome> {
                             ),
                             Indicator(
                               color: Color(0xffFF57BC),
-                              text: 'Education',
+                              text: 'Parent',
                               size: 12,
                               isSquare: false,
                             ),
@@ -478,17 +476,17 @@ class _OutcomeState extends State<Outcome> {
                   // Image.asset("assets/images/pie_chart.png"),
                   SizedBox(height: 30),
                   Text(
-                    'History Outcome.',
+                    'History Income.',
                     style: titleTextStyle,
                   ),
-                  SizedBox(height: 20),
-                  Text(
-                    "16/05/2022",
-                    style: dateMMTextStyle,
-                  ),
+                  // SizedBox(height: 20),
+                  // Text(
+                  //   "16/05/2022",
+                  //   style: dateMMTextStyle,
+                  // ),
                   // SLIDE-ABLE
                   StreamBuilder(
-                    stream: uOutcome.readItems(),
+                    stream: uIncome.readItems(),
                     builder:
                         (context, AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                       if (streamSnapshot.hasError) {
@@ -500,17 +498,16 @@ class _OutcomeState extends State<Outcome> {
                             shrinkWrap: true,
                             itemCount: streamSnapshot.data!.docs.length,
                             itemBuilder: (context, index) {
-                              var outcomesInfo =
-                                  streamSnapshot.data!.docs[index].data()
-                                      as Map<String, dynamic>;
+                              var incomesInfo = streamSnapshot.data!.docs[index]
+                                  .data() as Map<String, dynamic>;
                               final DocumentSnapshot documentSnapshot =
                                   streamSnapshot.data!.docs[index];
                               String docId =
                                   streamSnapshot.data!.docs[index].id;
-                              String title = outcomesInfo['title'];
-                              String category = outcomesInfo['category'];
-                              int outcome = outcomesInfo['outcome'];
-                              String date = outcomesInfo['date'];
+                              String title = incomesInfo['title'];
+                              String category = incomesInfo['category'];
+                              int income = incomesInfo['income'];
+                              String date = incomesInfo['date'];
 
                               return Slidable(
                                 // Specify a key if the Slidable is dismissible.
@@ -524,12 +521,12 @@ class _OutcomeState extends State<Outcome> {
                                       // An action can be bigger than the others.
                                       onPressed: (context) {
                                         documentId = docId;
-                                        _title.text = outcomesInfo['title'];
-                                        _date.text = outcomesInfo['date'];
+                                        _title.text = incomesInfo['title'];
+                                        _date.text = incomesInfo['date'];
                                         selectedCategory =
-                                            outcomesInfo['category'];
-                                        _outcome.text =
-                                            outcomesInfo['outcome'].toString();
+                                            incomesInfo['category'];
+                                        _income.text =
+                                            incomesInfo['income'].toString();
                                       },
                                       backgroundColor:
                                           Color.fromARGB(255, 99, 185, 255),
@@ -538,15 +535,13 @@ class _OutcomeState extends State<Outcome> {
                                     ),
                                     SlidableAction(
                                       onPressed: ((context) async {
-                                        await uOutcome.deleteItem(docId: docId);
-                                        await uOutcome.getNama();
+                                        await uIncome.deleteItem(docId: docId);
+                                        await uIncome.getNama();
                                         setState(() {
-                                          totalFood = uOutcome.totalFood;
-                                          totalEducation =
-                                              uOutcome.totalEducation;
-                                          totalEntertainment =
-                                              uOutcome.totalEntertainment;
-                                          totalEtc = uOutcome.totalEtc;
+                                          totalSalary = uIncome.totalSalary;
+                                          totalGift = uIncome.totalGift;
+                                          totalParent = uIncome.totalParent;
+                                          totalEtc = uIncome.totalEtc;
                                         });
                                       }),
                                       backgroundColor: Color(0xffF76963),
@@ -564,56 +559,31 @@ class _OutcomeState extends State<Outcome> {
                                     ListTile(
                                       leading: CircleAvatar(
                                         backgroundColor: redColor,
-                                        child: category == 'Food'
+                                        child: category == 'Salary'
                                             ? Icon(
-                                                Icons.restaurant_rounded,
+                                                Icons
+                                                    .account_balance_wallet_rounded,
                                                 color: Colors.white,
                                                 size: 20,
                                               )
-                                            : category == 'Entertainment'
+                                            : category == 'Parent'
                                                 ? Icon(
-                                                    Icons
-                                                        .sports_esports_rounded,
+                                                    Icons.group_rounded,
                                                     color: Colors.white,
                                                     size: 20,
                                                   )
-                                                : category == 'Beauty'
+                                                : category == 'Gift'
                                                     ? Icon(
-                                                        Icons.woman_rounded,
+                                                        Icons.redeem_rounded,
                                                         color: Colors.white,
                                                         size: 20,
                                                       )
-                                                    : category == 'Education'
-                                                        ? Icon(
-                                                            Icons
-                                                                .cast_for_education_rounded,
-                                                            color: Colors.white,
-                                                            size: 20,
-                                                          )
-                                                        : category == 'Social'
-                                                            ? Icon(
-                                                                Icons
-                                                                    .groups_rounded,
-                                                                color: Colors
-                                                                    .white,
-                                                                size: 20,
-                                                              )
-                                                            : category ==
-                                                                    'Travel'
-                                                                ? Icon(
-                                                                    Icons
-                                                                        .flight_rounded,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    size: 20,
-                                                                  )
-                                                                : Icon(
-                                                                    Icons
-                                                                        .more_horiz_rounded,
-                                                                    color: Colors
-                                                                        .white,
-                                                                    size: 20,
-                                                                  ),
+                                                    : Icon(
+                                                        Icons
+                                                            .more_horiz_rounded,
+                                                        color: Colors.white,
+                                                        size: 20,
+                                                      ),
                                       ),
                                       title: Text(
                                         title,
@@ -622,7 +592,7 @@ class _OutcomeState extends State<Outcome> {
                                       ),
                                       subtitle: Text(date),
                                       trailing: Text(
-                                        "Rp. ${outcome}",
+                                        "Rp. ${income}",
                                         style:
                                             TextStyle(color: Color(0xff464646)),
                                       ),
@@ -653,10 +623,13 @@ class _OutcomeState extends State<Outcome> {
       final radius = isTouched ? 60.0 : 50.0;
       switch (i) {
         case 0:
+          // print(
+          //     'salary: ${uIncome.totalSalary} / ${uIncome.totalIncome} * 100 = ${totalSalary}');
           return PieChartSectionData(
             color: const Color(0xff9F43CC),
-            value: totalFood,
-            title: '${(uOutcome.persenFood).toString()}%',
+            value: totalSalary,
+            title: '${(uIncome.persenSalary).toString()}%',
+            // title: '${(totalSalary / uIncome.totalIncome * 100).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -664,10 +637,13 @@ class _OutcomeState extends State<Outcome> {
                 color: const Color(0xffffffff)),
           );
         case 1:
+          // print(
+          //     'gift: ${uIncome.totalGift} / ${uIncome.totalIncome} * 100 = ${totalGift}');
           return PieChartSectionData(
             color: const Color(0xff4D4D4E),
-            value: totalEducation,
-            title: '${(uOutcome.persenEducation).toString()}%',
+            value: totalGift,
+            title: '${(uIncome.persenGift).toString()}%',
+            // title: '${(totalGift / uIncome.totalIncome * 100).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -677,8 +653,8 @@ class _OutcomeState extends State<Outcome> {
         case 2:
           return PieChartSectionData(
             color: const Color(0xffFF57BC),
-            value: totalEntertainment,
-            title: '${(uOutcome.persenEntertainment).toString()}%',
+            value: totalParent,
+            title: '${(uIncome.persenParent).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -689,7 +665,7 @@ class _OutcomeState extends State<Outcome> {
           return PieChartSectionData(
             color: const Color(0xffFB4F4F),
             value: totalEtc,
-            title: '${(uOutcome.persenEtc).toString()}%',
+            title: '${(uIncome.persenEtc).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,

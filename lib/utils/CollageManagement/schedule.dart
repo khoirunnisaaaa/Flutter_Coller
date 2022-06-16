@@ -17,7 +17,7 @@ class uSchedule {
     required String timeEnd,
   }) async {
     DocumentReference documentReference =
-        _scheduleCollection.doc(userUid).collection(hari as String).doc();
+        _scheduleCollection.doc(userUid).collection('items').doc();
 
     Map<String, dynamic> data = <String, dynamic>{
       "day": day,
@@ -56,16 +56,17 @@ class uSchedule {
   }
 
   static Stream<QuerySnapshot> readItems(String hari) {
-    CollectionReference todosItemCollection =
-        _scheduleCollection.doc(userUid).collection(hari);
+    Query<Map<String, dynamic>> todosItemCollection = _scheduleCollection
+        .doc(userUid)
+        .collection('items')
+        .where("day", isEqualTo: hari);
 
     return todosItemCollection.snapshots();
   }
 
-  static Future<void> deleteItem(
-      {required String docId, required String day}) async {
+  static Future<void> deleteItem({required String docId}) async {
     DocumentReference documentReference =
-        _scheduleCollection.doc(userUid).collection(day).doc(docId);
+        _scheduleCollection.doc(userUid).collection("items").doc(docId);
     await documentReference
         .delete()
         .whenComplete(() => print('Schedule deleted'))

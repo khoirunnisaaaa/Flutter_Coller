@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:coller_mobile/utils/profile.dart';
+import 'package:coller_mobile/view/Profile/ChangeEmail.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme.dart';
@@ -129,8 +130,10 @@ class _EditProfileState extends State<EditProfile> {
                 TextField(
                   controller: _emailController,
                   // controller: searchCtrl,
+                  readOnly: true,
                   keyboardType: TextInputType.text,
                   decoration: InputDecoration(
+                    suffixIcon: Icon(Icons.edit),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
@@ -150,6 +153,12 @@ class _EditProfileState extends State<EditProfile> {
                     filled: true,
                     fillColor: Colors.white,
                   ),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangeEmail()),
+                    );
+                  },
                 ),
                 SizedBox(height: 20),
                 Text(
@@ -212,6 +221,7 @@ class _EditProfileState extends State<EditProfile> {
                     uProfile.updateProfile(
                         email: _emailController.text,
                         nama_lengkap: _namaController.text,
+                        password: uProfile.password.toString(),
                         no_hp: _phoneController.text,
                         prof_img: _profImgController.text);
 

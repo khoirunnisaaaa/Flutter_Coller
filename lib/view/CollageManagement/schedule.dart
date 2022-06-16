@@ -440,7 +440,7 @@ class _scheduleState extends State<schedule> {
                                             SlidableAction(
                                               onPressed: ((context) async {
                                                 await uSchedule.deleteItem(
-                                                    docId: docId, day: day);
+                                                    docId: docId);
                                               }),
                                               backgroundColor:
                                                   Color(0xffF76963),

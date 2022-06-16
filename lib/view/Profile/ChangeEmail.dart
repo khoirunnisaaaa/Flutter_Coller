@@ -2,41 +2,41 @@ import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/utils/profile.dart';
-import 'package:coller_mobile/view/navbar.dart';
+import 'package:coller_mobile/view/Profile/EditProfile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme.dart';
 
-class ChangePassword extends StatefulWidget {
+class ChangeEmail extends StatefulWidget {
   @override
-  State<ChangePassword> createState() => _ChangePasswordState();
+  State<ChangeEmail> createState() => _ChangeEmailState();
 }
 
-class _ChangePasswordState extends State<ChangePassword> {
+class _ChangeEmailState extends State<ChangeEmail> {
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confPassController = TextEditingController();
-  final TextEditingController _newPassController = TextEditingController();
+  final TextEditingController _confEmailController = TextEditingController();
+  final TextEditingController _newEmailController = TextEditingController();
 
   final formGlobalKey = GlobalKey<FormState>();
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  changePass(String newPass) async {
+  changePass(String newEmail) async {
     try {
-      await _firebaseAuth.currentUser?.updatePassword(newPass).then((value) {
+      await _firebaseAuth.currentUser?.updateEmail(newEmail).then((value) {
         uProfile.updateProfile(
-            email: uProfile.email.toString(),
-            password: _newPassController.text,
+            email: _newEmailController.text,
+            password: uProfile.password.toString(),
             nama_lengkap: uProfile.nama_lengkap.toString(),
             no_hp: uProfile.no_hp.toString(),
             prof_img: uProfile.prof_img.toString());
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Password berhasil diperbarui!'),
+          content: const Text('Email berhasil diperbarui!'),
         ));
-      }).then((value) => Navigator.of(context)
-          .pushReplacement(MaterialPageRoute(builder: (context) => navbar())));
+      }).then((value) => Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => EditProfile())));
     } on FirebaseAuthException catch (e) {
       print(e);
     }
@@ -77,7 +77,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           // );
                         },
                       ),
-                      Text("Change Password.", style: mainTitleTextStyle),
+                      Text("Change Email.", style: mainTitleTextStyle),
                       SizedBox(
                         width: 35,
                       )
@@ -85,13 +85,13 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                   SizedBox(height: 50),
                   Text(
-                    "New Password",
+                    "New Email",
                     style: titleTFEditProfile,
                   ),
                   SizedBox(height: 5),
                   TextFormField(
-                    controller: _newPassController,
-                    obscureText: true,
+                    controller: _newEmailController,
+                    // obscureText: true,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -123,14 +123,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                   ),
                   SizedBox(height: 20),
                   Text(
-                    "New Password Confirmation",
+                    "New Email Confirmation",
                     style: titleTFEditProfile,
                   ),
                   SizedBox(height: 5),
                   TextFormField(
-                    controller: _confPassController,
+                    controller: _confEmailController,
                     // controller: searchCtrl,
-                    obscureText: true,
+                    // obscureText: true,
                     keyboardType: TextInputType.text,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -154,7 +154,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'must be filled';
-                      } else if (value != _newPassController.text) {
+                      } else if (value != _newEmailController.text) {
                         return 'The password confirmation does not match';
                       }
                       return null;
@@ -164,7 +164,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                   Divider(),
                   SizedBox(height: 20),
                   Text(
-                    "Old Password",
+                    "Password",
                     style: titleTFEditProfile,
                   ),
                   SizedBox(height: 5),
@@ -230,7 +230,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     onTap: () {
                       if (formGlobalKey.currentState!.validate()) {
-                        changePass(_newPassController.text);
+                        changePass(_newEmailController.text);
                         // _formKey.currentState!.save();
                         print("Sukses");
                       }

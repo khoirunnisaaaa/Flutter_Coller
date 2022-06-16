@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
@@ -47,17 +49,17 @@ class MyApp extends StatelessWidget {
           return Center(child: Text("Something went wrong!"));
         } else if (snapshot.hasData) {
           uProfile.userUid = snapshot.data!.uid.toString();
-
-          FirebaseFirestore.instance
-              .collection("users")
-              .doc(snapshot.data!.uid.toString())
-              .get()
-              .then((value) {
-            uProfile.email = (value.data()!["email"]).toString();
-            uProfile.nama_lengkap = (value.data()!["nama_lengkap"]).toString();
-            uProfile.no_hp = (value.data()!["phone"]).toString();
-            uProfile.prof_img = (value.data()!["prof_img"]).toString();
-          });
+          uProfile.getUserDoc();
+          // FirebaseFirestore.instance
+          //     .collection("users")
+          //     .doc(snapshot.data!.uid.toString())
+          //     .get()
+          //     .then((value) {
+          //   uProfile.email = (value.data()!["email"]).toString();
+          //   uProfile.nama_lengkap = (value.data()!["nama_lengkap"]).toString();
+          //   uProfile.no_hp = (value.data()!["phone"]).toString();
+          //   uProfile.prof_img = (value.data()!["prof_img"]).toString();
+          // });
           FirebaseFirestore.instance
               .collection("todolist")
               .doc(snapshot.data!.uid.toString())
@@ -79,6 +81,7 @@ class MyApp extends StatelessWidget {
           });
           uIncome.getNama();
           uOutcome.getNama();
+
           return navbar();
         } else {
           return Login();

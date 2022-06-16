@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/Profile/ChangePassword.dart';
+import 'package:coller_mobile/view/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -295,11 +296,10 @@ class _OverviewProfileState extends State<OverviewProfile> {
                   ),
                   onTap: () async {
                     await FirebaseAuth.instance.signOut();
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => EditProfile()),
-                    // );
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Login()),
+                    );
                   },
                 ),
                 SizedBox(height: 15),

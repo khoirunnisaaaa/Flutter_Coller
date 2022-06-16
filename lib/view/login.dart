@@ -24,16 +24,20 @@ class _LoginState extends State<Login> {
           .then((value) => Navigator.of(context).pushReplacement(
               MaterialPageRoute(builder: (context) => navbar())));
     } on FirebaseAuthException catch (e) {
-      print(e.message);
-      // if (e.code == 'user-not-found') {
-      //   SnackBar(content: Text(e.toString()));
-      //   print(e);
-      // } else if (e.code == 'wrong-password') {
-      //   SnackBar(content: Text(e.toString()));
-      //   print(e);
-      // }
-      // print(e);
-      // SnackBar(content: Text(e.toString()));
+      print(e.code);
+      if (e.code == 'invalid-email') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Masukkan email yang benar!'),
+        ));
+      } else if (e.code == 'user-not-found') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Email anda belum terdaftar!'),
+        ));
+      } else if (e.code == 'wrong-password') {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: const Text('Password anda salah!'),
+        ));
+      }
     }
   }
 

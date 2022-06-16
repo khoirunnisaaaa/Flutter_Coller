@@ -45,30 +45,31 @@ class _DashboardState extends State<Dashboard> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
-    FirebaseFirestore _firestore = FirebaseFirestore.instance;
+    String nama = uProfile.nama_lengkap.toString();
+    // FirebaseAuth auth = FirebaseAuth.instance;
+    // FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    if (auth.currentUser != null) {
-      // print(auth.currentUser!.uid);
-      _firestore
-          .collection("users")
-          .doc(auth.currentUser!.uid.toString())
-          .get()
-          .then((value) {
-        uProfile.email = (value.data()!["email"]).toString();
-        uProfile.nama_lengkap = (value.data()!["nama_lengkap"]).toString();
-        uProfile.no_hp = (value.data()!["phone"]).toString();
-        uProfile.prof_img = (value.data()!["prof_img"]).toString();
-        // print(nama_lengkap);
-      });
-      uProfile.userUid = auth.currentUser!.uid.toString();
-      // uTodolist.userUid = auth.currentUser!.uid.toString();
-      // uNotes.userUid = auth.currentUser!.uid.toString();
-      // uTask.userUid = auth.currentUser!.uid.toString();
-      // uSchedule.userUid = auth.currentUser!.uid.toString();
-      // uIncome.userUid = auth.currentUser!.uid.toString();
-      // uOutcome.userUid = auth.currentUser!.uid.toString();
-    }
+    // if (auth.currentUser != null) {
+    //   // print(auth.currentUser!.uid);
+    //   _firestore
+    //       .collection("users")
+    //       .doc(auth.currentUser!.uid.toString())
+    //       .get()
+    //       .then((value) {
+    //     uProfile.email = (value.data()!["email"]).toString();
+    //     uProfile.nama_lengkap = (value.data()!["nama_lengkap"]).toString();
+    //     uProfile.no_hp = (value.data()!["phone"]).toString();
+    //     uProfile.prof_img = (value.data()!["prof_img"]).toString();
+    //     // print(nama_lengkap);
+    //   });
+    //   uProfile.userUid = auth.currentUser!.uid.toString();
+    //   // uTodolist.userUid = auth.currentUser!.uid.toString();
+    //   // uNotes.userUid = auth.currentUser!.uid.toString();
+    //   // uTask.userUid = auth.currentUser!.uid.toString();
+    //   // uSchedule.userUid = auth.currentUser!.uid.toString();
+    //   // uIncome.userUid = auth.currentUser!.uid.toString();
+    //   // uOutcome.userUid = auth.currentUser!.uid.toString();
+    // }
 
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -90,7 +91,7 @@ class _DashboardState extends State<Dashboard> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Hello, " + uProfile.nama_lengkap.toString(),
+                                "Hello, " + nama,
                                 style: mainTitleTextStyle,
                               ),
                               Text(

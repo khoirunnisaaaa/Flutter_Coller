@@ -10,11 +10,28 @@ class uProfile {
   static String? userUid;
   static String? nama_lengkap;
   static String? email;
+  static String? password;
   static String? no_hp;
   static String? prof_img;
 
+  static getUserDoc() async {
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userUid.toString())
+        .get()
+        .then((value) {
+      uProfile.email = (value.data()!["email"]).toString();
+      uProfile.password = (value.data()!["password"]).toString();
+      uProfile.nama_lengkap = (value.data()!["nama_lengkap"]).toString();
+      uProfile.no_hp = (value.data()!["phone"]).toString();
+      uProfile.prof_img = (value.data()!["prof_img"]).toString();
+    });
+    print("Ini Password : " + password.toString());
+  }
+
   static Future<void> updateProfile({
     required String email,
+    required String password,
     required String nama_lengkap,
     required String no_hp,
     required String prof_img,
@@ -24,6 +41,7 @@ class uProfile {
     Map<String, dynamic> data = <String, dynamic>{
       "email": email,
       "nama_lengkap": nama_lengkap,
+      "password": password,
       "phone": no_hp,
       "prof_img": prof_img
     };

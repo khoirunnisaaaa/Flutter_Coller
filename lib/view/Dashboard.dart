@@ -34,6 +34,10 @@ class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
     String nama = uProfile.nama_lengkap.toString();
+    String balance =
+        ((uIncome.totalIncome) - (uOutcome.totalOutcome)).toString();
+    String totalIncome = (uIncome.totalIncome).toString();
+    String totalOutcome = (uOutcome.totalOutcome).toString();
     // FirebaseAuth auth = FirebaseAuth.instance;
     // FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -206,7 +210,7 @@ class _DashboardState extends State<Dashboard> {
                               Row(
                                 children: [
                                   Text(
-                                    "Rp. 2.385.000",
+                                    "Rp. ${balance.toString()}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w600,
@@ -227,14 +231,14 @@ class _DashboardState extends State<Dashboard> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
-                                    "${nama} / +1 2738 23** ***",
+                                    "~${nama}",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 11),
                                   ),
                                   Text(
-                                    "12/24",
+                                    "coller",
                                     style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w400,
@@ -280,7 +284,7 @@ class _DashboardState extends State<Dashboard> {
                                               style: subMenuTextStyle,
                                             ),
                                             Text(
-                                              "Rp. 3.000.000,-",
+                                              "Rp. ${totalIncome.toString()},-",
                                               style: TextStyle(
                                                   color: Color(0xffA7A7A7),
                                                   fontSize: 10),
@@ -331,7 +335,7 @@ class _DashboardState extends State<Dashboard> {
                                               style: subMenuTextStyle,
                                             ),
                                             Text(
-                                              "Rp. 615.000,-",
+                                              "Rp. ${totalOutcome.toString()},-",
                                               style: TextStyle(
                                                   color: Color(0xffA7A7A7),
                                                   fontSize: 10),

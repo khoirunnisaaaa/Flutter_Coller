@@ -1,11 +1,13 @@
 import 'dart:ui';
 
 import 'package:coller_mobile/utils/profile.dart';
+import 'package:coller_mobile/view/AboutApp.dart';
 import 'package:coller_mobile/view/Profile/ChangePassword.dart';
 import 'package:coller_mobile/view/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 import '../../theme.dart';
 import 'EditProfile.dart';
@@ -176,11 +178,10 @@ class _OverviewProfileState extends State<OverviewProfile> {
                                   ],
                                 ),
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => EditProfile()),
-                                  // );
+                                  print("pressed");
+                                  Get.isDarkMode
+                                      ? Get.changeTheme(ThemeData.light())
+                                      : Get.changeTheme(ThemeData.dark());
                                 },
                               ),
                               SizedBox(height: 20),
@@ -250,11 +251,11 @@ class _OverviewProfileState extends State<OverviewProfile> {
                                   ],
                                 ),
                                 onTap: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //       builder: (context) => EditProfile()),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => AboutApp()),
+                                  );
                                 },
                               ),
                             ],
@@ -299,37 +300,6 @@ class _OverviewProfileState extends State<OverviewProfile> {
                     showAlertLogout();
                   },
                 ),
-                SizedBox(height: 15),
-                InkWell(
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 40,
-                          decoration: BoxDecoration(
-                              border: Border.all(color: Color(0xffC7C7C7)),
-                              borderRadius: BorderRadius.circular(50)),
-                          child: Center(
-                            child: Text(
-                              "Delete Account",
-                              style: TextStyle(
-                                  color: Color(0xffC7C7C7),
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //       builder: (context) => EditProfile()),
-                    // );
-                  },
-                )
               ],
             ),
           ),

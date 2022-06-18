@@ -19,13 +19,7 @@ class AboutApp extends StatelessWidget {
               Center(
                 child: Text(
                   'About Applications.',
-                  style: Get.isDarkMode
-                      ? mainTitleTextStyle
-                      : TextStyle(
-                          color:
-                              Get.isDarkMode ? Color(0xff6F6F6F) : Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700),
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                 ),
               ),
               SizedBox(height: 30),

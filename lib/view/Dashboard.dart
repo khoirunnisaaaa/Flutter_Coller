@@ -22,7 +22,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:badges/badges.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
+import '../controller/DemoController.dart';
 import 'Profile/EditProfile.dart';
 
 class Dashboard extends StatefulWidget {
@@ -33,6 +36,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
+    final DemoController ctrl = Get.find();
     String nama = uProfile.nama_lengkap.toString();
     String balance =
         ((uIncome.totalIncome) - (uOutcome.totalOutcome)).toString();
@@ -82,14 +86,15 @@ class _DashboardState extends State<Dashboard> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                "Hello, " + nama,
-                                style: mainTitleTextStyle,
-                              ),
+                              Text("Hello, " + nama,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 18,
+                                  )),
                               Text(
                                 "Make your life better with Coller!",
                                 style: TextStyle(
-                                    color: semiDarkGreyColor,
+                                    color: Color(0xff949494),
                                     fontWeight: FontWeight.w400,
                                     fontSize: 13),
                               )
@@ -137,17 +142,17 @@ class _DashboardState extends State<Dashboard> {
                                   borderRadius: BorderRadius.circular(50.0),
                                 ),
                                 filled: true,
-                                hintStyle: TextStyle(color: Color(0xffA7A7A7)),
+                                // hintStyle: TextStyle(color: Color(0xffA7A7A7)),
                                 hintText: "Add instant note in here ...",
-                                fillColor: Color(0xffF3F3F3),
+                                // fillColor: Color(0xffF3F3F3),
                                 focusedBorder: OutlineInputBorder(
-                                  borderSide:
-                                      new BorderSide(color: Color(0xffF3F3F3)),
+                                  // borderSide:
+                                  //     new BorderSide(color: Color(0xffF3F3F3)),
                                   borderRadius: new BorderRadius.circular(25.7),
                                 ),
                                 enabledBorder: UnderlineInputBorder(
                                   borderSide:
-                                      new BorderSide(color: Color(0xffF3F3F3)),
+                                      new BorderSide(color: Colors.transparent),
                                   borderRadius: new BorderRadius.circular(25.7),
                                 ),
                               ),
@@ -172,7 +177,8 @@ class _DashboardState extends State<Dashboard> {
                       SizedBox(height: 30),
                       Text(
                         "Your Saldo.",
-                        style: titleTextStyle,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 16),
                       ),
                       SizedBox(height: 20),
                       // card
@@ -261,7 +267,9 @@ class _DashboardState extends State<Dashboard> {
                                 child: Container(
                                   height: 85,
                                   decoration: BoxDecoration(
-                                      color: greyColor,
+                                      color: ctrl.isDark
+                                          ? Color.fromARGB(31, 206, 206, 206)
+                                          : greyColor,
                                       borderRadius: BorderRadius.circular(11)),
                                   child: Padding(
                                     padding: EdgeInsets.symmetric(
@@ -279,10 +287,15 @@ class _DashboardState extends State<Dashboard> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              "Income",
-                                              style: subMenuTextStyle,
-                                            ),
+                                            Text("Income",
+                                                style: ctrl.isDark
+                                                    ? TextStyle(
+                                                        color:
+                                                            Color(0xffA7A7A7),
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        fontSize: 13)
+                                                    : subMenuTextStyle),
                                             Text(
                                               "Rp. ${totalIncome.toString()},-",
                                               style: TextStyle(
@@ -311,7 +324,9 @@ class _DashboardState extends State<Dashboard> {
                                 child: Container(
                                   height: 85,
                                   decoration: BoxDecoration(
-                                    color: greyColor,
+                                    color: ctrl.isDark
+                                        ? Color.fromARGB(31, 206, 206, 206)
+                                        : greyColor,
                                     borderRadius: BorderRadius.circular(11),
                                   ),
                                   child: Padding(
@@ -332,7 +347,13 @@ class _DashboardState extends State<Dashboard> {
                                           children: [
                                             Text(
                                               "Outcome",
-                                              style: subMenuTextStyle,
+                                              style: ctrl.isDark
+                                                  ? TextStyle(
+                                                      color: Color(0xffA7A7A7),
+                                                      fontWeight:
+                                                          FontWeight.w600,
+                                                      fontSize: 13)
+                                                  : subMenuTextStyle,
                                             ),
                                             Text(
                                               "Rp. ${totalOutcome.toString()},-",
@@ -361,7 +382,8 @@ class _DashboardState extends State<Dashboard> {
                       SizedBox(height: 30),
                       Text(
                         "What you have to finish.",
-                        style: titleTextStyle,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 16),
                       ),
                       SizedBox(height: 28),
                       Row(
@@ -372,7 +394,9 @@ class _DashboardState extends State<Dashboard> {
                               child: Container(
                                 height: 110,
                                 decoration: BoxDecoration(
-                                    color: greyColor,
+                                    color: ctrl.isDark
+                                        ? Color.fromARGB(31, 206, 206, 206)
+                                        : greyColor,
                                     borderRadius: BorderRadius.circular(11)),
                                 child: Badge(
                                   badgeContent: Container(
@@ -399,7 +423,13 @@ class _DashboardState extends State<Dashboard> {
                                         height: 30,
                                       ),
                                       SizedBox(height: 10),
-                                      Text("Task", style: subMenuTextStyle),
+                                      Text("Task",
+                                          style: ctrl.isDark
+                                              ? TextStyle(
+                                                  color: Color(0xffA7A7A7),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13)
+                                              : subMenuTextStyle),
                                     ],
                                   ),
                                 ),
@@ -419,7 +449,9 @@ class _DashboardState extends State<Dashboard> {
                               child: Container(
                                 height: 110,
                                 decoration: BoxDecoration(
-                                    color: greyColor,
+                                    color: ctrl.isDark
+                                        ? Color.fromARGB(31, 206, 206, 206)
+                                        : greyColor,
                                     borderRadius: BorderRadius.circular(11)),
                                 child: Badge(
                                   badgeContent: Container(
@@ -446,7 +478,13 @@ class _DashboardState extends State<Dashboard> {
                                         height: 38,
                                       ),
                                       SizedBox(height: 10),
-                                      Text("Schedule", style: subMenuTextStyle)
+                                      Text("Schedule",
+                                          style: ctrl.isDark
+                                              ? TextStyle(
+                                                  color: Color(0xffA7A7A7),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13)
+                                              : subMenuTextStyle)
                                     ],
                                   ),
                                 ),
@@ -466,7 +504,9 @@ class _DashboardState extends State<Dashboard> {
                               child: Container(
                                 height: 110,
                                 decoration: BoxDecoration(
-                                    color: greyColor,
+                                    color: ctrl.isDark
+                                        ? Color.fromARGB(31, 206, 206, 206)
+                                        : greyColor,
                                     borderRadius: BorderRadius.circular(11)),
                                 child: Badge(
                                   badgeContent: Container(
@@ -494,7 +534,12 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                       SizedBox(height: 10),
                                       Text("To do List",
-                                          style: subMenuTextStyle)
+                                          style: ctrl.isDark
+                                              ? TextStyle(
+                                                  color: Color(0xffA7A7A7),
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13)
+                                              : subMenuTextStyle)
                                     ],
                                   ),
                                 ),

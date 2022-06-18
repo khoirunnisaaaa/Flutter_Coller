@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -17,6 +20,7 @@ class schedule extends StatefulWidget {
 }
 
 class _scheduleState extends State<schedule> {
+  final DemoController ctrl = Get.find();
   String? _selectedDay;
   TimeOfDay time = TimeOfDay.now();
   final _timeStartController = TextEditingController();
@@ -44,6 +48,7 @@ class _scheduleState extends State<schedule> {
         body: Form(
       key: _formKey,
       child: SlidingUpPanel(
+        color: ctrl.isDark ? Color.fromARGB(255, 51, 50, 50) : Colors.white,
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
         minHeight: size.height * 0.35,
@@ -70,13 +75,14 @@ class _scheduleState extends State<schedule> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(50)),
@@ -102,19 +108,8 @@ class _scheduleState extends State<schedule> {
                           fontSize: 18,
                         ),
                       ),
-                      InkWell(
-                        child: Image.asset(
-                          "assets/images/profile.png",
-                          height: 45,
-                          width: 45,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OverviewProfile()),
-                          );
-                        },
+                      SizedBox(
+                        width: 30,
                       )
                     ],
                   ),
@@ -346,7 +341,7 @@ class _scheduleState extends State<schedule> {
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 35,
                   ),
                   Column(children: <Widget>[
                     Center(
@@ -374,7 +369,7 @@ class _scheduleState extends State<schedule> {
                     ))
                   ]),
                   SizedBox(
-                    height: 15,
+                    height: 35,
                   ),
                   Padding(
                       padding: EdgeInsets.only(left: 30),
@@ -432,71 +427,75 @@ class _scheduleState extends State<schedule> {
                                           scheduleInfo['timestart'];
                                       String timeEnd = scheduleInfo['timeend'];
 
-                                      return Slidable(
-                                        // Specify a key if the Slidable is dismissible.
-                                        key: const ValueKey(0),
+                                      return Padding(
+                                        padding:
+                                            EdgeInsets.symmetric(vertical: 10),
+                                        child: Slidable(
+                                          // Specify a key if the Slidable is dismissible.
+                                          key: const ValueKey(0),
 
-                                        // The end action pane is the one at the right or the bottom side.
-                                        endActionPane: ActionPane(
-                                          motion: ScrollMotion(),
-                                          children: [
-                                            SlidableAction(
-                                              // An action can be bigger than the others.
-                                              onPressed: (context) {
-                                                documentId = docId;
-                                                _topicController.text = topic;
-                                                _timeStartController.text =
-                                                    timeStart;
-                                                _timeEndController.text =
-                                                    timeEnd;
-                                              },
-                                              backgroundColor: Color.fromARGB(
-                                                  255, 99, 185, 255),
-                                              foregroundColor: Colors.white,
-                                              icon: Icons.edit_rounded,
-                                            ),
-                                            SlidableAction(
-                                              onPressed: ((context) async {
-                                                await uSchedule.deleteItem(
-                                                    docId: docId);
-                                                uSchedule.getLength();
-                                              }),
-                                              backgroundColor:
-                                                  Color(0xffF76963),
-                                              foregroundColor: Colors.white,
-                                              icon: Icons.delete_rounded,
-                                            ),
-                                          ],
-                                        ),
-                                        child: Table(
-                                          columnWidths: const <int,
-                                              TableColumnWidth>{
-                                            0: FixedColumnWidth(120),
-                                            1: FlexColumnWidth()
-                                          },
-                                          children: <TableRow>[
-                                            TableRow(children: <Widget>[
-                                              Text(
-                                                '${timeStart} - ${timeEnd}',
-                                                style: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                ),
+                                          // The end action pane is the one at the right or the bottom side.
+                                          endActionPane: ActionPane(
+                                            motion: ScrollMotion(),
+                                            children: [
+                                              SlidableAction(
+                                                // An action can be bigger than the others.
+                                                onPressed: (context) {
+                                                  documentId = docId;
+                                                  _topicController.text = topic;
+                                                  _timeStartController.text =
+                                                      timeStart;
+                                                  _timeEndController.text =
+                                                      timeEnd;
+                                                },
+                                                backgroundColor: Color.fromARGB(
+                                                    255, 99, 185, 255),
+                                                foregroundColor: Colors.white,
+                                                icon: Icons.edit_rounded,
                                               ),
-                                              Text(
-                                                topic,
-                                                style: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14,
-                                                ),
+                                              SlidableAction(
+                                                onPressed: ((context) async {
+                                                  await uSchedule.deleteItem(
+                                                      docId: docId);
+                                                  uSchedule.getLength();
+                                                }),
+                                                backgroundColor:
+                                                    Color(0xffF76963),
+                                                foregroundColor: Colors.white,
+                                                icon: Icons.delete_rounded,
                                               ),
-                                            ])
-                                          ],
+                                            ],
+                                          ),
+                                          child: Table(
+                                            columnWidths: const <int,
+                                                TableColumnWidth>{
+                                              0: FixedColumnWidth(120),
+                                              1: FlexColumnWidth()
+                                            },
+                                            children: <TableRow>[
+                                              TableRow(children: <Widget>[
+                                                Text(
+                                                  '${timeStart} - ${timeEnd}',
+                                                  style: TextStyle(
+                                                    color: Colors.grey[600],
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  topic,
+                                                  style: TextStyle(
+                                                    color: Colors.grey[600],
+                                                    fontWeight: FontWeight.w500,
+                                                    fontSize: 14,
+                                                  ),
+                                                ),
+                                              ])
+                                            ],
+                                          ),
+                                          // The child of the Slidable is what the user sees when the
+                                          // component is not dragged.
                                         ),
-                                        // The child of the Slidable is what the user sees when the
-                                        // component is not dragged.
                                       );
                                     });
                               }

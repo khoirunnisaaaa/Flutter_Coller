@@ -1,10 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/notes.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesAddItem.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notesEditItem.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -18,14 +21,16 @@ class Notes extends StatefulWidget {
 }
 
 class _NotesState extends State<Notes> {
+  final DemoController ctrl = Get.find();
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SlidingUpPanel(
+        color: ctrl.isDark ? Color.fromARGB(255, 51, 50, 50) : Colors.white,
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
-        minHeight: size.height * 0.7,
+        minHeight: size.height * 0.6,
         boxShadow: [
           BoxShadow(
             color: Color.fromARGB(255, 0, 0, 0).withOpacity(0.1),
@@ -49,13 +54,14 @@ class _NotesState extends State<Notes> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 30),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(50)),
@@ -81,24 +87,13 @@ class _NotesState extends State<Notes> {
                           fontSize: 18,
                         ),
                       ),
-                      InkWell(
-                        child: Image.asset(
-                          "assets/images/profile.png",
-                          height: 45,
-                          width: 45,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OverviewProfile()),
-                          );
-                        },
+                      SizedBox(
+                        width: 30,
                       )
                     ],
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 50,
                   ),
                   Text(
                     "New Notes.",
@@ -304,8 +299,13 @@ class _NotesState extends State<Notes> {
                                       ),
                                       trailing: Text(
                                         dateNotes,
-                                        style:
-                                            TextStyle(color: Color(0xff464646)),
+                                        style: ctrl.isDark
+                                            ? TextStyle(
+                                                color: Color(0xffA7A7A7),
+                                                fontSize: 13)
+                                            : TextStyle(
+                                                color: Color(0xff464646),
+                                                fontSize: 13),
                                       ),
                                     ),
                                   ],

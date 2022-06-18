@@ -54,6 +54,8 @@ dependencies:
   flutter_exif_rotation: ^0.5.1
   firebase_storage: ^10.2.17
   get: ^4.6.5
+  get_storage: ^2.0.3
+  provider: ^6.0.3
 
 dev_dependencies:
   flutter_test:
@@ -83,6 +85,7 @@ flutter:
     - assets/images/coller-white-logo-large.png
     - assets/images/bg-welcome-screen2.png
     - assets/images/bg_mmmenu.png
+    - assets/images/bg_mmmenu2.png
     - assets/images/ic_alarmClock.png
     - assets/images/ic_books.png
     - assets/images/ic_cm.png

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/Profile/ChangeEmail.dart';
 import 'package:coller_mobile/view/navbar.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../theme.dart';
@@ -19,6 +22,8 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  final DemoController ctrl = Get.find();
+
   TextEditingController _namaController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
@@ -103,13 +108,14 @@ class _EditProfileState extends State<EditProfile> {
                   children: [
                     InkWell(
                       child: Container(
-                        width: 35,
-                        height: 35,
+                        width: 30,
+                        height: 30,
                         decoration: BoxDecoration(
                             color: redColor,
                             borderRadius: BorderRadius.circular(50)),
                         child: Icon(
-                          Icons.chevron_left,
+                          Icons.chevron_left_rounded,
+                          size: 30,
                           color: Colors.white,
                         ),
                       ),
@@ -121,9 +127,14 @@ class _EditProfileState extends State<EditProfile> {
                         );
                       },
                     ),
-                    Text("Edit Profile.", style: mainTitleTextStyle),
+                    Text(
+                      'Edit Profile',
+                      style: ctrl.isDark
+                          ? TextStyle(fontWeight: FontWeight.w600, fontSize: 18)
+                          : mainTitleTextStyle,
+                    ),
                     SizedBox(
-                      width: 35,
+                      width: 30,
                     )
                   ],
                 ),
@@ -188,11 +199,11 @@ class _EditProfileState extends State<EditProfile> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
-                          color: Color.fromARGB(255, 183, 183, 183),
+                          // color: Color.fromARGB(255, 183, 183, 183),
                           width: 0.0),
                     ),
                     filled: true,
-                    fillColor: Colors.white,
+                    // fillColor: Colors.white,
                   ),
                 ),
                 SizedBox(height: 20),
@@ -221,11 +232,11 @@ class _EditProfileState extends State<EditProfile> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
-                          color: Color.fromARGB(255, 183, 183, 183),
+                          // color: Color.fromARGB(255, 183, 183, 183),
                           width: 0.0),
                     ),
                     filled: true,
-                    fillColor: Colors.white,
+                    // fillColor: Colors.white,
                   ),
                   onTap: () {
                     Navigator.push(
@@ -258,11 +269,11 @@ class _EditProfileState extends State<EditProfile> {
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                       borderSide: BorderSide(
-                          color: Color.fromARGB(255, 183, 183, 183),
+                          // color: Color.fromARGB(255, 183, 183, 183),
                           width: 0.0),
                     ),
                     filled: true,
-                    fillColor: Colors.white,
+                    // fillColor: Colors.white,
                   ),
                 ),
                 SizedBox(height: 40),

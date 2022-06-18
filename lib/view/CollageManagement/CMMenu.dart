@@ -1,9 +1,12 @@
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/view/CollageManagement/notes/notes.dart';
 import 'package:coller_mobile/view/CollageManagement/schedule.dart';
 import 'package:coller_mobile/view/CollageManagement/task.dart';
 import 'package:coller_mobile/view/CollageManagement/todolist.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../theme.dart';
 import '../Profile/OverviewProfile.dart';
@@ -15,7 +18,7 @@ class CMMenu extends StatefulWidget {
 
 class _CMMenuState extends State<CMMenu> {
   var currentIndex = 1;
-
+  final DemoController ctrl = Get.find();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -40,20 +43,13 @@ class _CMMenuState extends State<CMMenu> {
                         color: Colors.white,
                       ),
                     ),
-                    Text("College Management.", style: mainTitleTextStyle),
-                    InkWell(
-                      child: Image.asset(
-                        "assets/images/profile.png",
-                        height: 45,
-                        width: 45,
-                      ),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OverviewProfile()),
-                        );
-                      },
+                    Text("College Management.",
+                        style: ctrl.isDark
+                            ? TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18)
+                            : mainTitleTextStyle),
+                    SizedBox(
+                      width: 30,
                     )
                   ],
                 ),
@@ -73,7 +69,9 @@ class _CMMenuState extends State<CMMenu> {
                         child: Container(
                           height: 170,
                           decoration: BoxDecoration(
-                              color: greyColor,
+                              color: ctrl.isDark
+                                  ? Color.fromARGB(31, 206, 206, 206)
+                                  : greyColor,
                               borderRadius: BorderRadius.circular(11)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -81,7 +79,13 @@ class _CMMenuState extends State<CMMenu> {
                               Image.asset("assets/images/ic_pen.png",
                                   height: 63),
                               SizedBox(height: 15),
-                              Text("Notes", style: titleTextStyle),
+                              Text("Notes",
+                                  style: ctrl.isDark
+                                      ? TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)
+                                      : titleTextStyle),
+                              SizedBox(height: 5),
                               Text(
                                 "Catatan Penting",
                                 style: TextStyle(
@@ -106,7 +110,9 @@ class _CMMenuState extends State<CMMenu> {
                         child: Container(
                           height: 170,
                           decoration: BoxDecoration(
-                              color: greyColor,
+                              color: ctrl.isDark
+                                  ? Color.fromARGB(31, 206, 206, 206)
+                                  : greyColor,
                               borderRadius: BorderRadius.circular(11)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -114,7 +120,13 @@ class _CMMenuState extends State<CMMenu> {
                               Image.asset("assets/images/ic_books.png",
                                   height: 53),
                               SizedBox(height: 15),
-                              Text("Task", style: titleTextStyle),
+                              Text("Task",
+                                  style: ctrl.isDark
+                                      ? TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)
+                                      : titleTextStyle),
+                              SizedBox(height: 5),
                               Text(
                                 "Daftar Tugas, Quis",
                                 style: TextStyle(
@@ -143,7 +155,9 @@ class _CMMenuState extends State<CMMenu> {
                         child: Container(
                           height: 170,
                           decoration: BoxDecoration(
-                              color: greyColor,
+                              color: ctrl.isDark
+                                  ? Color.fromARGB(31, 206, 206, 206)
+                                  : greyColor,
                               borderRadius: BorderRadius.circular(11)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -151,7 +165,13 @@ class _CMMenuState extends State<CMMenu> {
                               Image.asset("assets/images/ic_alarmClock.png",
                                   height: 65),
                               SizedBox(height: 15),
-                              Text("Schedule", style: titleTextStyle),
+                              Text("Schedule",
+                                  style: ctrl.isDark
+                                      ? TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)
+                                      : titleTextStyle),
+                              SizedBox(height: 5),
                               Text(
                                 "Jadwal hari ini",
                                 style: TextStyle(
@@ -176,7 +196,9 @@ class _CMMenuState extends State<CMMenu> {
                         child: Container(
                           height: 170,
                           decoration: BoxDecoration(
-                              color: greyColor,
+                              color: ctrl.isDark
+                                  ? Color.fromARGB(31, 206, 206, 206)
+                                  : greyColor,
                               borderRadius: BorderRadius.circular(11)),
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -184,7 +206,13 @@ class _CMMenuState extends State<CMMenu> {
                               Image.asset("assets/images/ic_text.png",
                                   height: 54),
                               SizedBox(height: 15),
-                              Text("To do List", style: titleTextStyle),
+                              Text("To do List",
+                                  style: ctrl.isDark
+                                      ? TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16)
+                                      : titleTextStyle),
+                              SizedBox(height: 5),
                               Text(
                                 "Yang harus dilakukan",
                                 style: TextStyle(

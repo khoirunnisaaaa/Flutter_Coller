@@ -1,8 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -16,6 +19,7 @@ class Todolist extends StatefulWidget {
 }
 
 class _TodolistState extends State<Todolist> {
+  final DemoController ctrl = Get.find();
   final TextEditingController _todos = TextEditingController();
   String? documentId;
   String? todosStatus;
@@ -27,6 +31,7 @@ class _TodolistState extends State<Todolist> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SlidingUpPanel(
+        color: ctrl.isDark ? Color.fromARGB(255, 51, 50, 50) : Colors.white,
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
         minHeight: size.height * 0.6,
@@ -53,13 +58,14 @@ class _TodolistState extends State<Todolist> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(50)),
@@ -85,24 +91,13 @@ class _TodolistState extends State<Todolist> {
                           fontSize: 18,
                         ),
                       ),
-                      InkWell(
-                        child: Image.asset(
-                          "assets/images/profile.png",
-                          height: 45,
-                          width: 45,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OverviewProfile()),
-                          );
-                        },
+                      SizedBox(
+                        width: 30,
                       )
                     ],
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 50,
                   ),
                   Text(
                     "New To do list.",
@@ -228,7 +223,7 @@ class _TodolistState extends State<Todolist> {
         panel: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.only(top: 30, bottom: 170),
+              padding: EdgeInsets.only(top: 0, bottom: 170),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -240,7 +235,7 @@ class _TodolistState extends State<Todolist> {
                     ),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 30,
                   ),
                   StreamBuilder(
                     stream: uTodolist.readItems(),

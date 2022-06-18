@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/utils/outcome.dart';
 import 'package:coller_mobile/view/MoneyManagement/Income.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
@@ -17,6 +20,7 @@ class MMMenu extends StatefulWidget {
 }
 
 class _MMMenuState extends State<MMMenu> {
+  final DemoController ctrl = Get.find();
   DateTime _selectedDate = DateTime.now();
   final initialdateval = TextEditingController();
   String balance = ((uIncome.totalIncome) - (uOutcome.totalOutcome)).toString();
@@ -41,7 +45,9 @@ class _MMMenuState extends State<MMMenu> {
         child: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/bg_mmmenu.png'),
+                image: ctrl.isDark
+                    ? AssetImage('assets/images/bg_mmmenu2.png')
+                    : AssetImage('assets/images/bg_mmmenu.png'),
                 fit: BoxFit.cover),
           ),
           child: Center(

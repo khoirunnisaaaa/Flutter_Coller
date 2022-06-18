@@ -8,7 +8,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
+import '../../controller/DemoController.dart';
 import '../../theme.dart';
 import 'EditProfile.dart';
 
@@ -19,7 +21,7 @@ class OverviewProfile extends StatefulWidget {
 
 class _OverviewProfileState extends State<OverviewProfile> {
   var currentIndex = 3;
-
+  final DemoController ctrl = Get.find();
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -54,7 +56,13 @@ class _OverviewProfileState extends State<OverviewProfile> {
                         // );
                       },
                     ),
-                    Text("Profile.", style: mainTitleTextStyle),
+                    Text(
+                      "Profile.",
+                      style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xff949494)),
+                    ),
                     SizedBox(
                       width: 30,
                     )
@@ -66,7 +74,9 @@ class _OverviewProfileState extends State<OverviewProfile> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                            color: bgLightRedColor,
+                            color: ctrl.isDark
+                                ? Color.fromARGB(31, 206, 206, 206)
+                                : bgLightRedColor,
                             borderRadius: BorderRadius.circular(22)),
                         child: Padding(
                           padding: EdgeInsets.only(top: 30, bottom: 45),
@@ -78,10 +88,15 @@ class _OverviewProfileState extends State<OverviewProfile> {
                                 backgroundImage: NetworkImage(uProfile.prof_img
                                     .toString()), // for Network image
                               ),
-                              SizedBox(height: 10),
+                              SizedBox(height: 20),
                               Text(
                                 uProfile.nama_lengkap.toString(),
-                                style: titleTextStyle,
+                                style: ctrl.isDark
+                                    ? TextStyle(
+                                        color: Color(0xffA7A7A7),
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 16)
+                                    : titleTextStyle,
                               ),
                               Text(
                                 uProfile.email.toString(),
@@ -143,46 +158,48 @@ class _OverviewProfileState extends State<OverviewProfile> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                            color: bgLightRedColor,
+                            color: ctrl.isDark
+                                ? Color.fromARGB(31, 206, 206, 206)
+                                : bgLightRedColor,
                             borderRadius: BorderRadius.circular(22)),
                         child: Padding(
                           padding: EdgeInsets.all(30),
                           child: Column(
                             children: [
-                              InkWell(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.dark_mode_outlined,
-                                          color: Color.fromARGB(
-                                              255, 147, 147, 147),
-                                        ),
-                                        SizedBox(width: 15),
-                                        Text(
-                                          "Dark Mode",
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: Color(0xff6F6F6F)),
-                                        ),
-                                      ],
-                                    ),
-                                    Icon(
-                                      Icons.toggle_off_outlined,
-                                      color: Color.fromARGB(255, 147, 147, 147),
-                                      size: 30,
-                                    )
-                                  ],
-                                ),
-                                onTap: () {
-                                  print("pressed");
-                                  Get.isDarkMode
-                                      ? Get.changeTheme(ThemeData.light())
-                                      : Get.changeTheme(ThemeData.dark());
-                                },
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.dark_mode_outlined,
+                                        color:
+                                            Color.fromARGB(255, 147, 147, 147),
+                                      ),
+                                      SizedBox(width: 15),
+                                      Text(
+                                        "Dark Mode",
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            color: Color(0xff6F6F6F)),
+                                      ),
+                                    ],
+                                  ),
+                                  // IconButton(
+                                  //   icon: Icon(Icons.toggle_off_outlined),
+                                  //   color: Color.fromARGB(255, 147, 147, 147),
+                                  //   onPressed: () {},
+                                  // )
+                                  // Switch(
+                                  //   value: isDarkMode,
+                                  //   onChanged: (value) => appdata.write('darkmode', value),
+                                  // )
+                                  Switch(
+                                    value: ctrl.isDark,
+                                    onChanged: ctrl.changeTheme,
+                                  ),
+                                ],
                               ),
                               SizedBox(height: 20),
                               InkWell(

@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/main.dart';
 import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/view/MoneyManagement/MMMenu.dart';
@@ -7,6 +8,8 @@ import 'package:coller_mobile/view/navbar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -24,6 +27,7 @@ class Income extends StatefulWidget {
 
 class _IncomeState extends State<Income> {
   int touchedIndex = -1;
+  final DemoController ctrl = Get.find();
 
   double sum = 0.0;
 
@@ -63,6 +67,7 @@ class _IncomeState extends State<Income> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SlidingUpPanel(
+        color: ctrl.isDark ? Color.fromARGB(255, 51, 50, 50) : Colors.white,
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
         minHeight: size.height * 0.2,
@@ -90,13 +95,14 @@ class _IncomeState extends State<Income> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(50)),
@@ -122,19 +128,8 @@ class _IncomeState extends State<Income> {
                           fontSize: 18,
                         ),
                       ),
-                      InkWell(
-                        child: Image.asset(
-                          "assets/images/profile.png",
-                          height: 45,
-                          width: 45,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OverviewProfile()),
-                          );
-                        },
+                      SizedBox(
+                        width: 30,
                       )
                     ],
                   ),
@@ -282,7 +277,7 @@ class _IncomeState extends State<Income> {
                       //first element in column is the transparent offset
                       Positioned(
                         bottom: 0.0,
-                        left: 70,
+                        left: 50,
                         child: InkWell(
                           child: Container(
                             width: 200,
@@ -379,14 +374,19 @@ class _IncomeState extends State<Income> {
                   SizedBox(height: 15),
                   Center(
                     child: Text(
-                      'History',
+                      'Chart & History',
                       style: titleFeatureTextStyle,
                     ),
                   ),
                   SizedBox(height: 30),
                   Text(
                     'Chart % Income.',
-                    style: titleTextStyle,
+                    style: ctrl.isDark
+                        ? TextStyle(
+                            color: Color(0xffA7A7A7),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16)
+                        : titleTextStyle,
                   ),
                   SizedBox(height: 10),
                   Container(
@@ -479,7 +479,12 @@ class _IncomeState extends State<Income> {
                   SizedBox(height: 30),
                   Text(
                     'History Income.',
-                    style: titleTextStyle,
+                    style: ctrl.isDark
+                        ? TextStyle(
+                            color: Color(0xffA7A7A7),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16)
+                        : titleTextStyle,
                   ),
                   // SizedBox(height: 20),
                   // Text(
@@ -595,8 +600,13 @@ class _IncomeState extends State<Income> {
                                       subtitle: Text(date),
                                       trailing: Text(
                                         "Rp. ${income}",
-                                        style:
-                                            TextStyle(color: Color(0xff464646)),
+                                        style: ctrl.isDark
+                                            ? TextStyle(
+                                                color: Color(0xffA7A7A7),
+                                                fontSize: 13)
+                                            : TextStyle(
+                                                color: Color(0xff464646),
+                                                fontSize: 13),
                                       ),
                                     ),
                                   ],

@@ -1,10 +1,13 @@
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../theme.dart';
 
@@ -14,6 +17,8 @@ class ChangePassword extends StatefulWidget {
 }
 
 class _ChangePasswordState extends State<ChangePassword> {
+  final DemoController ctrl = Get.find();
+
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confPassController = TextEditingController();
   final TextEditingController _newPassController = TextEditingController();
@@ -70,13 +75,14 @@ class _ChangePasswordState extends State<ChangePassword> {
                     children: [
                       InkWell(
                         child: Container(
-                          width: 35,
-                          height: 35,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                               color: redColor,
                               borderRadius: BorderRadius.circular(50)),
                           child: Icon(
-                            Icons.chevron_left,
+                            Icons.chevron_left_rounded,
+                            size: 30,
                             color: Colors.white,
                           ),
                         ),
@@ -88,9 +94,15 @@ class _ChangePasswordState extends State<ChangePassword> {
                           );
                         },
                       ),
-                      Text("Change Password.", style: mainTitleTextStyle),
+                      Text(
+                        'Change Password',
+                        style: ctrl.isDark
+                            ? TextStyle(
+                                fontWeight: FontWeight.w600, fontSize: 18)
+                            : mainTitleTextStyle,
+                      ),
                       SizedBox(
-                        width: 35,
+                        width: 30,
                       )
                     ],
                   ),
@@ -117,11 +129,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
                         borderSide: BorderSide(
-                            color: Color.fromARGB(255, 183, 183, 183),
+                            // color: Color.fromARGB(255, 183, 183, 183),
                             width: 0.0),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      // fillColor: Colors.white,
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -156,11 +168,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
                         borderSide: BorderSide(
-                            color: Color.fromARGB(255, 183, 183, 183),
+                            // color: Color.fromARGB(255, 183, 183, 183),
                             width: 0.0),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      // fillColor: Colors.white,
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -197,11 +209,11 @@ class _ChangePasswordState extends State<ChangePassword> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50),
                         borderSide: BorderSide(
-                            color: Color.fromARGB(255, 183, 183, 183),
+                            // color: Color.fromARGB(255, 183, 183, 183),
                             width: 0.0),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      // fillColor: Colors.white,
                     ),
                     validator: (value) {
                       if (value!.isEmpty) {
@@ -233,7 +245,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                         child: isLoading
                             ? CircularProgressIndicator(color: Colors.white)
                             : Text(
-                                "Simpan",
+                                "Save",
                                 style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.white,

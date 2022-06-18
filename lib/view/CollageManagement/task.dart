@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -19,6 +22,8 @@ class Task extends StatefulWidget {
 
 class _TaskState extends State<Task> {
   // DateTime _selectedDate = DateTime.now();
+
+  final DemoController ctrl = Get.find();
 
   final initialdateval = TextEditingController();
   final deskTask = TextEditingController();
@@ -44,6 +49,7 @@ class _TaskState extends State<Task> {
       body: Form(
         key: _formKey,
         child: SlidingUpPanel(
+          color: ctrl.isDark ? Color.fromARGB(255, 51, 50, 50) : Colors.white,
           padding: EdgeInsets.all(20),
           maxHeight: size.height,
           minHeight: size.height * 0.3,
@@ -70,13 +76,14 @@ class _TaskState extends State<Task> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         InkWell(
                           child: Container(
-                            width: 40,
-                            height: 40,
+                            width: 30,
+                            height: 30,
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(50)),
@@ -102,19 +109,8 @@ class _TaskState extends State<Task> {
                             fontSize: 18,
                           ),
                         ),
-                        InkWell(
-                          child: Image.asset(
-                            "assets/images/profile.png",
-                            height: 45,
-                            width: 45,
-                          ),
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OverviewProfile()),
-                            );
-                          },
+                        SizedBox(
+                          width: 30,
                         )
                       ],
                     ),
@@ -234,7 +230,7 @@ class _TaskState extends State<Task> {
                                     ),
                                   ),
                                   width: 400.0,
-                                  height: 250.0,
+                                  height: 280.0,
                                 )),
                             //second item in the column is a transparent space of 20
                             Container(height: 20.0),
@@ -242,7 +238,7 @@ class _TaskState extends State<Task> {
                         ),
                         Column(children: <Widget>[
                           //first element in column is the transparent offset
-                          Container(height: 225.0),
+                          Container(height: 260.0),
                           Center(
                               child: InkWell(
                             child: Container(
@@ -418,8 +414,13 @@ class _TaskState extends State<Task> {
                                         ),
                                         trailing: Text(
                                           date,
-                                          style: TextStyle(
-                                              color: Color(0xff464646)),
+                                          style: ctrl.isDark
+                                              ? TextStyle(
+                                                  color: Color(0xffA7A7A7),
+                                                  fontSize: 13)
+                                              : TextStyle(
+                                                  color: Color(0xff464646),
+                                                  fontSize: 13),
                                         ),
                                       ),
                                     ],

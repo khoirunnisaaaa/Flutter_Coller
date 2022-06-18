@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
+import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
 import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
@@ -16,6 +18,7 @@ import 'package:coller_mobile/view/register.dart';
 import 'package:coller_mobile/view/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
@@ -23,23 +26,25 @@ import 'package:get/get.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(const MyApp());
+  await GetStorage.init();
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  final DemoController ctrl = Get.put(DemoController());
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Poppins'),
-      darkTheme: ThemeData.dark(),
-      themeMode: ThemeMode.light,
-      home: _getSession(),
-    );
+    return SimpleBuilder(builder: (_) {
+      return GetMaterialApp(
+        title: 'Flutter Demo',
+        debugShowCheckedModeBanner: false,
+        // theme: ThemeData(fontFamily: 'Poppins'),
+        theme: ctrl.theme,
+        home: _getSession(),
+      );
+    });
   }
 
   Widget _getSession() {

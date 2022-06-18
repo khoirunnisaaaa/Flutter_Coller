@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/controller/DemoController.dart';
 import 'package:coller_mobile/main.dart';
 import 'package:coller_mobile/utils/income.dart';
 import 'package:coller_mobile/utils/outcome.dart';
@@ -8,6 +9,8 @@ import 'package:coller_mobile/view/navbar.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
@@ -25,7 +28,7 @@ class Outcome extends StatefulWidget {
 
 class _OutcomeState extends State<Outcome> {
   int touchedIndex = -1;
-
+  final DemoController ctrl = Get.find();
   double sum = 0.0;
 
   final List<String> outcomeItems = [
@@ -66,6 +69,7 @@ class _OutcomeState extends State<Outcome> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SlidingUpPanel(
+        color: ctrl.isDark ? Color.fromARGB(255, 51, 50, 50) : Colors.white,
         padding: EdgeInsets.all(20),
         maxHeight: size.height,
         minHeight: size.height * 0.2,
@@ -93,13 +97,14 @@ class _OutcomeState extends State<Outcome> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       InkWell(
                         child: Container(
-                          width: 40,
-                          height: 40,
+                          width: 30,
+                          height: 30,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(50)),
@@ -125,19 +130,8 @@ class _OutcomeState extends State<Outcome> {
                           fontSize: 18,
                         ),
                       ),
-                      InkWell(
-                        child: Image.asset(
-                          "assets/images/profile.png",
-                          height: 45,
-                          width: 45,
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => OverviewProfile()),
-                          );
-                        },
+                      SizedBox(
+                        width: 30,
                       )
                     ],
                   ),
@@ -285,7 +279,7 @@ class _OutcomeState extends State<Outcome> {
                       //first element in column is the transparent offset
                       Positioned(
                         bottom: 0.0,
-                        left: 70,
+                        left: 50,
                         child: InkWell(
                           child: Container(
                             width: 200,
@@ -388,7 +382,12 @@ class _OutcomeState extends State<Outcome> {
                   SizedBox(height: 30),
                   Text(
                     'Chart % Outcome.',
-                    style: titleTextStyle,
+                    style: ctrl.isDark
+                        ? TextStyle(
+                            color: Color(0xffA7A7A7),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16)
+                        : titleTextStyle,
                   ),
                   SizedBox(height: 10),
                   Container(
@@ -481,13 +480,18 @@ class _OutcomeState extends State<Outcome> {
                   SizedBox(height: 30),
                   Text(
                     'History Outcome.',
-                    style: titleTextStyle,
+                    style: ctrl.isDark
+                        ? TextStyle(
+                            color: Color(0xffA7A7A7),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16)
+                        : titleTextStyle,
                   ),
-                  SizedBox(height: 20),
-                  Text(
-                    "16/05/2022",
-                    style: dateMMTextStyle,
-                  ),
+                  // SizedBox(height: 20),
+                  // Text(
+                  //   "16/05/2022",
+                  //   style: dateMMTextStyle,
+                  // ),
                   // SLIDE-ABLE
                   StreamBuilder(
                     stream: uOutcome.readItems(),
@@ -625,8 +629,13 @@ class _OutcomeState extends State<Outcome> {
                                       subtitle: Text(date),
                                       trailing: Text(
                                         "Rp. ${outcome}",
-                                        style:
-                                            TextStyle(color: Color(0xff464646)),
+                                        style: ctrl.isDark
+                                            ? TextStyle(
+                                                color: Color(0xffA7A7A7),
+                                                fontSize: 13)
+                                            : TextStyle(
+                                                color: Color(0xff464646),
+                                                fontSize: 13),
                                       ),
                                     ),
                                   ],

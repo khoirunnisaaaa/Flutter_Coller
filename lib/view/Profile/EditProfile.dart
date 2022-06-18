@@ -140,7 +140,8 @@ class _EditProfileState extends State<EditProfile> {
                         ),
                       ),
                       onTap: () {
-                        Navigator.push(
+                        // Navigator.pop(context)
+                        Navigator.pop(
                           context,
                           MaterialPageRoute(
                               builder: (context) => navbar(index: 3)),

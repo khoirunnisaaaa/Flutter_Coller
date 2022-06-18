@@ -51,8 +51,8 @@ class _ChangePasswordState extends State<ChangePassword> {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: const Text('Password berhasil diperbarui!'),
         ));
-      }).then((value) => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => navbar(index: 3))));
+      }).then((value) => Navigator.of(context)
+          .pop(MaterialPageRoute(builder: (context) => navbar(index: 3))));
     } on FirebaseAuthException catch (e) {
       print(e);
     }
@@ -87,7 +87,7 @@ class _ChangePasswordState extends State<ChangePassword> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pop(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => navbar(index: 3)),

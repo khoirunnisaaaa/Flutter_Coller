@@ -76,7 +76,7 @@ class _TodolistState extends State<Todolist> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pop(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => navbar(index: 1)),

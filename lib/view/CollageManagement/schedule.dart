@@ -103,7 +103,7 @@ class _scheduleState extends State<schedule> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pop(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => navbar(index: 1)),

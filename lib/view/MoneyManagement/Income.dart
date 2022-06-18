@@ -113,7 +113,7 @@ class _IncomeState extends State<Income> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pop(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => navbar(index: 2)),

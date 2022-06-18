@@ -59,7 +59,7 @@ class _notesAddItemState extends State<notesAddItem> {
                       ),
                     ),
                     onTap: () {
-                      Navigator.push(
+                      Navigator.pop(
                         context,
                         MaterialPageRoute(builder: (context) => Notes()),
                       );

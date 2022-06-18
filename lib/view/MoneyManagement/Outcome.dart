@@ -115,7 +115,7 @@ class _OutcomeState extends State<Outcome> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pop(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => navbar(index: 2)),

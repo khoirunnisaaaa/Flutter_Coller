@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/view/login.dart';
 import 'package:coller_mobile/view/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,8 @@ class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
+  bool obscureText = true;
+  bool obscureTextConf = true;
 
   registerSubmit() async {
     try {
@@ -144,13 +147,27 @@ class _RegisterState extends State<Register> {
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: TextFormField(
                           controller: _passwordController,
-                          obscureText: true,
+                          obscureText: obscureText,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             labelText: 'Password',
-                            suffixIcon: Icon(
-                              Icons.visibility,
-                              color: Color.fromARGB(255, 116, 110, 110),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                print("Clicked!");
+                                setState(() {
+                                  obscureText = !obscureText;
+                                });
+                                print(obscureText);
+                              },
+                              child: obscureText == true
+                                  ? Icon(
+                                      Icons.visibility_off,
+                                      color: Color.fromARGB(255, 116, 110, 110),
+                                    )
+                                  : Icon(
+                                      Icons.visibility,
+                                      color: redColor,
+                                    ),
                             ),
                           ),
                           validator: (value) {
@@ -180,13 +197,27 @@ class _RegisterState extends State<Register> {
                       padding: const EdgeInsets.symmetric(horizontal: 25),
                       child: TextFormField(
                           controller: _confPasswordController,
-                          obscureText: true,
+                          obscureText: obscureTextConf,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             labelText: 'Konfirmasi Password',
-                            suffixIcon: Icon(
-                              Icons.visibility,
-                              color: Color.fromARGB(255, 116, 110, 110),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                print("Clicked!");
+                                setState(() {
+                                  obscureTextConf = !obscureTextConf;
+                                });
+                                print(obscureTextConf);
+                              },
+                              child: obscureTextConf == true
+                                  ? Icon(
+                                      Icons.visibility_off,
+                                      color: Color.fromARGB(255, 116, 110, 110),
+                                    )
+                                  : Icon(
+                                      Icons.visibility,
+                                      color: redColor,
+                                    ),
                             ),
                           ),
                           validator: (value) {

@@ -79,7 +79,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
+                          Navigator.pop(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => EditProfile()),

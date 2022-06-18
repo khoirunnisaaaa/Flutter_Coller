@@ -1,3 +1,4 @@
+import 'package:coller_mobile/theme.dart';
 import 'package:coller_mobile/utils/CollageManagement/schedule.dart';
 import 'package:coller_mobile/utils/CollageManagement/task.dart';
 import 'package:coller_mobile/utils/CollageManagement/todolist.dart';
@@ -22,6 +23,7 @@ class _LoginState extends State<Login> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   bool isLogin = false;
+  bool obscureText = true;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -149,13 +151,27 @@ class _LoginState extends State<Login> {
                     padding: const EdgeInsets.symmetric(horizontal: 25),
                     child: TextFormField(
                         controller: _passwordController,
-                        obscureText: true,
+                        obscureText: obscureText,
                         decoration: InputDecoration(
                           border: InputBorder.none,
                           labelText: 'Password',
-                          suffixIcon: Icon(
-                            Icons.visibility,
-                            color: Color.fromARGB(255, 116, 110, 110),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              print("Clicked!");
+                              setState(() {
+                                obscureText = !obscureText;
+                              });
+                              print(obscureText);
+                            },
+                            child: obscureText == true
+                                ? Icon(
+                                    Icons.visibility_off,
+                                    color: Color.fromARGB(255, 116, 110, 110),
+                                  )
+                                : Icon(
+                                    Icons.visibility,
+                                    color: redColor,
+                                  ),
                           ),
                         ),
                         validator: (value) {

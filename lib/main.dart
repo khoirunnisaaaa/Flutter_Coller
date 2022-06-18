@@ -58,13 +58,6 @@ class MyApp extends StatelessWidget {
           return Center(child: Text("Something went wrong!"));
         } else if (snapshot.hasData) {
           uProfile.userUid = snapshot.data!.uid.toString();
-          uProfile.getUserDoc();
-          uTask.getLength();
-          uSchedule.getLength();
-          uTodolist.getLength();
-          uIncome.getNama();
-          uOutcome.getNama();
-
           return navbar(index: 0);
         } else {
           return Login();

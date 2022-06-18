@@ -7,6 +7,7 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
@@ -23,23 +24,32 @@ class _scheduleState extends State<schedule> {
   final DemoController ctrl = Get.find();
   String? _selectedDay;
   TimeOfDay time = TimeOfDay.now();
+  DateTime date = DateTime.now();
+
   final _timeStartController = TextEditingController();
   final _timeEndController = TextEditingController();
   final _topicController = TextEditingController();
 
   String? documentId;
-  String dayNow = "Senin";
+  String? dayNow;
   final List<String> dayItems = [
-    'Senin',
-    'Selasa',
-    'Rabu',
-    'Kamis',
-    'Jumat',
-    'Sabtu',
-    'Minggu'
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday'
   ];
 
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    dayNow = DateFormat('EEEE').format(date);
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -355,7 +365,7 @@ class _scheduleState extends State<schedule> {
                         ),
                         child: Center(
                           child: Text(
-                            dayNow,
+                            dayNow.toString(),
                             style: TextStyle(
                                 fontSize: 16,
                                 color: Colors.black,
@@ -402,7 +412,7 @@ class _scheduleState extends State<schedule> {
                             ],
                           ),
                           StreamBuilder(
-                            stream: uSchedule.readItems(dayNow),
+                            stream: uSchedule.readItems(dayNow.toString()),
                             builder: (context,
                                 AsyncSnapshot<QuerySnapshot> streamSnapshot) {
                               if (streamSnapshot.hasError) {

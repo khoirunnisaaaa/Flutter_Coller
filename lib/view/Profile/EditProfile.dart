@@ -13,6 +13,7 @@ import 'package:flutter_exif_rotation/flutter_exif_rotation.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../theme.dart';
 
@@ -61,6 +62,8 @@ class _EditProfileState extends State<EditProfile> {
         isLoading = false;
         _pickedImage = file;
       });
+
+      uProfile.getUserDoc();
     }
   }
 
@@ -70,15 +73,32 @@ class _EditProfileState extends State<EditProfile> {
       builder: (context) =>
           AlertDialog(content: Text("Choose image source"), actions: [
         FlatButton(
-          child: Text("Camera"),
-          onPressed: () =>
-              Navigator.pop(context, pickImage(ImageSource.camera)),
-        ),
+            child: Text("Camera"),
+            onPressed: () async {
+              PermissionStatus cameraStatus = await Permission.camera.request();
+
+              if (cameraStatus == PermissionStatus.granted) {
+                Navigator.pop(context, pickImage(ImageSource.camera));
+              } else if (cameraStatus == PermissionStatus.denied) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: const Text('Please grant permission!'),
+                ));
+              }
+            }),
         FlatButton(
-          child: Text("Gallery"),
-          onPressed: () =>
-              Navigator.pop(context, pickImage(ImageSource.gallery)),
-        ),
+            child: Text("Gallery"),
+            onPressed: () async {
+              PermissionStatus storageStatus =
+                  await Permission.storage.request();
+
+              if (storageStatus == PermissionStatus.granted) {
+                Navigator.pop(context, pickImage(ImageSource.gallery));
+              } else if (storageStatus == PermissionStatus.denied) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: const Text('Please grant permission!'),
+                ));
+              }
+            }),
       ]),
     );
   }
@@ -141,11 +161,17 @@ class _EditProfileState extends State<EditProfile> {
                 SizedBox(height: 45),
                 Center(
                     child: InkWell(
-                  child: isLoading
-                      ? CircularProgressIndicator(color: redColor)
-                      : Stack(
-                          children: [
-                            CircleAvatar(
+                  child: Stack(
+                    children: [
+                      isLoading
+                          ? CircleAvatar(
+                              radius: 90.0,
+                              backgroundColor:
+                                  Color.fromARGB(255, 190, 193, 196),
+                              child: CircularProgressIndicator(
+                                  color: Colors.white),
+                            )
+                          : CircleAvatar(
                               radius: 90.0,
                               backgroundColor: const Color(0xFF778899),
                               backgroundImage: _pickedImage != null
@@ -153,24 +179,24 @@ class _EditProfileState extends State<EditProfile> {
                                   : NetworkImage(uProfile.prof_img.toString())
                                       as ImageProvider, // for Network image,
                             ),
-                            Positioned(
-                              right: 15,
-                              bottom: 0,
-                              child: Container(
-                                width: 35,
-                                height: 35,
-                                decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(50)),
-                                child: Icon(
-                                  Icons.camera_alt_rounded,
-                                  color: redColor,
-                                  size: 18,
-                                ),
-                              ),
-                            )
-                          ],
+                      Positioned(
+                        right: 15,
+                        bottom: 0,
+                        child: Container(
+                          width: 35,
+                          height: 35,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(50)),
+                          child: Icon(
+                            Icons.camera_alt_rounded,
+                            color: redColor,
+                            size: 18,
+                          ),
                         ),
+                      )
+                    ],
+                  ),
                   onTap: () {
                     _imageOption();
                   },

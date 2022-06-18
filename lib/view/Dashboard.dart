@@ -24,6 +24,7 @@ import 'package:flutter/services.dart';
 import 'package:badges/badges.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 
 import '../controller/DemoController.dart';
 import 'Profile/EditProfile.dart';
@@ -34,37 +35,29 @@ class Dashboard extends StatefulWidget {
 }
 
 class _DashboardState extends State<Dashboard> {
+  String? nama;
+  String? profImg;
+  int? taskCounter;
+  int? scheduleCounter;
+  int? todosCounter;
+  String? dayNow;
+
+  DateTime date = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     final DemoController ctrl = Get.find();
-    String nama = uProfile.nama_lengkap.toString();
+    dayNow = DateFormat('EEEE').format(date);
     String balance =
         ((uIncome.totalIncome) - (uOutcome.totalOutcome)).toString();
     String totalIncome = (uIncome.totalIncome).toString();
     String totalOutcome = (uOutcome.totalOutcome).toString();
-    // FirebaseAuth auth = FirebaseAuth.instance;
-    // FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-    // if (auth.currentUser != null) {
-    //   // print(auth.currentUser!.uid);
-    //   _firestore
-    //       .collection("users")
-    //       .doc(auth.currentUser!.uid.toString())
-    //       .get()
-    //       .then((value) {
-    //     uProfile.email = (value.data()!["email"]).toString();
-    //     uProfile.nama_lengkap = (value.data()!["nama_lengkap"]).toString();
-    //     uProfile.no_hp = (value.data()!["phone"]).toString();
-    //     uProfile.prof_img = (value.data()!["prof_img"]).toString();
-    //     // print(nama_lengkap);
-    //   });
-    //   uProfile.userUid = auth.currentUser!.uid.toString();
-    //   // uTodolist.userUid = auth.currentUser!.uid.toString();
-    //   // uNotes.userUid = auth.currentUser!.uid.toString();
-    //   // uTask.userUid = auth.currentUser!.uid.toString();
-    //   // uSchedule.userUid = auth.currentUser!.uid.toString();
-    //   // uIncome.userUid = auth.currentUser!.uid.toString();
-    //   // uOutcome.userUid = auth.currentUser!.uid.toString();
+    // @override
+    // void initState() {
+    //   uProfile.getUserDoc();
+    //   // TODO: implement initState
+    //   super.initState();
     // }
 
     double screenWidth = MediaQuery.of(context).size.width;
@@ -86,11 +79,34 @@ class _DashboardState extends State<Dashboard> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Hello, " + nama,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 18,
-                                  )),
+                              uProfile.nama_lengkap != null
+                                  ? Text(
+                                      "Hello, " +
+                                          uProfile.nama_lengkap.toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 18,
+                                      ))
+                                  : FutureBuilder(
+                                      future: _getProfileData(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                          return Text("Hello, ",
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                              ));
+                                        } else {
+                                          return Text(
+                                              "Hello, " + nama.toString(),
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 18,
+                                              ));
+                                        }
+                                      },
+                                    ),
                               Text(
                                 "Make your life better with Coller!",
                                 style: TextStyle(
@@ -100,12 +116,36 @@ class _DashboardState extends State<Dashboard> {
                               )
                             ],
                           ),
-                          CircleAvatar(
-                            radius: 30.0,
-                            backgroundColor: const Color(0xFF778899),
-                            backgroundImage: NetworkImage(uProfile.prof_img
-                                .toString()), // for Network image
-                          ),
+                          uProfile.prof_img != null
+                              ? CircleAvatar(
+                                  radius: 30.0,
+                                  backgroundColor: Colors.transparent,
+                                  backgroundImage: NetworkImage(uProfile
+                                      .prof_img
+                                      .toString()), // for Network image
+                                )
+                              : FutureBuilder(
+                                  future: _getProfileData(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState !=
+                                        ConnectionState.done) {
+                                      return CircleAvatar(
+                                        radius: 30.0,
+                                        backgroundColor: redColor,
+                                        child: CircularProgressIndicator(
+                                          color: Colors.white,
+                                        ), // for Network image
+                                      );
+                                    } else {
+                                      return CircleAvatar(
+                                        radius: 30.0,
+                                        backgroundColor: Colors.transparent,
+                                        backgroundImage: NetworkImage(profImg
+                                            .toString()), // for Network image
+                                      );
+                                    }
+                                  },
+                                ),
                           // InkWell(
                           //   child: Image.asset(
                           //     "assets/images/profile.png",
@@ -236,13 +276,37 @@ class _DashboardState extends State<Dashboard> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    "~${nama}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 11),
-                                  ),
+                                  uProfile.nama_lengkap != null
+                                      ? Text(
+                                          uProfile.nama_lengkap.toString(),
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 11),
+                                        )
+                                      : FutureBuilder(
+                                          future: _getProfileData(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState !=
+                                                ConnectionState.done) {
+                                              return Text(
+                                                "...",
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 11),
+                                              );
+                                            } else {
+                                              return Text(
+                                                nama.toString(),
+                                                style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.w400,
+                                                    fontSize: 11),
+                                              );
+                                            }
+                                          },
+                                        ),
                                   Text(
                                     "coller",
                                     style: TextStyle(
@@ -402,13 +466,30 @@ class _DashboardState extends State<Dashboard> {
                                   badgeContent: Container(
                                     width: 25,
                                     height: 25,
-                                    child: Text(
-                                      uTask.totalTask.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
+                                    child: FutureBuilder(
+                                      future: _getCmData(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                          return Text(
+                                            "0",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } else {
+                                          return Text(
+                                            taskCounter.toString(),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        }
+                                      },
                                     ),
                                   ),
                                   badgeColor: redColor,
@@ -457,13 +538,30 @@ class _DashboardState extends State<Dashboard> {
                                   badgeContent: Container(
                                     width: 25,
                                     height: 25,
-                                    child: Text(
-                                      uSchedule.totalSchedule.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
+                                    child: FutureBuilder(
+                                      future: _getCmData(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                          return Text(
+                                            "0",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } else {
+                                          return Text(
+                                            scheduleCounter.toString(),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        }
+                                      },
                                     ),
                                   ),
                                   badgeColor: redColor,
@@ -512,13 +610,30 @@ class _DashboardState extends State<Dashboard> {
                                   badgeContent: Container(
                                     width: 25,
                                     height: 25,
-                                    child: Text(
-                                      uTodolist.todosLength.toString(),
-                                      style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500),
-                                      textAlign: TextAlign.center,
+                                    child: FutureBuilder(
+                                      future: _getCmData(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState !=
+                                            ConnectionState.done) {
+                                          return Text(
+                                            "0",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        } else {
+                                          return Text(
+                                            todosCounter.toString(),
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w500),
+                                            textAlign: TextAlign.center,
+                                          );
+                                        }
+                                      },
                                     ),
                                   ),
                                   badgeColor: redColor,
@@ -564,5 +679,72 @@ class _DashboardState extends State<Dashboard> {
         ),
       ),
     );
+  }
+
+  _getProfileData() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser;
+
+    if (firebaseUser != null) {
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(firebaseUser.uid)
+          .get()
+          .then((value) {
+        nama = (value.data()!["nama_lengkap"]).toString();
+        profImg = (value.data()!["prof_img"]).toString();
+        print("Nama : " + (value.data()!["nama_lengkap"]).toString());
+        print("Nama : " + (value.data()!["prof_img"]).toString());
+      });
+    }
+
+    uProfile.getUserDoc();
+    // uProfile.getUserDoc();
+    //       uTask.getLength();
+    //       uSchedule.getLength();
+    //       uTodolist.getLength();
+    uIncome.getNama();
+    uOutcome.getNama();
+  }
+
+  _getCmData() async {
+    final firebaseUser = await FirebaseAuth.instance.currentUser;
+
+    if (firebaseUser != null) {
+      await FirebaseFirestore.instance
+          .collection("task")
+          .doc(firebaseUser.uid)
+          .collection("items")
+          .where("status", isEqualTo: "false")
+          .get()
+          .then((value) {
+        taskCounter = value.docs.length;
+        print("Task Length : " + value.docs.length.toString());
+      });
+
+      await FirebaseFirestore.instance
+          .collection("todolist")
+          .doc(firebaseUser.uid)
+          .collection("items")
+          .where("status", isEqualTo: "false")
+          .get()
+          .then((value) {
+        todosCounter = value.docs.length;
+        print("Todos Length : " + value.docs.length.toString());
+      });
+
+      await FirebaseFirestore.instance
+          .collection("schedule")
+          .doc(firebaseUser.uid)
+          .collection("items")
+          .where("day", isEqualTo: dayNow)
+          .get()
+          .then((value) {
+        scheduleCounter = value.docs.length;
+        print("Today : " +
+            dayNow.toString() +
+            " Length : " +
+            value.docs.length.toString());
+      });
+    }
   }
 }

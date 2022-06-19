@@ -41,7 +41,6 @@ class _DashboardState extends State<Dashboard> {
   int? scheduleCounter;
   int? todosCounter;
   String? dayNow;
-
   DateTime date = DateTime.now();
 
   @override
@@ -55,7 +54,7 @@ class _DashboardState extends State<Dashboard> {
 
     // @override
     // void initState() {
-    //   uProfile.getUserDoc();
+    //   _getMmData();
     //   // TODO: implement initState
     //   super.initState();
     // }
@@ -253,23 +252,50 @@ class _DashboardState extends State<Dashboard> {
                                   )
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Text(
-                                    "Rp. ${balance.toString()}",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 24),
-                                  ),
-                                  Text(
-                                    " ,-",
-                                    style: TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14),
-                                  ),
-                                ],
+                              FutureBuilder(
+                                future: uIncome.getNama(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState !=
+                                      ConnectionState.done) {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "Rp. -",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 24),
+                                        ),
+                                        Text(
+                                          " ,-",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14),
+                                        ),
+                                      ],
+                                    );
+                                  } else {
+                                    return Row(
+                                      children: [
+                                        Text(
+                                          "Rp. ${uIncome.totalIncome - uOutcome.totalOutcome}",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 24),
+                                        ),
+                                        Text(
+                                          " ,-",
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 14),
+                                        ),
+                                      ],
+                                    );
+                                  }
+                                },
                               ),
                               SizedBox(height: 50),
                               Row(
@@ -360,12 +386,29 @@ class _DashboardState extends State<Dashboard> {
                                                             FontWeight.w600,
                                                         fontSize: 13)
                                                     : subMenuTextStyle),
-                                            Text(
-                                              "Rp. ${totalIncome.toString()},-",
-                                              style: TextStyle(
-                                                  color: Color(0xffA7A7A7),
-                                                  fontSize: 10),
-                                            )
+                                            FutureBuilder(
+                                              future: uIncome.getNama(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState !=
+                                                    ConnectionState.done) {
+                                                  return Text(
+                                                    "Rp. 0,-",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xffA7A7A7),
+                                                        fontSize: 10),
+                                                  );
+                                                } else {
+                                                  return Text(
+                                                    "Rp. ${uIncome.totalIncome.toString()},-",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xffA7A7A7),
+                                                        fontSize: 10),
+                                                  );
+                                                }
+                                              },
+                                            ),
                                           ],
                                         )
                                       ],
@@ -419,12 +462,29 @@ class _DashboardState extends State<Dashboard> {
                                                       fontSize: 13)
                                                   : subMenuTextStyle,
                                             ),
-                                            Text(
-                                              "Rp. ${totalOutcome.toString()},-",
-                                              style: TextStyle(
-                                                  color: Color(0xffA7A7A7),
-                                                  fontSize: 10),
-                                            )
+                                            FutureBuilder(
+                                              future: uOutcome.getNama(),
+                                              builder: (context, snapshot) {
+                                                if (snapshot.connectionState !=
+                                                    ConnectionState.done) {
+                                                  return Text(
+                                                    "Rp. 0,-",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xffA7A7A7),
+                                                        fontSize: 10),
+                                                  );
+                                                } else {
+                                                  return Text(
+                                                    "Rp. ${uOutcome.totalOutcome.toString()},-",
+                                                    style: TextStyle(
+                                                        color:
+                                                            Color(0xffA7A7A7),
+                                                        fontSize: 10),
+                                                  );
+                                                }
+                                              },
+                                            ),
                                           ],
                                         )
                                       ],
@@ -693,7 +753,7 @@ class _DashboardState extends State<Dashboard> {
         nama = (value.data()!["nama_lengkap"]).toString();
         profImg = (value.data()!["prof_img"]).toString();
         print("Nama : " + (value.data()!["nama_lengkap"]).toString());
-        print("Nama : " + (value.data()!["prof_img"]).toString());
+        // print("Nama : " + (value.data()!["prof_img"]).toString());
       });
     }
 

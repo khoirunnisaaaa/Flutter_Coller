@@ -32,8 +32,8 @@ class _MMMenuState extends State<MMMenu> {
   void initState() {
     super.initState();
     uIncome.totalIncome = 0;
-    uIncome.getNama();
     uOutcome.totalOutcome = 0;
+    uIncome.getNama();
     uOutcome.getNama();
   }
 

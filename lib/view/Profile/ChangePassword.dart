@@ -49,7 +49,7 @@ class _ChangePasswordState extends State<ChangePassword> {
         });
 
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Password berhasil diperbarui!'),
+          content: const Text('Password updated!'),
         ));
       }).then((value) => Navigator.of(context)
           .pop(MaterialPageRoute(builder: (context) => navbar(index: 3))));
@@ -140,6 +140,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                         return 'must be filled';
                       } else if (value.length < 8) {
                         return 'Minimum password length is 8 characters';
+                      } else if (value == uProfile.password.toString()) {
+                        return 'Please choose other password.';
                       }
                       return null;
                     },
@@ -255,8 +257,8 @@ class _ChangePasswordState extends State<ChangePassword> {
                     ),
                     onTap: () {
                       if (formGlobalKey.currentState!.validate()) {
-                        changePass(_newPassController.text);
                         // _formKey.currentState!.save();
+                        showAlertConfirmation();
                         print("Sukses");
                       }
                       // print(_namaController.text +
@@ -275,5 +277,32 @@ class _ChangePasswordState extends State<ChangePassword> {
         ),
       ),
     );
+  }
+
+  showAlertConfirmation() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Do you want to change your password?'),
+            // content: Text('We hate to see you leave...'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  print("you choose no");
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  changePass(_newPassController.text);
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          );
+        });
   }
 }

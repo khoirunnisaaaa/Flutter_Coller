@@ -42,10 +42,10 @@ class _ChangeEmailState extends State<ChangeEmail> {
           isLoading = false;
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Email berhasil diperbarui!'),
+          content: const Text('Email updated!'),
         ));
-      }).then((value) => Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => EditProfile())));
+      }).then((value) => Navigator.of(context)
+          .pop(MaterialPageRoute(builder: (context) => EditProfile())));
     } on FirebaseAuthException catch (e) {
       print(e);
     }
@@ -124,8 +124,8 @@ class _ChangeEmailState extends State<ChangeEmail> {
                     validator: (value) {
                       if (value!.isEmpty) {
                         return 'must be filled';
-                      } else if (value.length < 8) {
-                        return 'Minimum password length is 8 characters';
+                      } else if (value == uProfile.email.toString()) {
+                        return 'Please choose other email address.';
                       }
                       return null;
                     },
@@ -164,7 +164,7 @@ class _ChangeEmailState extends State<ChangeEmail> {
                       if (value!.isEmpty) {
                         return 'must be filled';
                       } else if (value != _newEmailController.text) {
-                        return 'The password confirmation does not match';
+                        return 'The email confirmation does not match';
                       }
                       return null;
                     },
@@ -241,7 +241,8 @@ class _ChangeEmailState extends State<ChangeEmail> {
                     ),
                     onTap: () {
                       if (formGlobalKey.currentState!.validate()) {
-                        changePass(_newEmailController.text);
+                        // changePass(_newEmailController.text);
+                        showAlertConfirmation();
                         // _formKey.currentState!.save();
                         print("Sukses");
                       }
@@ -261,5 +262,32 @@ class _ChangeEmailState extends State<ChangeEmail> {
         ),
       ),
     );
+  }
+
+  showAlertConfirmation() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Do you want to change your email?'),
+            // content: Text('We hate to see you leave...'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  print("you choose no");
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  changePass(_newEmailController.text);
+                  Navigator.of(context).pop(true);
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          );
+        });
   }
 }

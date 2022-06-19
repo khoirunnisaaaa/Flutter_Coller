@@ -321,7 +321,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                     child: Center(
                       child: Text(
-                        "Simpan",
+                        "Save",
                         style: TextStyle(
                             fontSize: 16,
                             color: Colors.white,
@@ -330,14 +330,7 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                   onTap: () {
-                    uProfile.updateProfile(
-                        email: uProfile.email.toString(),
-                        nama_lengkap: _namaController.text,
-                        password: uProfile.password.toString(),
-                        no_hp: _phoneController.text,
-                        prof_img: _profImgController.text);
-
-                    uProfile.getUserDoc();
+                    showAlertConfirmation();
                     // uProfile.email = _emailController.text;
                     // uProfile.nama_lengkap = _namaController.text;
                     // uProfile.no_hp = _phoneController.text;
@@ -357,5 +350,42 @@ class _EditProfileState extends State<EditProfile> {
         ),
       ),
     );
+  }
+
+  showAlertConfirmation() {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Do you want to edit your profile?'),
+            // content: Text('We hate to see you leave...'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  print("you choose no");
+                  Navigator.of(context).pop(false);
+                },
+                child: Text('No'),
+              ),
+              FlatButton(
+                onPressed: () async {
+                  uProfile.updateProfile(
+                      email: uProfile.email.toString(),
+                      nama_lengkap: _namaController.text,
+                      password: uProfile.password.toString(),
+                      no_hp: _phoneController.text,
+                      prof_img: _profImgController.text);
+
+                  uProfile.getUserDoc();
+                  Navigator.of(context).pop(true);
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: const Text('Profile Updated!'),
+                  ));
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          );
+        });
   }
 }

@@ -56,15 +56,15 @@ class _LoginState extends State<Login> {
       print(e.code);
       if (e.code == 'invalid-email') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Masukkan email yang benar!'),
+          content: const Text('Please enter a valid email address.'),
         ));
       } else if (e.code == 'user-not-found') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Email anda belum terdaftar!'),
+          content: const Text('Email not registered.'),
         ));
       } else if (e.code == 'wrong-password') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Password anda salah!'),
+          content: const Text('Wrong password.'),
         ));
       }
       setState(() {
@@ -128,7 +128,7 @@ class _LoginState extends State<Login> {
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Email tidak boleh kosong';
+                            return 'Email is required.';
                           }
                           return null;
                         }),
@@ -176,7 +176,7 @@ class _LoginState extends State<Login> {
                         ),
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'Password Tidak Boleh Kosong';
+                            return 'Password field is required.';
                           }
                           return null;
                         }),

@@ -65,7 +65,7 @@ class _RegisterState extends State<Register> {
       print(e.code);
       if (e.code == 'email-already-in-use') {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: const Text('Email telah terdaftar!'),
+          content: const Text('Email already registered.  '),
         ));
       }
     }
@@ -124,7 +124,7 @@ class _RegisterState extends State<Register> {
                           ),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Email tidak boleh kosong';
+                              return 'Email field is required.';
                             }
                             return null;
                           }),
@@ -172,9 +172,9 @@ class _RegisterState extends State<Register> {
                           ),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Password Tidak Boleh Kosong';
+                              return 'Password is required';
                             } else if (value.length < 8) {
-                              return 'Password minimal 8 karakter';
+                              return 'Password length must be > 8 characters';
                             }
                             return null;
                           }),
@@ -200,7 +200,7 @@ class _RegisterState extends State<Register> {
                           obscureText: obscureTextConf,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            labelText: 'Konfirmasi Password',
+                            labelText: 'Confirm Password',
                             suffixIcon: GestureDetector(
                               onTap: () {
                                 print("Clicked!");
@@ -222,9 +222,9 @@ class _RegisterState extends State<Register> {
                           ),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Password Tidak Boleh Kosong';
+                              return 'Confirm password field is required.';
                             } else if (value != _passwordController.text) {
-                              return 'Password tidak sesuai';
+                              return 'Wrong password.';
                             }
                             return null;
                           }),
@@ -251,7 +251,7 @@ class _RegisterState extends State<Register> {
                           decoration: InputDecoration(
                             border: InputBorder.none,
                             hintText: 'Irene Bae',
-                            labelText: 'Nama Lengkap',
+                            labelText: 'Full Name',
                             suffixIcon: Icon(
                               Icons.person,
                               color: Color.fromARGB(255, 116, 110, 110),
@@ -259,7 +259,7 @@ class _RegisterState extends State<Register> {
                           ),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'Nama Tidak Boleh Kosong';
+                              return 'Full Name field is required.';
                             }
                             return null;
                           }),
@@ -285,8 +285,8 @@ class _RegisterState extends State<Register> {
                           controller: _nohpController,
                           decoration: InputDecoration(
                             border: InputBorder.none,
-                            hintText: '+1 2374 23899 21',
-                            labelText: 'No Telepon',
+                            hintText: '085398334040',
+                            labelText: 'Phone',
                             suffixIcon: Icon(
                               Icons.phone,
                               color: Color.fromARGB(255, 116, 110, 110),
@@ -294,9 +294,9 @@ class _RegisterState extends State<Register> {
                           ),
                           validator: (value) {
                             if (value!.isEmpty) {
-                              return 'No Telepon Tidak Boleh Kosong';
+                              return 'Phone field is required.';
                             } else if (value.length < 11) {
-                              return 'Masukkan nomor telepon yang sesuai reg (ID)';
+                              return 'Please enter valid phone.';
                             }
                             return null;
                           }),

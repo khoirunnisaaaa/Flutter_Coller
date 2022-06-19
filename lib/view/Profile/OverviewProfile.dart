@@ -34,28 +34,29 @@ class _OverviewProfileState extends State<OverviewProfile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    InkWell(
-                      child: Container(
-                        width: 35,
-                        height: 35,
-                        decoration: BoxDecoration(
-                            color: redColor,
-                            borderRadius: BorderRadius.circular(50)),
-                        child: Icon(
-                          Icons.chevron_left,
-                          color: Colors.white,
-                        ),
-                      ),
-                      onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //       builder: (context) => EditProfile()),
-                        // );
-                      },
-                    ),
+                    // InkWell(
+                    //   child: Container(
+                    //     width: 35,
+                    //     height: 35,
+                    //     decoration: BoxDecoration(
+                    //         color: redColor,
+                    //         borderRadius: BorderRadius.circular(50)),
+                    //     child: Icon(
+                    //       Icons.chevron_left,
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    //   onTap: () {
+                    //     // Navigator.push(
+                    //     //   context,
+                    //     //   MaterialPageRoute(
+                    //     //       builder: (context) => EditProfile()),
+                    //     // );
+                    //   },
+                    // ),
+
                     Text(
                       "Profile.",
                       style: TextStyle(
@@ -63,9 +64,9 @@ class _OverviewProfileState extends State<OverviewProfile> {
                           fontWeight: FontWeight.w700,
                           color: Color(0xff949494)),
                     ),
-                    SizedBox(
-                      width: 30,
-                    )
+                    // SizedBox(
+                    //   width: 30,
+                    // )
                   ],
                 ),
                 SizedBox(height: 35),

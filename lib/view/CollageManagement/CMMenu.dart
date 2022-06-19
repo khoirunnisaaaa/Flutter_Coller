@@ -30,27 +30,13 @@ class _CMMenuState extends State<CMMenu> {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Container(
-                      width: 35,
-                      height: 35,
-                      decoration: BoxDecoration(
-                          color: redColor,
-                          borderRadius: BorderRadius.circular(50)),
-                      child: Icon(
-                        Icons.chevron_left,
-                        color: Colors.white,
-                      ),
-                    ),
                     Text("College Management.",
                         style: ctrl.isDark
                             ? TextStyle(
                                 fontWeight: FontWeight.w600, fontSize: 18)
                             : mainTitleTextStyle),
-                    SizedBox(
-                      width: 30,
-                    )
                   ],
                 ),
                 SizedBox(height: 70),

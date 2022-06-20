@@ -135,7 +135,9 @@ class _OverviewProfileState extends State<OverviewProfile> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => EditProfile()),
-                                  );
+                                  ).then((value) {
+                                    setState(() {});
+                                  });
                                 },
                               )
                             ],

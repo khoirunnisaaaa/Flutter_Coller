@@ -4,7 +4,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
    <application
-        android:label="coller_mobile"
+        android:label="coller"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

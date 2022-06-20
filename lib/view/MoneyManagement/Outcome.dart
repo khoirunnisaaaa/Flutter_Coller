@@ -667,7 +667,7 @@ class _OutcomeState extends State<Outcome> {
           return PieChartSectionData(
             color: const Color(0xff9F43CC),
             value: totalFood,
-            title: '${(uOutcome.persenFood).toString()}%',
+            title: '${(uOutcome.persenFood).toStringAsFixed(0)}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -678,7 +678,7 @@ class _OutcomeState extends State<Outcome> {
           return PieChartSectionData(
             color: const Color(0xff4D4D4E),
             value: totalEducation,
-            title: '${(uOutcome.persenEducation).toString()}%',
+            title: '${(uOutcome.persenEducation).toStringAsFixed(0)}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -689,7 +689,7 @@ class _OutcomeState extends State<Outcome> {
           return PieChartSectionData(
             color: const Color(0xffFF57BC),
             value: totalEntertainment,
-            title: '${(uOutcome.persenEntertainment).toString()}%',
+            title: '${(uOutcome.persenEntertainment).toStringAsFixed(0)}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -700,7 +700,7 @@ class _OutcomeState extends State<Outcome> {
           return PieChartSectionData(
             color: const Color(0xffFB4F4F),
             value: totalEtc,
-            title: '${(uOutcome.persenEtc).toString()}%',
+            title: '${(uOutcome.persenEtc).toStringAsFixed(0)}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,

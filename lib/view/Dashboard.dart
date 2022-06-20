@@ -420,7 +420,9 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Income()),
-                                  );
+                                  ).then((value) {
+                                    setState(() {});
+                                  });
                                 },
                               ),
                             ),
@@ -496,7 +498,9 @@ class _DashboardState extends State<Dashboard> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) => Outcome()),
-                                  );
+                                  ).then((value) {
+                                    setState(() {});
+                                  });
                                 },
                               ),
                             ),
@@ -580,7 +584,9 @@ class _DashboardState extends State<Dashboard> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Task()),
-                                );
+                                ).then((value) {
+                                  setState(() {});
+                                });
                               },
                             ),
                           ),
@@ -652,7 +658,9 @@ class _DashboardState extends State<Dashboard> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => schedule()),
-                                );
+                                ).then((value) {
+                                  setState(() {});
+                                });
                               },
                             ),
                           ),
@@ -724,7 +732,9 @@ class _DashboardState extends State<Dashboard> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => Todolist()),
-                                );
+                                ).then((value) {
+                                  setState(() {});
+                                });
                               },
                             ),
                           ),

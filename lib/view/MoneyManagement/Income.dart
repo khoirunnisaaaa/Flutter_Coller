@@ -640,7 +640,7 @@ class _IncomeState extends State<Income> {
           return PieChartSectionData(
             color: const Color(0xff9F43CC),
             value: totalSalary,
-            title: '${(uIncome.persenSalary).toString()}%',
+            title: '${(uIncome.persenSalary).toStringAsFixed(0)}%',
             // title: '${(totalSalary / uIncome.totalIncome * 100).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
@@ -654,7 +654,7 @@ class _IncomeState extends State<Income> {
           return PieChartSectionData(
             color: const Color(0xff4D4D4E),
             value: totalGift,
-            title: '${(uIncome.persenGift).toString()}%',
+            title: '${(uIncome.persenGift).toStringAsFixed(0)}%',
             // title: '${(totalGift / uIncome.totalIncome * 100).toString()}%',
             radius: radius,
             titleStyle: TextStyle(
@@ -666,7 +666,7 @@ class _IncomeState extends State<Income> {
           return PieChartSectionData(
             color: const Color(0xffFF57BC),
             value: totalParent,
-            title: '${(uIncome.persenParent).toString()}%',
+            title: '${(uIncome.persenParent).toStringAsFixed(0)}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,
@@ -677,7 +677,7 @@ class _IncomeState extends State<Income> {
           return PieChartSectionData(
             color: const Color(0xffFB4F4F),
             value: totalEtc,
-            title: '${(uIncome.persenEtc).toString()}%',
+            title: '${(uIncome.persenEtc).toStringAsFixed(0)}%',
             radius: radius,
             titleStyle: TextStyle(
                 fontSize: fontSize,

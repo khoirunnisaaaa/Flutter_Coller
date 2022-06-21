@@ -26,35 +26,35 @@ class uIncome {
   static getNama() async {
     var data = await FirebaseFirestore.instance
         .collection("income")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         // .where('category', isEqualTo: 'Gift')
         .get();
 
     var dataSalary = await FirebaseFirestore.instance
         .collection("income")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: 'Salary')
         .get();
 
     var dataGift = await FirebaseFirestore.instance
         .collection("income")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: 'Gift')
         .get();
 
     var dataParent = await FirebaseFirestore.instance
         .collection("income")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: 'Parent')
         .get();
 
     var dataEtc = await FirebaseFirestore.instance
         .collection("income")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: '.etc')
         .get();

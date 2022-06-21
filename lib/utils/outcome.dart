@@ -27,34 +27,34 @@ class uOutcome {
   static getNama() async {
     var data = await FirebaseFirestore.instance
         .collection("outcome")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .get();
 
     var dataFood = await FirebaseFirestore.instance
         .collection("outcome")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: 'Food')
         .get();
 
     var dataEducation = await FirebaseFirestore.instance
         .collection("outcome")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: 'Education')
         .get();
 
     var dataEntertainment = await FirebaseFirestore.instance
         .collection("outcome")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: 'Entertainment')
         .get();
 
     var dataEtc = await FirebaseFirestore.instance
         .collection("outcome")
-        .doc(userUid)
+        .doc(uProfile.userUid)
         .collection("items")
         .where('category', isEqualTo: '.etc')
         .get();

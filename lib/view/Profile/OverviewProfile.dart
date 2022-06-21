@@ -1,5 +1,7 @@
 import 'dart:ui';
 
+import 'package:coller_mobile/utils/income.dart';
+import 'package:coller_mobile/utils/outcome.dart';
 import 'package:coller_mobile/utils/profile.dart';
 import 'package:coller_mobile/view/AboutApp.dart';
 import 'package:coller_mobile/view/Profile/ChangePassword.dart';
@@ -346,6 +348,8 @@ class _OverviewProfileState extends State<OverviewProfile> {
               FlatButton(
                 onPressed: () async {
                   await FirebaseAuth.instance.signOut();
+                  uProfile.nama_lengkap = null;
+                  uProfile.prof_img = null;
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => Login()),
